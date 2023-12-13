@@ -1,5 +1,10 @@
 from ply.yacc import YaccProduction as Prod
 from ply.lex import LexToken
+# Tipos
+from utils.Type import Type
+# Instrucciones
+# Expresiones
+from statements.Expressions.Primitive import Primitive
 
 precedence = (
     ('left', 'RW_or'),
@@ -76,7 +81,7 @@ def p_LIST_IDS(t: Prod):
                 | IDS'''
 
 def p_IDS(t: Prod):
-    '''IDS  : EXP RW_as TK_varchar
+    '''IDS  : EXP RW_as TK_nvarchar
             | EXP RW_as TK_field
             | EXP'''
 
@@ -145,10 +150,10 @@ def p_IFSTRUCT(t: Prod):
 # Estructura CASE
 def p_CASESTRUCT_S(t: Prod):
     '''CASESTRUCT_S : RW_case EXP WHENELSE RW_end RW_as TK_field
-                    | RW_case EXP WHENELSE RW_end RW_as TK_varchar
+                    | RW_case EXP WHENELSE RW_end RW_as TK_nvarchar
                     | RW_case EXP WHENELSE RW_end
                     | RW_case WHENELSE RW_end RW_as TK_field
-                    | RW_case WHENELSE RW_end RW_as TK_varchar
+                    | RW_case WHENELSE RW_end RW_as TK_nvarchar
                     | RW_case WHENELSE RW_end'''
 
 def p_WHENELSE(t: Prod):
@@ -217,12 +222,25 @@ def p_EXP(t: Prod):
             | CALLFUNC
             | TK_id
             | TK_field
-            | TK_varchar
+            | TK_nchar
+            | TK_nvarchar
             | TK_int
-            | TK_double
+            | TK_decimal
             | TK_date
             | RW_null
             | TK_lpar EXP TK_rpar'''
+    types = ['ARITHMETICS', 'RELATIONALS', 'LOGICS', 'CAST', 'NATIVEFUNC', 'CALLFUNC']
+    if t.slice[1].type in types           : pass
+    elif t.slice[1].type == 'TK_id'       : pass
+    elif t.slice[1].type == 'TK_field'    : pass
+    elif t.slice[1].type == 'TK_nchar'    : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NCHAR)
+    elif t.slice[1].type == 'TK_nvarchar' : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NVARCHAR)
+    elif t.slice[1].type == 'TK_int'      : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.INT)
+    elif t.slice[1].type == 'TK_double'   : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DECIMAL)
+    elif t.slice[1].type == 'TK_date'     : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DATE)
+    elif t.slice[1].type == 'RW_null'     : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NULL)
+    else                                  : pass
+
 
 def p_ARITHMETICS(t: Prod):
     '''ARITHMETICS  : EXP TK_plus EXP

@@ -53,6 +53,7 @@ reserveds = {
     'BIT'        : 'RW_bit',
     'DECIMAL'    : 'RW_decimal',
     'DATE'       : 'RW_date',
+    'DATETIME'   : 'RW_datetime',
     'NCHAR'      : 'RW_nchar',
     'NVARCHAR'   : 'RW_nvarchar',
     'NULL'       : 'RW_null',
@@ -83,7 +84,7 @@ tokens = tuple(reserveds.values()) + (
     'TK_date',
     'TK_datetime',
     'TK_nvarchar',
-    'TK_double',
+    'TK_decimal',
     'TK_int',
 )
 # SIGNOS DE AGRUPACIÓN Y FINALIZACIÓN
@@ -149,7 +150,7 @@ def t_TK_nvarchar(t):
     t.value = t.value[1 : len(t.value) - 1]
     return t
 
-def t_TK_double(t):
+def t_TK_decimal(t):
     r'[0-9]+\.[0-9]+'
     return t
 

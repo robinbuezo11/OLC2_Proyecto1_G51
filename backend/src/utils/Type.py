@@ -1,13 +1,15 @@
 from enum import Enum, auto
 
 class Type(Enum):
-    INT     = 0
-    DOUBLE  = 1
-    DATE    = 2
-    VARCHAR = 3
-    BOOLEAN = 4
-    NULL    = 5
-    TABLE   = 6
+    INT      = 0
+    BIT      = 1
+    DECIMAL  = 2
+    DATE     = 3
+    DATETIME = 4
+    NCHAR    = 5
+    NVARCHAR = 6
+    NULL     = 7
+    TABLE    = 8
 
 class ReturnType:
     def __init__(self, value: any, type: Type):
