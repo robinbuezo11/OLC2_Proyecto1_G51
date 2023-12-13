@@ -221,8 +221,6 @@ def p_EXP(t: Prod):
             | TK_int
             | TK_double
             | TK_date
-            | RW_true
-            | RW_false
             | RW_null
             | TK_lpar EXP TK_rpar'''
 
@@ -248,7 +246,7 @@ def p_LOGICS(t: Prod):
                 | RW_not EXP'''
 
 def p_CAST(t: Prod):
-    '''CAST : RW_cast TK_lpar EXP RW_as TYPE TK_rpar'''
+    '''CAST : RW_cas TK_lpar EXP RW_as TYPE TK_rpar'''
 
 # Funciones Nativas
 def p_NATIVEFUNC(t: Prod):
@@ -261,10 +259,11 @@ def p_NATIVEFUNC(t: Prod):
 
 def p_TYPE(t: Prod):
     '''TYPE : RW_int
-            | RW_double
+            | RW_bit
+            | RW_decimal
             | RW_date
-            | RW_varchar
-            | RW_boolean'''
+            | RW_nchar
+            | RW_nvarchar'''
 
 from interpreter.Scanner import *
 

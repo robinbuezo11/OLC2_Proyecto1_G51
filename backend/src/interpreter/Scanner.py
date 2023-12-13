@@ -4,55 +4,58 @@ from utils.TypeError import TypeError
 
 reserveds = {
     # EJECUCION DDL
-    'BEGIN'     : 'RW_begin',
-    'END'       : 'RW_end',
-    'SELECT'    : 'RW_select',
-    'FROM'      : 'RW_from',
-    'WHERE'     : 'RW_where',
-    'DECLARE'   : 'RW_declare',
-    'SET'       : 'RW_set',
-    'CREATE'    : 'RW_create',
-    'TABLE'     : 'RW_table',
-    'ALTER'     : 'RW_alter',
-    'ADD'       : 'RW_add',
-    'DROP'      : 'RW_drop',
-    'COLUMN'    : 'RW_column',
-    'RENAME'    : 'RW_rename',
-    'TO'        : 'RW_to',
-    'INSERT'    : 'RW_insert',
-    'INTO'      : 'RW_into',
-    'VALUES'    : 'RW_values',
-    'AS'        : 'RW_as',
-    'UPDATE'    : 'RW_update',
-    'TRUNCATE'  : 'RW_truncate',
-    'DELETE'    : 'RW_delete',
-    'CAST'      : 'RW_cast',
-    'THEN'      : 'RW_then',
-    'WHEN'      : 'RW_when',
+    'BEGIN'      : 'RW_begin',
+    'END'        : 'RW_end',
+    'SELECT'     : 'RW_select',
+    'FROM'       : 'RW_from',
+    'WHERE'      : 'RW_where',
+    'DECLARE'    : 'RW_declare',
+    'SET'        : 'RW_set',
+    'CREATE'     : 'RW_create',
+    'TABLE'      : 'RW_table',
+    'ALTER'      : 'RW_alter',
+    'ADD'        : 'RW_add',
+    'DROP'       : 'RW_drop',
+    'COLUMN'     : 'RW_column',
+    'RENAME'     : 'RW_rename',
+    'TO'         : 'RW_to',
+    'INSERT'     : 'RW_insert',
+    'INTO'       : 'RW_into',
+    'VALUES'     : 'RW_values',
+    'AS'         : 'RW_as',
+    'UPDATE'     : 'RW_update',
+    'TRUNCATE'   : 'RW_truncate',
+    'DELETE'     : 'RW_delete',
+    'THEN'       : 'RW_then',
+    'WHEN'       : 'RW_when',
     # EJECUCION DML
-    'IF'        : 'RW_if',
-    'ELSE'      : 'RW_else',
-    'CASE'      : 'RW_case',
-    'WHILE'     : 'RW_while',
-    'FOR'       : 'RW_for',
-    'IN'        : 'RW_in',
-    'LOOP'      : 'RW_loop',
-    'BREAK'     : 'RW_break',
-    'CONTINUE'  : 'RW_continue',
-    'FUNCTION'  : 'RW_function',
-    'RETURNS'   : 'RW_returns',
-    'RETURN'    : 'RW_return',
-    'PROCEDURE' : 'RW_procedure',
-    'TRUNCATE'  : 'RW_truncate',
+    'IF'         : 'RW_if',
+    'ELSE'       : 'RW_else',
+    'CASE'       : 'RW_case',
+    'WHILE'      : 'RW_while',
+    'FOR'        : 'RW_for',
+    'IN'         : 'RW_in',
+    'LOOP'       : 'RW_loop',
+    'BREAK'      : 'RW_break',
+    'CONTINUE'   : 'RW_continue',
+    'FUNCTION'   : 'RW_function',
+    'RETURNS'    : 'RW_returns',
+    'RETURN'     : 'RW_return',
+    'PROCEDURE'  : 'RW_procedure',
+    'TRUNCATE'   : 'RW_truncate',
+    'CONCATENA'  : 'RW_concatena',
+    'SUMBSTRAER' : 'RW_substraer',
+    'HOY'        : 'RW_hoy',
+    'CONTAR'     : 'RW_contar',
+    'CAS'        : 'RW_cas',
     # TIPOS DE DATOS
-    'INT'       : 'RW_int',
-    'DOUBLE'    : 'RW_double',
-    'DATE'      : 'RW_date',
-    'VARCHAR'   : 'RW_varchar',
-    'BOOLEAN'   : 'RW_boolean',
-    'TRUE'      : 'RW_true',
-    'FALSE'     : 'RW_false',
-    'NULL'      : 'RW_null',
+    'INT'        : 'RW_int',
+    'BIT'        : 'RW_bit',
+    'DECIMAL'    : 'RW_decimal',
+    'DATE'       : 'RW_date',
+    'NCHAR'      : 'RW_nchar',
+    'NVARCHAR'   : 'RW_nvarchar',
+    'NULL'       : 'RW_null',
 }
 
 tokens = tuple(reserveds.values()) + (
@@ -78,7 +81,8 @@ tokens = tuple(reserveds.values()) + (
     'TK_id',
     'TK_field',
     'TK_date',
-    'TK_varchar',
+    'TK_datetime',
+    'TK_nvarchar',
     'TK_double',
     'TK_int',
 )
@@ -131,11 +135,16 @@ def t_TK_field(t):
     return t
 
 def t_TK_date(t):
-    r'\"\d\d\/\d\d\/\d\d\d\d\"'
+    r'\"\d\d\-\d\d\-\d\d\d\d\"'
     t.value = t.value[1 : len(t.value) - 1]
     return t
 
-def t_TK_varchar(t):
+def t_TK_date(t):
+    r'\"\d\d\-\d\d\-\d\d\d\d\ \d\d\:\d\d"'
+    t.value = t.value[1 : len(t.value) - 1]
+    return t
+
+def t_TK_nvarchar(t):
     r'\"(([^\n\"\\]|\\.)*)\"'
     t.value = t.value[1 : len(t.value) - 1]
     return t
