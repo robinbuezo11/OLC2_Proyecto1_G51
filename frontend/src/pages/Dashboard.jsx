@@ -121,7 +121,7 @@ function App() {
       </Container>
       </Navbar>
       </header>
-      {/* <div className='Content'> */}
+      <div className='Content'>
         <div className="editor1">
           <Editor
             height="70vh"
@@ -132,7 +132,7 @@ function App() {
             onChange={setCode}
           />
         </div>
-      {/* </div> */}
+      </div>
     </div>
   );
 }
