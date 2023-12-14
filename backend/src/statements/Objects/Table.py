@@ -1,6 +1,6 @@
 import math
-from Abstracts.Expression import Expression
-from Env.Env import Env
+from statements.Abstracts.Expression import Expression
+from statements.Env.Env import Env
 from utils.Type import Type, ReturnType
 # from Expressions.Field import Field as F
 

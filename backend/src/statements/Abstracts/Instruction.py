@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from utils.TypeInst import TypeInst
-from Env.Env import Env
-from Env.AST import AST, ReturnAST
+from statements.Env.Env import Env
+from statements.Env.AST import AST, ReturnAST
 
 class Instruction(ABC):
     def __init__(self, line: int, column: int, typeInst: TypeInst):

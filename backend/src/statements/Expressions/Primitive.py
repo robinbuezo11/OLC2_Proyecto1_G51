@@ -1,7 +1,7 @@
-from Abstracts.Expression import Expression
-from Env.AST import AST, ReturnAST
-from Env.Env import Env
-from Objects.Table import Field
+from statements.Abstracts.Expression import Expression
+from statements.Env.AST import AST, ReturnAST
+from statements.Env.Env import Env
+from statements.Objects.Table import Field
 from utils.Type import ReturnType, Type
 from utils.TypeExp import TypeExp
 

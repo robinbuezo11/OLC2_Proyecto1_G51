@@ -3,13 +3,14 @@ from ply.lex import LexToken
 # Tipos
 from utils.Type import Type
 # Instrucciones
+from statements.Instructions.InitID import InitID
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 
 precedence = (
-    ('left', 'RW_or'),
-    ('left', 'RW_and'),
-    ('right', 'RW_not'),
+    ('left', 'TK_or'),
+    ('left', 'TK_and'),
+    ('right', 'TK_not'),
     ('left', 'TK_equal', 'TK_notequal'),
     ('left', 'TK_less', 'TK_lessequal', 'TK_great', 'TK_greatequal'),
     ('left', 'TK_plus', 'TK_minus'),
@@ -20,10 +21,14 @@ precedence = (
 def p_INIT(t: Prod):
     '''INIT : INSTRUCTIONS
             |'''
+    if len(t) == 2 : t[0] = t[1]
+    else           : t[0] = []
 
 def p_INSTRUCTIONS(t: Prod):
     '''INSTRUCTIONS : INSTRUCTIONS INSTRUCTION
                     | INSTRUCTION'''
+    if len(t) == 3 : t[1].append(t[2]); t[0] = t[1]
+    else           : t[0] = [t[1]]
 
 def p_INSTRUCTION(t: Prod):
     '''INSTRUCTION  : CREATETABLE TK_semicolon
@@ -48,19 +53,29 @@ def p_INSTRUCTION(t: Prod):
                     | RW_continue TK_semicolon
                     | RW_return EXP TK_semicolon
                     | RW_return TK_semicolon'''
+    types = ['RW_break', 'RW_continue', 'RW_return']
+    if not t.slice[1].type in types                     : t[0] = t[1]
+    elif t.slice[1].type == 'RW_break'                  : pass
+    elif t.slice[1].type == 'RW_continue'               : pass
+    elif t.slice[1].type == 'RW_return' and len(t) == 4 : pass
+    elif t.slice[1].type == 'RW_return'                 : pass
 
 # Declaración de Variables
 def p_DECLAREID(t: Prod):
     '''DECLAREID    : RW_declare DECLIDS
-                    | RW_declare TK_id TYPE TK_equal EXP
-                    | RW_declare TK_id TYPE RW_default EXP'''
+                    | RW_declare TK_id TYPE TK_equal EXP'''
+    if len(t) == 3:   t[0] = InitID(t.lineno(1), t.lexpos(1), t[2][0], t[2][1], None)
+    elif len(t) == 6: t[0] = InitID(t.lineno(1), t.lexpos(1), t[2],    t[3],    t[5])
 
 def p_DECLIDS(t: Prod):
     '''DECLIDS  : DECLIDS TK_comma DECLID
                 | DECLID'''
-    
+    if len(t) == 4: t[1][0].append(t[3][0]); t[1][1].append(t[3][1]); t[0] = t[1]
+    else:           t[0] = [[t[1][0]], [t[1][1]]]
+
 def p_DECLID(t: Prod):
     '''DECLID : TK_id TYPE'''
+    t[0] = [t[1], t[2]]
 
 # Asignación de Variables
 def p_ASIGNID(t: Prod):
@@ -222,7 +237,6 @@ def p_EXP(t: Prod):
             | CALLFUNC
             | TK_id
             | TK_field
-            | TK_nchar
             | TK_nvarchar
             | TK_int
             | TK_decimal
@@ -233,7 +247,6 @@ def p_EXP(t: Prod):
     if t.slice[1].type in types           : pass
     elif t.slice[1].type == 'TK_id'       : pass
     elif t.slice[1].type == 'TK_field'    : pass
-    elif t.slice[1].type == 'TK_nchar'    : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NCHAR)
     elif t.slice[1].type == 'TK_nvarchar' : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NVARCHAR)
     elif t.slice[1].type == 'TK_int'      : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.INT)
     elif t.slice[1].type == 'TK_double'   : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DECIMAL)
@@ -259,21 +272,16 @@ def p_RELATIONALS(t: Prod):
                     | EXP TK_great EXP'''
 
 def p_LOGICS(t: Prod):
-    '''LOGICS   : EXP RW_and EXP
-                | EXP RW_or EXP
-                | RW_not EXP'''
+    '''LOGICS   : EXP TK_and EXP
+                | EXP TK_or EXP
+                | TK_not EXP'''
 
 def p_CAST(t: Prod):
     '''CAST : RW_cas TK_lpar EXP RW_as TYPE TK_rpar'''
 
 # Funciones Nativas
 def p_NATIVEFUNC(t: Prod):
-    '''NATIVEFUNC   : RW_lower TK_lpar EXP TK_rpar
-                    | RW_upper TK_lpar EXP TK_rpar
-                    | RW_round TK_lpar EXP TK_comma EXP TK_rpar
-                    | RW_len TK_lpar EXP TK_rpar
-                    | RW_truncate TK_lpar EXP TK_comma EXP TK_rpar
-                    | RW_typeof TK_lpar EXP TK_rpar'''
+    '''NATIVEFUNC : RW_truncate TK_lpar EXP TK_comma EXP TK_rpar'''
 
 def p_TYPE(t: Prod):
     '''TYPE : RW_int
