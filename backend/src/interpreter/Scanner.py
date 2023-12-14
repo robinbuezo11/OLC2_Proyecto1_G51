@@ -42,6 +42,7 @@ reserveds = {
     'RETURNS'    : 'RW_returns',
     'RETURN'     : 'RW_return',
     'PROCEDURE'  : 'RW_procedure',
+    'PRINT'      : 'RW_print',
     'TRUNCATE'   : 'RW_truncate',
     'CONCATENA'  : 'RW_concatena',
     'SUMBSTRAER' : 'RW_substraer',
@@ -140,7 +141,7 @@ def t_TK_date(t):
     t.value = t.value[1 : len(t.value) - 1]
     return t
 
-def t_TK_date(t):
+def t_TK_datetime(t):
     r'\"\d\d\-\d\d\-\d\d\d\d\ \d\d\:\d\d"'
     t.value = t.value[1 : len(t.value) - 1]
     return t
