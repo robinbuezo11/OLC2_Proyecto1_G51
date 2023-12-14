@@ -1,64 +1,51 @@
-.Dashboard {
-    height: 100vh;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    background-color: #000000;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  .Dashboard-header {
-    background-color: #282c34;
-    min-height: 10vh;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-  
-  .Code{
-    width: 100%;
-    height: 21.5rem;
-    border-radius: 4px;
-    padding: 0px, 10px, 10px, 10px;
-    overflow: auto;
-    outline: none;
-    resize: none;
-    font-size: 14px;
-    line-height: 20px;
-    color: #333;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-  }
-  
-  .Result{
-    width: 100%;
-    height: 21.5rem;
-    border-radius: 4px;
-    padding: 0px, 10px, 10px, 10px;
-    overflow: auto;
-    outline: none;
-    resize: none;
-    font-size: 14px;
-    line-height: 20px;
-    color: #333;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-  }
-  
-  .Abrir{
-    margin-left: 5vw;
-  }
-  
-  .Title{
-    color: #ffffff;
-    margin-top: 4vh;
-    text-align: center;
-  }
-  
-  .Link-login {
-    position: absolute;
-    margin-left: 90vw;
-  }
+#cont-nav{
+  background-color: #545b68;
+  max-width: 100vw;
+  min-height: 5vh;
+  padding: 0%;
+}
+
+#navbar{
+  background-color: #545b68;
+  max-width: 100vw;
+  min-height: 5vh;
+  padding: 0%;
+}
+
+Nav.Link {
+  text-align: center;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.Content {
+  background-color: #282c34;
+  min-height: 95vh;
+  max-width: 100vw;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.editor1 {
+  flex:1;
+  text-align: left;
+}
+
+#openinput{
+  width: 100%;
+  height: 35px;
+  padding-top: 5.5px;
+}
+
+#openinput:hover{
+	background-color: #f0f0f0;
+	color: rgb(0, 0, 0);
+	transform: .3s;
+	cursor: pointer;
+}
+
+#openbt{
+  margin-left: 15px;
+}
+
