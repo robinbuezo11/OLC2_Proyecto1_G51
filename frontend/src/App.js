@@ -1,12 +1,14 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
-
+import MainLayout from './components/layout/MainLayout';
+import { routes } from './routes';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard/>} />
+        <Route path="/" element={<MainLayout />}>
+          {routes}
+        </Route>
       </Routes>
     </BrowserRouter>
   );
