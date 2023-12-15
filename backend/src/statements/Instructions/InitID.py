@@ -23,6 +23,7 @@ class InitID(Instruction):
             else:
                 env.setError('Los tipos no coinciden en la declaración', self.line, self.column)
         elif type(self.id) == list and type(self.type) == list and not self.value:
+            print(self.type)
             for i in range(len(self.id)):
                 env.saveID(self.id[i], 'NULL', self.type[i], self.line, self.column)
 

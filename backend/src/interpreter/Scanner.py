@@ -71,6 +71,7 @@ tokens = tuple(reserveds.values()) + (
     'TK_mult',
     'TK_div',
     'TK_mod',
+    'TK_equalequal',
     'TK_equal',
     'TK_notequal',
     'TK_lessequal',
@@ -101,7 +102,8 @@ t_TK_mult       = r'\*'
 t_TK_div        = r'\/'
 t_TK_mod        = r'\%'
 # OPERADORES RELACIONALES
-t_TK_equal      = r'\=\='
+t_TK_equalequal = r'\=\='
+t_TK_equal      = r'\='
 t_TK_notequal   = r'\!\='
 t_TK_lessequal  = r'\<\='
 t_TK_greatequal = r'\>\='

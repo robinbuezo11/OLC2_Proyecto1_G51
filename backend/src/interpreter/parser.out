@@ -8,6 +8,7 @@ Unused terminals:
     RW_hoy
     RW_substraer
     TK_datetime
+    TK_equalequal
 
 Grammar
 
@@ -208,6 +209,7 @@ TK_decimal           : 108
 TK_div               : 115
 TK_dot               : 82
 TK_equal             : 28 32 61 118
+TK_equalequal        : 
 TK_field             : 33 34 41 43 46 47 48 49 50 51 51 52 53 54 55 58 61 62 63 67 70 83 84 85 86 87 88 94 95 105
 TK_great             : 123
 TK_greatequal        : 121

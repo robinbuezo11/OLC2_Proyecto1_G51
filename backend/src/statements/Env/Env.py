@@ -34,7 +34,7 @@ class Env:
         while env:
             if id.lower() in env.ids:
                 symbol: Symbol = env.ids.get(id.lower())
-                if symbol.type == value.type or symbol.type == Type.DOUBLE and value.type == Type.INT or value.type == Type.NULL:
+                if symbol.type == value.type or symbol.type == Type.DECIMAL and value.type == Type.INT or value.type == Type.NULL:
                     symbol.value = value.value
                     env.ids[id.lower()] = symbol
                     return True
@@ -57,7 +57,7 @@ class Env:
                 return True
         return False
 
-    def getTypeOf(type: Type) -> str:
+    def getTypeOf(self, type: Type) -> str:
         match type:
             case Type.INT:
                 return "INT"

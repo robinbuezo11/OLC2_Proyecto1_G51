@@ -15,7 +15,7 @@ def getStringOuts() -> str:
             out += '\n\n↳ ERRORES\n'
         else:
             out += '↳ ERRORES\n'
-        out += '\n'.join(errors)
+        out += '\n'.join(str(error) for error in errors)
     return out
 
 def getErrors():

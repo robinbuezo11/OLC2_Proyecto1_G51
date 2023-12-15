@@ -4,6 +4,7 @@ from ply.lex import LexToken
 from utils.Type import Type
 # Instrucciones
 from statements.Instructions.InitID import InitID
+from statements.Instructions.AsignID import AsignID
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 
@@ -80,6 +81,7 @@ def p_DECLID(t: Prod):
 # Asignación de Variables
 def p_ASIGNID(t: Prod):
     '''ASIGNID : RW_set TK_id TK_equal EXP'''
+    t[0] = AsignID(t.lineno(1), t.lexpos(1), t[2], t[4])
 
 # Mostrar valores de Variables
 def p_SELECT(t: Prod):
@@ -290,6 +292,12 @@ def p_TYPE(t: Prod):
             | RW_date
             | RW_nchar
             | RW_nvarchar'''
+    if t.slice[1].type == 'RW_int'        : t[0] = Type.INT
+    elif t.slice[1].type == 'RW_bit'      : t[0] = Type.BIT
+    elif t.slice[1].type == 'RW_double'   : t[0] = Type.DECIMAL
+    elif t.slice[1].type == 'RW_date'     : t[0] = Type.DATE
+    elif t.slice[1].type == 'RW_nchar'    : t[0] = Type.NCHAR
+    elif t.slice[1].type == 'RW_nvarchar' : t[0] = Type.NVARCHAR
 
 from interpreter.Scanner import *
 
