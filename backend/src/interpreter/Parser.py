@@ -5,8 +5,10 @@ from utils.Type import Type
 # Instrucciones
 from statements.Instructions.InitID import InitID
 from statements.Instructions.AsignID import AsignID
+from statements.Instructions.Select_prt import Select_prt
 # Expresiones
 from statements.Expressions.Primitive import Primitive
+from statements.Expressions.AccessID import AccessID
 
 precedence = (
     ('left', 'TK_or'),
@@ -88,19 +90,27 @@ def p_SELECT(t: Prod):
     '''SELECT   : RW_select FIELDS RW_from TK_field RW_where EXP
                 | RW_select FIELDS RW_from TK_field
                 | RW_select LIST_IDS'''
+    if len(t) == 7   : pass
+    elif len(t) == 5 : pass
+    else             : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
 
 def p_FIELDS(t: Prod):
     '''FIELDS   : LIST_IDS
                 | TK_mult'''
+    t[0] = t[1]
 
 def p_LIST_IDS(t: Prod):
     '''LIST_IDS : LIST_IDS TK_comma IDS
                 | IDS'''
+    if len(t) == 4 : t[1].append(t[3]); t[0] = t[1]
+    else           : t[0] = [t[1]]
 
 def p_IDS(t: Prod):
     '''IDS  : EXP RW_as TK_nvarchar
             | EXP RW_as TK_field
             | EXP'''
+    if len(t) == 4 : t[0] = [t[1], t[3]]
+    else           : t[0] = [t[1], '']
 
 # Creación de Tablas
 def p_CREATETABLE(t: Prod):
@@ -247,14 +257,14 @@ def p_EXP(t: Prod):
             | TK_lpar EXP TK_rpar'''
     types = ['ARITHMETICS', 'RELATIONALS', 'LOGICS', 'CAST', 'NATIVEFUNC', 'CALLFUNC']
     if t.slice[1].type in types           : pass
-    elif t.slice[1].type == 'TK_id'       : pass
+    elif t.slice[1].type == 'TK_id'       : t[0] = AccessID(t.lineno(1), t.lexpos(1), t[1])
     elif t.slice[1].type == 'TK_field'    : pass
     elif t.slice[1].type == 'TK_nvarchar' : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NVARCHAR)
     elif t.slice[1].type == 'TK_int'      : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.INT)
     elif t.slice[1].type == 'TK_double'   : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DECIMAL)
     elif t.slice[1].type == 'TK_date'     : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DATE)
     elif t.slice[1].type == 'RW_null'     : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NULL)
-    else                                  : pass
+    else                                  : t[0] = t[2]
 
 
 def p_ARITHMETICS(t: Prod):
