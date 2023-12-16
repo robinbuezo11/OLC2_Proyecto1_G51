@@ -255,6 +255,7 @@ def p_EXP(t: Prod):
             | TK_int
             | TK_decimal
             | TK_date
+            | TK_datetime
             | RW_null
             | TK_lpar EXP TK_rpar'''
     types = ['ARITHMETICS', 'RELATIONALS', 'LOGICS', 'CAST', 'NATIVEFUNC', 'CALLFUNC']
@@ -263,8 +264,9 @@ def p_EXP(t: Prod):
     elif t.slice[1].type == 'TK_field'    : pass
     elif t.slice[1].type == 'TK_nvarchar' : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NVARCHAR)
     elif t.slice[1].type == 'TK_int'      : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.INT)
-    elif t.slice[1].type == 'TK_double'   : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DECIMAL)
+    elif t.slice[1].type == 'TK_decimal'  : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DECIMAL)
     elif t.slice[1].type == 'TK_date'     : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DATE)
+    elif t.slice[1].type == 'TK_datetime' : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DATETIME)
     elif t.slice[1].type == 'RW_null'     : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NULL)
     else                                  : t[0] = t[2]
 
@@ -305,12 +307,14 @@ def p_TYPE(t: Prod):
             | RW_bit
             | RW_decimal
             | RW_date
+            | RW_datetime
             | RW_nchar
             | RW_nvarchar'''
     if t.slice[1].type == 'RW_int'        : t[0] = Type.INT
     elif t.slice[1].type == 'RW_bit'      : t[0] = Type.BIT
-    elif t.slice[1].type == 'RW_double'   : t[0] = Type.DECIMAL
+    elif t.slice[1].type == 'RW_decimal'  : t[0] = Type.DECIMAL
     elif t.slice[1].type == 'RW_date'     : t[0] = Type.DATE
+    elif t.slice[1].type == 'RW_datetime' : t[0] = Type.DATETIME
     elif t.slice[1].type == 'RW_nchar'    : t[0] = Type.NCHAR
     elif t.slice[1].type == 'RW_nvarchar' : t[0] = Type.NVARCHAR
 

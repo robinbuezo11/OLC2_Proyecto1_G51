@@ -23,14 +23,14 @@ class Arithmetic(Expression):
         match self.sign:
             case '+':
                 return self.plus(env)
-            # case '-':
-            #     if self.exp1 != None:
-            #         return self.minus(env)
-            #     return self.negative(env)
-            # case '*':
-            #     return self.mult(env)
-            # case '/':
-            #     return self.div(env)
+            case '-':
+                if self.exp1 != None:
+                    return self.minus(env)
+                return self.negative(env)
+            case '*':
+                return self.mult(env)
+            case '/':
+                return self.div(env)
             case _:
                 return ReturnType('NULL', Type.NULL)
 
@@ -39,11 +39,13 @@ class Arithmetic(Expression):
         value2: ReturnType = self.exp2.execute(env)
         self.type = plus[value1.type.value][value2.type.value]
         if self.type != Type.NULL:
-            if self.type == Type.INT:
+            if self.type == Type.BIT:
+                return ReturnType(1 if int(value1.value) == 1 or int(value2.value) == 1 else 0, self.type)
+            elif self.type == Type.INT:
                 return ReturnType(int(int(value1.value) + int(value2.value)), self.type)
             elif self.type == Type.DECIMAL:
                 return ReturnType(float(value1.value) + float(value2.value), self.type)
-            elif self.type == Type.NVARCHAR:
+            elif self.type == Type.NVARCHAR or self.type == Type.NCHAR:
                 return ReturnType(f'{value1.value}{value2.value}', self.type)
         env.setError('Los tipos no son válidos para operaciones aritméticas', self.exp2.line, self.exp2.column)
         return ReturnType('NULL', self.type)
@@ -57,8 +59,6 @@ class Arithmetic(Expression):
                 return ReturnType(int(value1.value) - int(value2.value), self.type)
             elif self.type == Type.DECIMAL:
                 return ReturnType(float(value1.value) - float(value2.value), self.type)
-            elif self.type == Type.NVARCHAR:
-                return ReturnType(f'{value1.value}{value2.value}', self.type)
         env.setError('Los tipos no son válidos para operaciones aritméticas', self.exp2.line, self.exp2.column)
         return ReturnType('NULL', self.type)
 
@@ -74,10 +74,16 @@ class Arithmetic(Expression):
         value1: ReturnType = self.exp1.execute(env)
         value2: ReturnType = self.exp2.execute(env)
         self.type = mult[value1.type.value][value2.type.value]
-        if self.type == Type.INT:
+        if self.type == Type.BIT:
+                return ReturnType(1 if int(value1.value) == 1 and int(value2.value) == 1 else 0, self.type)
+        elif self.type == Type.INT:
             return ReturnType(int(value1.value) * int(value2.value), self.type)
-        if self.type == Type.DECIMAL:
+        elif self.type == Type.DECIMAL:
             return ReturnType(float(value1.value) * float(value2.value), self.type)
+        elif self.type == Type.DATE or self.type == Type.DATETIME:
+                return ReturnType(f'{value1.value}{value2.value}', self.type)
+        elif self.type == Type.NVARCHAR or self.type == Type.NCHAR:
+                return ReturnType(f'{value1.value}{value2.value}', self.type)
         env.setError('Los tipos no son válidos para operaciones aritméticas', self.exp2.line, self.exp2.column)
         return ReturnType('NULL', self.type)
 
@@ -86,9 +92,19 @@ class Arithmetic(Expression):
         value2: ReturnType = self.exp2.execute(env)
         self.type = div[value1.type.value][value2.type.value]
         if self.type == Type.INT:
-            return ReturnType(int(float(value1.value) / float(value2.value)), self.type)
-        if self.type == Type.DECIMAL:
-            return ReturnType(float(value1.value) / float(value2.value), self.type)
+            if value2.value != 0:
+                return ReturnType(int(float(value1.value) / float(value2.value)), self.type)    
+            env.setError('No se puede dividir entre 0', self.exp2.line, self.exp2.column)
+            return
+        elif self.type == Type.DECIMAL:
+            if value2.value != 0:
+                return ReturnType(float(value1.value) / float(value2.value), self.type)
+            env.setError('No se puede dividir entre 0', self.exp2.line, self.exp2.column)
+            return
+        elif self.type == Type.DATE or self.type == Type.DATETIME:
+                return ReturnType(f'{value1.value}{value2.value}', self.type)
+        elif self.type == Type.NVARCHAR or self.type == Type.NCHAR:
+                return ReturnType(f'{value1.value}{value2.value}', self.type)
         env.setError('Los tipos no son válidos para operaciones aritméticas', self.exp2.line, self.exp2.column)
         return ReturnType('NULL', self.type)
 
