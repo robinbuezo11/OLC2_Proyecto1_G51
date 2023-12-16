@@ -9,6 +9,8 @@ from statements.Instructions.Select_prt import Select_prt
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
+from statements.Expressions.Relational import Relational
+from statements.Expressions.Arithmetic import Arithmetic
 
 precedence = (
     ('left', 'TK_or'),
@@ -256,7 +258,7 @@ def p_EXP(t: Prod):
             | RW_null
             | TK_lpar EXP TK_rpar'''
     types = ['ARITHMETICS', 'RELATIONALS', 'LOGICS', 'CAST', 'NATIVEFUNC', 'CALLFUNC']
-    if t.slice[1].type in types           : pass
+    if t.slice[1].type in types           : t[0] = t[1]
     elif t.slice[1].type == 'TK_id'       : t[0] = AccessID(t.lineno(1), t.lexpos(1), t[1])
     elif t.slice[1].type == 'TK_field'    : pass
     elif t.slice[1].type == 'TK_nvarchar' : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NVARCHAR)
@@ -274,6 +276,8 @@ def p_ARITHMETICS(t: Prod):
                     | EXP TK_div EXP
                     | EXP TK_mod EXP
                     | TK_minus EXP %prec TK_uminus'''
+    if t.slice[1].type != 'TK_minus' : t[0] = Arithmetic(t.lineno(1), t.lexpos(1), t[1], t[2], t[3])
+    else                             : t[0] = Arithmetic(t.lineno(1), t.lexpos(1), None, t[1], t[2])
 
 def p_RELATIONALS(t: Prod):  
     '''RELATIONALS  : EXP TK_equal EXP
@@ -282,6 +286,7 @@ def p_RELATIONALS(t: Prod):
                     | EXP TK_greatequal EXP
                     | EXP TK_less EXP
                     | EXP TK_great EXP'''
+    t[0] = Relational(t.lineno(1), t.lexpos(1), t[1], t[2], t[3])
 
 def p_LOGICS(t: Prod):
     '''LOGICS   : EXP TK_and EXP
