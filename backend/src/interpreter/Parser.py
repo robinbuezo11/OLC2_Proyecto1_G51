@@ -6,11 +6,14 @@ from utils.Type import Type
 from statements.Instructions.InitID import InitID
 from statements.Instructions.AsignID import AsignID
 from statements.Instructions.Select_prt import Select_prt
+from statements.Instructions.If import If
+from statements.Instructions.Block import Block
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
 from statements.Expressions.Relational import Relational
 from statements.Expressions.Arithmetic import Arithmetic
+from statements.Expressions.Logic import Logic
 
 precedence = (
     ('left', 'TK_or'),
@@ -175,6 +178,9 @@ def p_IFSTRUCT(t: Prod):
     '''IFSTRUCT : RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end RW_if
                 | RW_if EXP RW_then INSTRUCTIONS RW_end RW_if
                 | RW_if EXP RW_begin INSTRUCTIONS RW_end'''
+    if len(t) == 9   : t[0] = If(t.lineno(1), t.lexpos(1), t[2], Block(t.lineno(1), t.lexpos(1), t[4]), Block(t.lineno(1), t.lexpos(1), t[6]))
+    elif len(t) == 7 : t[0] = If(t.lineno(1), t.lexpos(1), t[2], Block(t.lineno(1), t.lexpos(1), t[4]), None)
+    elif len(t) == 6 : t[0] = If(t.lineno(1), t.lexpos(1), t[2], Block(t.lineno(1), t.lexpos(1), t[4]), None)
 
 # Estructura CASE
 def p_CASESTRUCT_S(t: Prod):
@@ -232,6 +238,8 @@ def p_PARAM(t: Prod):
 def p_ENCAP(t: Prod):
     '''ENCAP    : RW_begin INSTRUCTIONS RW_end
                 | RW_begin RW_end'''
+    if len(t) == 4 : t[0] = Block(t.lineno(1), t.lexpos(1), t[2])
+    else           : t[0] = Block(t.lineno(1), t.lexpos(1), [])
 
 # Llamada a funciones y métodos
 def p_CALLFUNC(t: Prod):
@@ -294,6 +302,8 @@ def p_LOGICS(t: Prod):
     '''LOGICS   : EXP TK_and EXP
                 | EXP TK_or EXP
                 | TK_not EXP'''
+    if t.slice[2].type != 'RW_not'   : t[0] = Logic(t.lineno(1), t.lexpos(1), t[1], t[2], t[3])
+    else                             : t[0] = Logic(t.lineno(1), t.lexpos(1), None, t[2], t[3])
 
 def p_CAST(t: Prod):
     '''CAST : RW_cas TK_lpar EXP RW_as TYPE TK_rpar'''
