@@ -18,7 +18,7 @@ class Relational(Expression):
 
     def execute(self, env: Env) -> ReturnType:
         match self.sign:
-            case '=':
+            case '==':
                 return self.equal(env)
             case '!=':
                 return self.notEqual(env)
@@ -36,14 +36,14 @@ class Relational(Expression):
     def equal (self, env: Env) -> ReturnType:
         value1: ReturnType = self.exp1.execute(env)
         value2: ReturnType = self.exp2.execute(env)
-        if value1.type == Type.INT or value1.type == Type.DECIMAL:
-            if value2.type == Type.INT or value2.type == Type.DECIMAL:
+        if value1.type in [Type.INT, Type.DECIMAL]:
+            if value2.type in [Type.INT, Type.DECIMAL]:
                 return ReturnType(value1.value == value2.value, Type.BOOLEAN)
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+            env.setError("Los tipos no son válidos para operaciones relacionales (==)", self.exp2.line, self.exp2.column)
             return ReturnType('NULL', Type.NULL)
-        if value1.type == Type.NVARCHAR and value2.type == Type.NVARCHAR:
+        if value1.type in [Type.NVARCHAR, Type.NCHAR] and value2.type in [Type.NVARCHAR, Type.NCHAR]:
             return ReturnType(value1.value == value2.value, Type.BOOLEAN)
-        env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        env.setError("Los tipos no son válidos para operaciones relacionales (==)", self.exp2.line, self.exp2.column)
         return ReturnType('NULL', Type.NULL)
 
     def notEqual(self, env: Env) -> ReturnType:
@@ -52,68 +52,63 @@ class Relational(Expression):
         if value1.type == Type.INT or value1.type == Type.DECIMAL:
             if value2.type == Type.INT or value2.type == Type.DECIMAL:
                 return ReturnType(value1.value != value2.value, Type.BOOLEAN)
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+            env.setError("Los tipos no son válidos para operaciones relacionales (!=)", self.exp2.line, self.exp2.column)
             return ReturnType('NULL', Type.NULL)
-        if value1.type == Type.NVARCHAR and value2.type == Type.NVARCHAR:
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        if value1.type in [Type.NVARCHAR, Type.NCHAR] and value2.type in [Type.NVARCHAR, Type.NCHAR]:
             return ReturnType(value1.value != value2.value, Type.BOOLEAN)
-        env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        env.setError("Los tipos no son válidos para operaciones relacionales (!=)", self.exp2.line, self.exp2.column)
         return ReturnType('NULL', Type.NULL)
 
     def greatEqual(self, env: Env) -> ReturnType:
         value1: ReturnType = self.exp1.execute(env)
         value2: ReturnType = self.exp2.execute(env)
-        if value1.type == Type.INT or value1.type == Type.DECIMAL:
-            if value2.type == Type.INT or value2.type == Type.DECIMAL:
+        if value1.type in [Type.INT, Type.DECIMAL]:
+            if value2.type in [Type.INT, Type.DECIMAL]:
                 return ReturnType(value1.value >= value2.value, Type.BOOLEAN)
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+            env.setError("Los tipos no son válidos para operaciones relacionales (>=)", self.exp2.line, self.exp2.column)
             return ReturnType('NULL', Type.NULL)
-        if value1.type == Type.NVARCHAR and value2.type == Type.NVARCHAR:
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        if value1.type in [Type.NVARCHAR, Type.NCHAR] and value2.type in [Type.NVARCHAR, Type.NCHAR]:
             return ReturnType(value1.value >= value2.value, Type.BOOLEAN)
-        env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        env.setError("Los tipos no son válidos para operaciones relacionales (>=)", self.exp2.line, self.exp2.column)
         return ReturnType('NULL', Type.NULL)
 
     def lessEqual(self, env: Env) -> ReturnType:
         value1: ReturnType = self.exp1.execute(env)
         value2: ReturnType = self.exp2.execute(env)
-        if value1.type == Type.INT or value1.type == Type.DECIMAL:
-            if value2.type == Type.INT or value2.type == Type.DECIMAL:
+        if value1.type in [Type.INT, Type.DECIMAL]:
+            if value2.type in [Type.INT, Type.DECIMAL]:
                 return ReturnType(value1.value <= value2.value, Type.BOOLEAN)
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+            env.setError("Los tipos no son válidos para operaciones relacionales (<=)", self.exp2.line, self.exp2.column)
             return ReturnType('NULL', Type.NULL)
-        if value1.type == Type.NVARCHAR and value2.type == Type.NVARCHAR:
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        if value1.type in [Type.NVARCHAR, Type.NCHAR] and value2.type in [Type.NVARCHAR, Type.NCHAR]:
             return ReturnType(value1.value <= value2.value, Type.BOOLEAN)
-        env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        env.setError("Los tipos no son válidos para operaciones relacionales (<=)", self.exp2.line, self.exp2.column)
         return ReturnType('NULL', Type.NULL)
 
     def great(self, env: Env) -> ReturnType:
         value1: ReturnType = self.exp1.execute(env)
         value2: ReturnType = self.exp2.execute(env)
-        if value1.type == Type.INT or value1.type == Type.DECIMAL:
-            if value2.type == Type.INT or value2.type == Type.DECIMAL:
+        if value1.type in [Type.INT, Type.DECIMAL]:
+            if value2.type in [Type.INT, Type.DECIMAL]:
                 return ReturnType(value1.value > value2.value, Type.BOOLEAN)
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+            env.setError("Los tipos no son válidos para operaciones relacionales (>)", self.exp2.line, self.exp2.column)
             return ReturnType('NULL', Type.NULL)
-        if value1.type == Type.NVARCHAR and value2.type == Type.NVARCHAR:
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        if value1.type in [Type.NVARCHAR, Type.NCHAR] and value2.type in [Type.NVARCHAR, Type.NCHAR]:
             return ReturnType(value1.value > value2.value, Type.BOOLEAN)
-        env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        env.setError("Los tipos no son válidos para operaciones relacionales (>)", self.exp2.line, self.exp2.column)
         return ReturnType('NULL', Type.NULL)
 
     def less(self, env: Env) -> ReturnType:
         value1: ReturnType = self.exp1.execute(env)
         value2: ReturnType = self.exp2.execute(env)
-        if value1.type == Type.INT or value1.type == Type.DECIMAL:
-            if value2.type == Type.INT or value2.type == Type.DECIMAL:
+        if value1.type in [Type.INT, Type.DECIMAL]:
+            if value2.type in [Type.INT, Type.DECIMAL]:
                 return ReturnType(value1.value < value2.value, Type.BOOLEAN)
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+            env.setError("Los tipos no son válidos para operaciones relacionales (<)", self.exp2.line, self.exp2.column)
             return ReturnType('NULL', Type.NULL)
-        if value1.type == Type.NVARCHAR and value2.type == Type.NVARCHAR:
-            env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        if value1.type in [Type.NVARCHAR, Type.NCHAR] and value2.type in [Type.NVARCHAR, Type.NCHAR]:
             return ReturnType(value1.value < value2.value, Type.BOOLEAN)
-        env.setError("Los tipos no son válidos para operaciones relacionales", self.exp2.line, self.exp2.column)
+        env.setError("Los tipos no son válidos para operaciones relacionales (<)", self.exp2.line, self.exp2.column)
         return ReturnType('NULL', Type.NULL)
 
     def ast(self, ast: AST) -> ReturnAST:

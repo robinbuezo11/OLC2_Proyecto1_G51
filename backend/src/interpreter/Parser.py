@@ -8,6 +8,9 @@ from statements.Instructions.AsignID import AsignID
 from statements.Instructions.Select_prt import Select_prt
 from statements.Instructions.If import If
 from statements.Instructions.Block import Block
+from statements.Instructions.While import While
+from statements.Instructions.When import When
+from statements.Instructions.Case import Case
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
@@ -19,7 +22,7 @@ precedence = (
     ('left', 'TK_or'),
     ('left', 'TK_and'),
     ('right', 'TK_not'),
-    ('left', 'TK_equal', 'TK_notequal'),
+    ('left', 'TK_equalequal', 'TK_notequal'),
     ('left', 'TK_less', 'TK_lessequal', 'TK_great', 'TK_greatequal'),
     ('left', 'TK_plus', 'TK_minus'),
     ('left', 'TK_mult', 'TK_div', 'TK_mod'),
@@ -190,21 +193,32 @@ def p_CASESTRUCT_S(t: Prod):
                     | RW_case WHENELSE RW_end RW_as TK_field
                     | RW_case WHENELSE RW_end RW_as TK_nvarchar
                     | RW_case WHENELSE RW_end'''
+    if len(t) == 7   : t[0] = Case(t.lineno(1), t.lexpos(1), t[2], t[3][0], t[3][1], t[6])
+    elif len(t) == 5 : t[0] = Case(t.lineno(1), t.lexpos(1), t[2], t[3][0], t[3][1], None)
+    elif len(t) == 6 : t[0] = Case(t.lineno(1), t.lexpos(1), None, t[2][0], t[2][1], t[5])
+    elif len(t) == 4 : t[0] = Case(t.lineno(1), t.lexpos(1), None, t[2][0], t[2][1], None)
 
 def p_WHENELSE(t: Prod):
     '''WHENELSE : WHENS ELSE
                 | WHENS
                 | ELSE'''
+    if len(t) == 3                                  : t[0] = [t[1], t[2]]
+    elif len(t) == 2 and t.slice[1].type == 'WHENS' : t[0] = [t[1], None]
+    else                                            : t[0] = [None, t[1]]
 
 def p_WHENS(t: Prod):
     '''WHENS    : WHENS WHEN
                 | WHEN'''
+    if len(t) == 3 : t[1].append(t[2]); t[0] = t[1]
+    else           : t[0] = [t[1]]
 
 def p_WHEN(t: Prod):
     '''WHEN : RW_when EXP RW_then EXP'''
+    t[0] = When(t.lineno(1), t.lexpos(1), t[2], t[4])
 
 def p_ELSE(t: Prod):
-    '''ELSE : RW_else EXP'''
+    '''ELSE : RW_else RW_then EXP'''
+    t[0] = t[3]
 
 # PRINT
 def p_PRINT(t: Prod):
@@ -213,6 +227,7 @@ def p_PRINT(t: Prod):
 # Estructura WHILE
 def p_WHILESTRUCT(t: Prod):
     '''WHILESTRUCT : RW_while EXP ENCAP'''
+    t[0] = While(t.lineno(1), t.lexpos(1), t[2], t[3])
 
 # Estructura FOR
 def p_FORSTRUCT(t: Prod):
@@ -257,6 +272,7 @@ def p_EXP(t: Prod):
             | CAST
             | NATIVEFUNC
             | CALLFUNC
+            | TERNARY
             | TK_id
             | TK_field
             | TK_nvarchar
@@ -266,7 +282,7 @@ def p_EXP(t: Prod):
             | TK_datetime
             | RW_null
             | TK_lpar EXP TK_rpar'''
-    types = ['ARITHMETICS', 'RELATIONALS', 'LOGICS', 'CAST', 'NATIVEFUNC', 'CALLFUNC']
+    types = ['ARITHMETICS', 'RELATIONALS', 'LOGICS', 'CAST', 'NATIVEFUNC', 'CALLFUNC', 'TERNARY']
     if t.slice[1].type in types           : t[0] = t[1]
     elif t.slice[1].type == 'TK_id'       : t[0] = AccessID(t.lineno(1), t.lexpos(1), t[1])
     elif t.slice[1].type == 'TK_field'    : pass
@@ -290,7 +306,7 @@ def p_ARITHMETICS(t: Prod):
     else                             : t[0] = Arithmetic(t.lineno(1), t.lexpos(1), None, t[1], t[2])
 
 def p_RELATIONALS(t: Prod):  
-    '''RELATIONALS  : EXP TK_equal EXP
+    '''RELATIONALS  : EXP TK_equalequal EXP
                     | EXP TK_notequal EXP
                     | EXP TK_lessequal EXP
                     | EXP TK_greatequal EXP
@@ -311,6 +327,9 @@ def p_CAST(t: Prod):
 # Funciones Nativas
 def p_NATIVEFUNC(t: Prod):
     '''NATIVEFUNC : RW_truncate TK_lpar EXP TK_comma EXP TK_rpar'''
+
+def p_TERNARY(t: Prod):
+    '''TERNARY : RW_if TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar'''
 
 def p_TYPE(t: Prod):
     '''TYPE : RW_int

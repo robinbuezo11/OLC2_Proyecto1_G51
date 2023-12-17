@@ -16,3 +16,6 @@ class ReturnType:
     def __init__(self, value: any, type: Type):
         self.value = value
         self.type = type
+
+    def __str__(self) -> str:
+        return f'{self.type}: {self.value}'
