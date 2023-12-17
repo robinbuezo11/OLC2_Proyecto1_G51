@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import Dropdown from './Dropdown'
 
 const TopbarItem = ({item, depthLevel}) => {
-    console.log(depthLevel)
     const [dropdown, setDropdown] = useState(false)
     let ref = useRef();
 
