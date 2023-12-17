@@ -34,7 +34,9 @@ class Env:
         while env:
             if id.lower() in env.ids:
                 symbol: Symbol = env.ids.get(id.lower())
-                if symbol.type == value.type or symbol.type == Type.DECIMAL and value.type == Type.INT or value.type == Type.NULL:
+                if value.type == symbol.type or symbol.type == Type.DECIMAL and value.type == Type.INT or \
+                symbol.type == Type.BIT and value.type == Type.INT and int(value.value) in [0, 1] or \
+                symbol.type == Type.NCHAR and value.type == Type.NVARCHAR:
                     symbol.value = value.value
                     env.ids[id.lower()] = symbol
                     return True
