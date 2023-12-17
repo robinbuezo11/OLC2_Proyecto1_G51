@@ -1,4 +1,5 @@
 import { Avatar, Drawer, List, Stack, Toolbar } from "@mui/material";
+import { Link } from "react-router-dom";
 import sizeConfigs from "../../configs/sizeConfigs";
 import assets from "../../assets";
 import colorConfigs from "../../configs/colorConfigs";
@@ -31,7 +32,9 @@ const Sidebar = () => {
             direction="row"
             justifyContent="center"
           >
-            <Avatar src={assets.images.logo} />
+            <Link to="/">
+              <Avatar src={assets.images.logo} />
+            </Link>
           </Stack>
         </Toolbar>
         {appRoutes.map((route, index) => (

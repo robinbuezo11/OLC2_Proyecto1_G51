@@ -30,20 +30,20 @@ const SidebarItemCollapse = ({item}) => {
                         paddingX: "24px",
                     }}
                 >
-                <ListItemIcon sx={{
-                    color: colorConfigs.sidebar.color
-                }}>
-                    {item.sidebarProps.icon && item.sidebarProps.icon}
-                </ListItemIcon>
-                <ListItemText
-                    disableTypography
-                    primary={
-                        <Typography>
-                            {item.sidebarProps.displayText}
-                        </Typography>
-                    }
-                />
-                {open ? <ExpandLessOutlinedIcon /> : <ExpandMoreOutlinedIcon />}
+                    <ListItemIcon sx={{
+                        color: colorConfigs.sidebar.color
+                    }}>
+                        {item.sidebarProps.icon && item.sidebarProps.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                        disableTypography
+                        primary={
+                            <Typography>
+                                {item.sidebarProps.displayText}
+                            </Typography>
+                        }
+                    />
+                    {open ? <ExpandLessOutlinedIcon /> : <ExpandMoreOutlinedIcon />}
                 </ListItemButton>
                 <Collapse in={open} timeout="auto">
                     <List>
