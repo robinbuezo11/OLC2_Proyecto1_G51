@@ -259,8 +259,8 @@ def p_PARAMS(t: Prod):
     else           : t[0] = [t[1]]
 
 def p_PARAM(t: Prod):
-    '''PARAM    : TK_id TYPE'''
-    t[0] = Parameter(t.lineno(1), t.lexpos(1), t[1], t[2])
+    '''PARAM    : TK_id RW_as TYPE'''
+    t[0] = Parameter(t.lineno(1), t.lexpos(1), t[1], t[3])
 
 # Encapsulamiento de Sentencias
 def p_ENCAP(t: Prod):
