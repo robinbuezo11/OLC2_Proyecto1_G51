@@ -11,12 +11,16 @@ from statements.Instructions.Block import Block
 from statements.Instructions.While import While
 from statements.Instructions.When import When
 from statements.Instructions.Case import Case
+from statements.Instructions.Function import Function
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
 from statements.Expressions.Relational import Relational
 from statements.Expressions.Arithmetic import Arithmetic
 from statements.Expressions.Logic import Logic
+from statements.Expressions.Parameter import Parameter
+from statements.Expressions.CallFunction import CallFunction
+from statements.Expressions.Return import Return
 
 precedence = (
     ('left', 'TK_or'),
@@ -68,8 +72,8 @@ def p_INSTRUCTION(t: Prod):
     if not t.slice[1].type in types                     : t[0] = t[1]
     elif t.slice[1].type == 'RW_break'                  : pass
     elif t.slice[1].type == 'RW_continue'               : pass
-    elif t.slice[1].type == 'RW_return' and len(t) == 4 : pass
-    elif t.slice[1].type == 'RW_return'                 : pass
+    elif t.slice[1].type == 'RW_return' and len(t) == 4 : t[0] = Return(t.lineno(1), t.lexpos(1), t[2])
+    elif t.slice[1].type == 'RW_return'                 : t[0] = Return(t.lineno(1), t.lexpos(1), None)
 
 # Declaración de Variables
 def p_DECLAREID(t: Prod):
@@ -241,13 +245,22 @@ def p_FUNCDEC(t: Prod):
                 | RW_create RW_procedure TK_field RW_as ENCAP
                 | RW_create RW_procedure TK_field PARAMS ENCAP
                 | RW_create RW_procedure TK_field ENCAP'''
+    if len(t) == 10                                 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[5], t[9], t[8])
+    elif len(t) == 9                                : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[8], t[7])
+    elif len(t) == 7                                : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[4], t[6], Type.NULL)
+    elif len(t) == 6 and t.slice[4].type == 'RW_as' : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[5], Type.NULL)
+    elif len(t) == 6                                : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[4], t[5], Type.NULL)
+    else                                            : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[4], Type.NULL)
 
 def p_PARAMS(t: Prod):
     '''PARAMS   : PARAMS TK_comma PARAM
                 | PARAM'''
+    if len(t) == 4 : t[1].append(t[3]); t[0] = t[1]
+    else           : t[0] = [t[1]]
 
 def p_PARAM(t: Prod):
     '''PARAM    : TK_id TYPE'''
+    t[0] = Parameter(t.lineno(1), t.lexpos(1), t[1], t[2])
 
 # Encapsulamiento de Sentencias
 def p_ENCAP(t: Prod):
@@ -260,10 +273,14 @@ def p_ENCAP(t: Prod):
 def p_CALLFUNC(t: Prod):
     '''CALLFUNC : TK_field TK_lpar ARGS TK_rpar
                 | TK_field TK_lpar TK_rpar'''
+    if len(t) == 5 : t[0] = CallFunction(t.lineno(1), t.lexpos(1), t[1], t[3])
+    else           : t[0] = CallFunction(t.lineno(1), t.lexpos(1), t[1],  [] )
 
 def p_ARGS(t: Prod):
     '''ARGS : ARGS TK_comma EXP
             | EXP'''
+    if len(t) == 4 : t[1].append(t[3]); t[0] = t[1]
+    else           : t[0] = [t[1]]
 
 def p_EXP(t: Prod):
     '''EXP  : ARITHMETICS

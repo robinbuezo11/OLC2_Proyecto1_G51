@@ -14,6 +14,7 @@ class Env:
         self.previous = previous
         self.name = name
 
+    # === VARIABLES ===
     def saveID(self, id: str, value: any, type: Type, line: int, column: int):
         env: Env = self
         if id.lower() not in env.ids:
@@ -46,6 +47,23 @@ class Env:
         self.setError('Resignación de valor a variable inexistente', line, column)
         return False
 
+    # === FUNCTIONS ===
+    def saveFunction(self, id: str, func: any):
+        env: Env = self
+        if not id.lower() in env.functions:
+            env.functions[id.lower()] = func
+        else:
+            self.setError('Redefinición de función existente', func.line, func.column)
+
+    def getFunction(self, id: str) -> any:
+        env: Env = self
+        while env:
+            if id.lower() in env.functions:
+                return env.functions.get(id.lower())
+            env = env.previous
+        return None
+
+    # === UTILS ===
     def setPrint(self, print_: str):
         printConsole.append(str(print_))
 
