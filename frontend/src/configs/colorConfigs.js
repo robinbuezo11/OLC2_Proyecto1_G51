@@ -9,7 +9,7 @@ const colorConfigs = {
     },
     topbar: {
         bg: "#fff",
-        color: "#000"
+        color: "#233044",
     },
     mainBg: colors.grey["100"]
 };

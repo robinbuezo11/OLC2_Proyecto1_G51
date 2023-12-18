@@ -22,7 +22,7 @@ const MainLayout = () => {
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    p: 3,
+                    p: 0,
                     width: `calc(100% - ${sizeConfigs.sidebar.width}px)`,
                     minHeight: "100vh",
                     backgroundColor: colorConfigs.mainBg
