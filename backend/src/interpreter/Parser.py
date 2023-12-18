@@ -12,13 +12,16 @@ from statements.Instructions.While import While
 from statements.Instructions.When import When
 from statements.Instructions.Case import Case
 from statements.Instructions.Function import Function
+from statements.Instructions.CreateTable import CreateTable
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
 from statements.Expressions.Relational import Relational
 from statements.Expressions.Arithmetic import Arithmetic
 from statements.Expressions.Logic import Logic
-from statements.Expressions.Parameter import Parameter
+from utils.Parameter import Parameter
+from utils.Attribute import Attribute
+from utils.ForeignKey import ForeignKey
 from statements.Expressions.CallFunction import CallFunction
 from statements.Expressions.Return import Return
 
@@ -127,13 +130,35 @@ def p_IDS(t: Prod):
 # Creación de Tablas
 def p_CREATETABLE(t: Prod):
     '''CREATETABLE : RW_create RW_table TK_field TK_lpar ATTRIBUTES TK_rpar'''
+    t[0] = CreateTable(t.lineno(1), t.lexpos(1), t[3], t[5])
 
 def p_ATTRIBUTES(t: Prod):
     '''ATTRIBUTES   : ATTRIBUTES TK_comma ATTRIBUTE
                     | ATTRIBUTE'''
+    if len(t) == 4: t[1].append(t[3]); t[0] = t[1]
+    else:           t[0] = [t[1]]
 
 def p_ATTRIBUTE(t: Prod):
-    '''ATTRIBUTE : TK_field TYPE'''
+    '''ATTRIBUTE    : TK_field TYPE TK_lpar TK_int TK_rpar PROPS
+                    | TK_field TYPE PROPS
+                    | TK_field TYPE TK_lpar TK_int TK_rpar
+                    | TK_field TYPE
+                    | RW_foreing RW_key TK_lpar TK_field TK_rpar RW_ref TK_field TK_lpar TK_field TK_rpar'''
+    if len(t) == 7   : t[0] = Attribute(t.lineno(1), t.lexpos(1), t[1], t[2], t[4], t[6])
+    elif len(t) == 4 : t[0] = Attribute(t.lineno(1), t.lexpos(1), t[1], t[2], None, t[3])
+    elif len(t) == 6 : t[0] = Attribute(t.lineno(1), t.lexpos(1), t[1], t[2], t[4])
+    elif len(t) == 3 : t[0] = Attribute(t.lineno(1), t.lexpos(1), t[1], t[2], None)
+    else             : t[0] = ForeignKey(t.lineno(1), t.lexpos(1), t[4], t[7], t[9])
+
+def p_PROPS(t: Prod):
+    '''PROPS    : RW_not RW_null RW_primary RW_key
+                | RW_primary RW_key RW_not RW_null
+                | RW_not RW_null
+                | RW_primary RW_key'''
+    if len(t) == 5 and t.slice[1].type == 'RW_not'     : t[0] = {'notNull': True,  'primaryKey': True }
+    if len(t) == 5 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': True,  'primaryKey': True }
+    if len(t) == 3 and t.slice[1].type == 'RW_not'     : t[0] = {'notNull': True,  'primaryKey': False}
+    if len(t) == 3 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': False, 'primaryKey': True }
 
 # Alter Table
 def p_ALTERTAB(t: Prod):

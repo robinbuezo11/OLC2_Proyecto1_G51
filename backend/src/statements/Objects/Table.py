@@ -2,6 +2,8 @@ import math
 from statements.Abstracts.Expression import Expression
 from statements.Env.Env import Env
 from utils.Type import Type, ReturnType
+from utils.Attribute import Attribute
+from utils.ForeignKey import ForeignKey
 # from Expressions.Field import Field as F
 
 class Data:
@@ -16,10 +18,12 @@ class Data:
         return ReturnType(self.value, self.type)
 
 class Field:
-    def __init__(self, type: Type, values: list[Data], length: int):
+    def __init__(self, type: Type, values: list[Data], length: int, notNull: bool, isPrimary: bool):
         self.type = type
         self.values = values
         self.length = length
+        self.notNull = notNull
+        self.isPrimary = isPrimary
 
     def slice(self):
         self.values.clear()
@@ -29,11 +33,14 @@ class Field:
             self.length = n
 
 class Table:
-    def __init__(self, name: str, nameFields: list[str], typeFields: list[Type]):
+    def __init__(self, name: str, attribs: list[Attribute | ForeignKey]):
         self.fields: dict[str, Field] = {}
         self.rows: int = 0
-        for i in range(len(nameFields)):
-            self.fields[nameFields[i].lower()] = Field(typeFields[i], [], len(nameFields[i]))
+        for attrib in attribs:
+            if type(attrib) == Attribute:
+                self.fields[attrib.id.lower()] = Field(attrib.type, [], len(attrib.id), attrib.props['notNull'], attrib.props['primaryKey'])
+            elif type(attrib) == ForeignKey:
+                pass
         self.name = name
 
     def insert(self, env: Env, fields: dict[str, list[any]], line: int, column: int) -> bool:

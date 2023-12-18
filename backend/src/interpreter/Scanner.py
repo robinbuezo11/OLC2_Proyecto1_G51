@@ -13,6 +13,10 @@ reserveds = {
     'SET'        : 'RW_set',
     'CREATE'     : 'RW_create',
     'TABLE'      : 'RW_table',
+    'PRIMARY'    : 'RW_primary',
+    'FOREING'    : 'RW_foreing',
+    'KEY'        : 'RW_key',
+    'REFERENCE'  : 'RW_ref',
     'ALTER'      : 'RW_alter',
     'ADD'        : 'RW_add',
     'DROP'       : 'RW_drop',
@@ -28,6 +32,7 @@ reserveds = {
     'DELETE'     : 'RW_delete',
     'THEN'       : 'RW_then',
     'WHEN'       : 'RW_when',
+    'NOT'        : 'RW_not',
     # EJECUCION DML
     'IF'         : 'RW_if',
     'ELSE'       : 'RW_else',

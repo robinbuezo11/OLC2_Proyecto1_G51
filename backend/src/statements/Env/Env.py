@@ -63,6 +63,15 @@ class Env:
             env = env.previous
         return None
 
+    # === TABLES ===
+    def saveTable(self, id: str, table: any, line: int, column: int):
+        env: Env = self
+        if not id.lower() in env.tables:
+            env.tables[id.lower()] = table
+            self.setPrint(f'Tabla \'{id.lower()}\' creada. {line}:{column + 1}')
+        else:
+            self.setError('Redefinición de tabla existente', line, column)
+
     # === UTILS ===
     def setPrint(self, print_: str):
         printConsole.append(str(print_))

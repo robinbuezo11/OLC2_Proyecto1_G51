@@ -2,7 +2,7 @@ from statements.Abstracts.Expression import Expression
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from statements.Env.Symbol import Symbol
-from statements.Expressions.Parameter import Parameter
+from utils.Parameter import Parameter
 from statements.Instructions.Function import Function
 from statements.Objects.Table import Field
 from utils.Type import ReturnType, Type

@@ -2,7 +2,7 @@ from statements.Abstracts.Instruction import Instruction
 from statements.Env.Env import Env
 from utils.TypeInst import TypeInst
 from utils.Type import Type
-from statements.Expressions.Parameter import Parameter
+from utils.Parameter import Parameter
 from statements.Env.AST import AST, ReturnAST
 
 class Function(Instruction):
