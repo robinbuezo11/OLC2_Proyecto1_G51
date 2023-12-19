@@ -13,6 +13,7 @@ from statements.Instructions.When import When
 from statements.Instructions.Case import Case
 from statements.Instructions.Function import Function
 from statements.Instructions.CreateTable import CreateTable
+from statements.Instructions.InsertTable import InsertTable
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
@@ -177,14 +178,20 @@ def p_DROPTAB(t: Prod):
 # Insertar registros
 def p_INSERTREG(t: Prod):
     '''INSERTREG : RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar RW_values TK_lpar LIST_EXPS TK_rpar'''
+    t[0] = InsertTable(t.lineno(1), t.lexpos(1), t[3], t[5], t[9])
+
 
 def p_LIST_ATTRIBS(t: Prod):
     '''LIST_ATTRIBS : LIST_ATTRIBS TK_comma TK_field
                     | TK_field'''
+    if len(t) == 4 : t[1].append(t[3]); t[0] = t[1]
+    else           : t[0] = [t[1]]
 
 def p_LIST_EXPS(t: Prod):
     '''LIST_EXPS    : LIST_EXPS TK_comma EXP
                     | EXP'''
+    if len(t) == 4 : t[1].append(t[3]); t[0] = t[1]
+    else           : t[0] = [t[1]]
 
 # Actualizar Tabla
 def p_UPDATETAB(t: Prod):

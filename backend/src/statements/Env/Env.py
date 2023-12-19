@@ -72,6 +72,26 @@ class Env:
         else:
             self.setError('Redefinición de tabla existente', line, column)
 
+    def insertTable(self, id: str, fields: list[str], values: list[Expression], line: int, column: int) -> bool:
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                if env.tables.get(id.lower()).validateFields(fields):
+                    newRow: dict[str, list[any]] = env.tables.get(id.lower()).getFieldsRow()
+                    result: ReturnType
+                    for i in range(len(fields)):
+                        result = values[i].execute(self)
+                        newRow[fields[i].lower()] = [result.type, result.value]
+                    if env.tables.get(id.lower()).insert(env, newRow, line, column):
+                        self.setPrint(f'Registro insertado exitosamente en Tabla \'{id.lower()}\'. {line}:{column + 1}')
+                        return True
+                    return False
+                self.setError(f'Inserta dato en columna inexistente en Tabla \'{id.lower()}\'', line, column)
+                return False
+            env = env.previous
+        self.setError('Insertar en tabla inexistente', line, column)
+        return False
+
     # === UTILS ===
     def setPrint(self, print_: str):
         printConsole.append(str(print_))
