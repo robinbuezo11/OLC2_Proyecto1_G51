@@ -16,6 +16,7 @@ from statements.Instructions.CreateTable import CreateTable
 from statements.Instructions.InsertTable import InsertTable
 from statements.Instructions.UpdateTable import UpdateTable
 from statements.Instructions.TruncateTable import TruncateTable
+from statements.Instructions.DropTable import DropTable
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
@@ -176,6 +177,7 @@ def p_ACTION(t: Prod):
 # Eliminar Tabla
 def p_DROPTAB(t: Prod):
     '''DROPTAB : RW_drop RW_table TK_field'''
+    t[0] = DropTable(t.lineno(1), t.lexpos(1), t[3])
 
 # Insertar registros
 def p_INSERTREG(t: Prod):

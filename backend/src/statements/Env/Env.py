@@ -103,6 +103,17 @@ class Env:
         self.setError('Truncar tabla inexistente', line, column)
         return False
 
+    def dropTable(self, id: str, line: int, column: int) -> bool:
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                del env.tables[id.lower()]
+                self.setPrint(f'Tabla \'{id.lower()}\' eliminada. {line}:{column + 1}')
+                return True
+            env = env.previous
+        self.setError('Eliminación de tabla inexistente', line, column)
+        return False
+
     def updateTable(self, id: str, fields: list[str], values: list[Expression], condition: Expression, line: int, column: int):
         env: Env = self
         while env:
