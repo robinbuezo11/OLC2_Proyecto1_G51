@@ -17,9 +17,11 @@ from statements.Instructions.InsertTable import InsertTable
 from statements.Instructions.UpdateTable import UpdateTable
 from statements.Instructions.TruncateTable import TruncateTable
 from statements.Instructions.DropTable import DropTable
+from statements.Instructions.DeleteTable import DeleteTable
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
+from statements.Expressions.Field import Field
 from statements.Expressions.Relational import Relational
 from statements.Expressions.Arithmetic import Arithmetic
 from statements.Expressions.Logic import Logic
@@ -220,6 +222,7 @@ def p_TRUNCATETAB(t: Prod):
 # Eliminar Registros
 def p_DELETETAB(t: Prod):
     '''DELETETAB : RW_delete RW_from TK_field RW_where EXP'''
+    t[0] = DeleteTable(t.lineno(1), t.lexpos(1), t[3], t[5])
 
 # Estructura IF
 def p_IFSTRUCT(t: Prod):
@@ -343,7 +346,7 @@ def p_EXP(t: Prod):
     types = ['ARITHMETICS', 'RELATIONALS', 'LOGICS', 'CAST', 'NATIVEFUNC', 'CALLFUNC', 'TERNARY']
     if t.slice[1].type in types           : t[0] = t[1]
     elif t.slice[1].type == 'TK_id'       : t[0] = AccessID(t.lineno(1), t.lexpos(1), t[1])
-    elif t.slice[1].type == 'TK_field'    : pass
+    elif t.slice[1].type == 'TK_field'    : t[0] = Field(t.lineno(1), t.lexpos(1), t[1])
     elif t.slice[1].type == 'TK_nvarchar' : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NVARCHAR)
     elif t.slice[1].type == 'TK_int'      : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.INT)
     elif t.slice[1].type == 'TK_decimal'  : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DECIMAL)
@@ -365,6 +368,7 @@ def p_ARITHMETICS(t: Prod):
 
 def p_RELATIONALS(t: Prod):  
     '''RELATIONALS  : EXP TK_equalequal EXP
+                    | EXP TK_equal EXP
                     | EXP TK_notequal EXP
                     | EXP TK_lessequal EXP
                     | EXP TK_greatequal EXP
