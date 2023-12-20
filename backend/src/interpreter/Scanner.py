@@ -119,7 +119,7 @@ t_TK_or         = r'\|\|'
 t_TK_not        = r'\!'
 
 def t_newline(t):
-    r'\n'
+    r'\n | \r'
     t.lexer.lineno += 1
 
 t_ignore = ' \t'

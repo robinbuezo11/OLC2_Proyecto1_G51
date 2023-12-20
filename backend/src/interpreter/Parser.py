@@ -15,6 +15,7 @@ from statements.Instructions.Function import Function
 from statements.Instructions.CreateTable import CreateTable
 from statements.Instructions.InsertTable import InsertTable
 from statements.Instructions.UpdateTable import UpdateTable
+from statements.Instructions.TruncateTable import TruncateTable
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
@@ -212,6 +213,7 @@ def p_VALUETAB(t: Prod):
 # Truncate
 def p_TRUNCATETAB(t: Prod):
     '''TRUNCATETAB : RW_truncate RW_table TK_field'''
+    t[0] = TruncateTable(t.lineno(1), t.lexpos(1), t[3])
 
 # Eliminar Registros
 def p_DELETETAB(t: Prod):
