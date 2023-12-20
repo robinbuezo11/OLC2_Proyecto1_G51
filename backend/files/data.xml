@@ -6,15 +6,20 @@
             <column name="name" type="str" />
             <column name="hint" type="str" />
             <row>
-                <value column="id">26</value>
-                <value column="name">Prueba</value>
-                <value column="hint">PruebaJEJE</value>
+                <value column="id">255555</value>
+                <value column="name">Grupo515</value>
+                <value column="hint">XD</value>
             </row>
+            <column name="id" type="int" />
+            <column name="name" type="str" />
+            <column name="hint" type="str" />
             <row>
-                <value column="id">1</value>
-                <value column="name">Grupo51</value>
-                <value column="hint">Los Cabrones</value>
+                <value column="id">255555</value>
+                <value column="name">Grupo515</value>
+                <value column="hint">XD</value>
             </row>
         </table>
+        <table name="demo" />
     </database>
+    <database name="test" />
 </root>
