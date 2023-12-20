@@ -93,7 +93,7 @@ class Table:
     def createTmpFields(self) -> dict[str, Field]:
         newFields: dict[str, Field] = {}
         for name, field in self.fields.items():
-            newFields[name] = Field(field.type, [], len(name))
+            newFields[name] = Field(field.type, [], len(name), field.notNull, field.isPrimary)
         return newFields
 
     def deleteWhere(self, condition: Expression, env: Env):
