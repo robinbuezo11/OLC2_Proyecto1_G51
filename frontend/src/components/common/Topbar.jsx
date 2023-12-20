@@ -6,8 +6,7 @@ import TopbarItems from "./TopbarItems";
 import TopbarItem from "./TopbarItem";
 import "../../styles/Topbar.css"
 
-const Topbar = () => {
-    
+const Topbar = ({props}) => {
     return (
         <AppBar
             position="fixed"
@@ -26,7 +25,7 @@ const Topbar = () => {
                         {
                             TopbarItems.map((item, index) => {
                                 const depthLevel = 0;
-                                return <TopbarItem item={item} key={index} depthLevel={depthLevel} />
+                                return <TopbarItem item={item} key={index} depthLevel={depthLevel} func={props[item.id]}/>
                             })
                         }
                     </ul>

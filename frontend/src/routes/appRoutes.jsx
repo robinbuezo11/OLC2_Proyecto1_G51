@@ -1,11 +1,5 @@
 import HomePage from "../pages/home/HomePage"
-import DashboardPageLayout from "../pages/dashboard/DashboardPageLayout"
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import DefaultPage from "../pages/dashboard/DefaultPage";
-import DashboardIndex from "../pages/dashboard/DashboardIndex";
-import ChangeLogPage from "../pages/changelog/ChangelogPage";
-import AnalyticsPage from "../pages/dashboard/AnalyticsPage";
-import SaasPage from "../pages/dashboard/SaasPage";
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 
 const appRoutes = [
@@ -16,7 +10,7 @@ const appRoutes = [
     },
     {
         path: "/dashboard",
-        element: <DashboardPageLayout />,
+        element: '',
         state: "dashboard",
         sidebarProps: {
             displayText: "Dashboard",
@@ -25,12 +19,12 @@ const appRoutes = [
         child: [
             {
                 index: true,
-                element: <DashboardIndex />,
+                element: '',
                 state: "dashboard.index"
             },
             {
                 path: "/dashboard/default",
-                element: <DefaultPage />,
+                element: '',
                 state: "dashboard.default",
                 sidebarProps: {
                     displayText: "Default"
@@ -38,7 +32,7 @@ const appRoutes = [
             },
             {
                 path: "/dashboard/analytics",
-                element: <AnalyticsPage />,
+                element: '',
                 state: "dashboard.analytics",
                 sidebarProps: {
                     displayText: "AnalyticsPage"
@@ -46,7 +40,7 @@ const appRoutes = [
             },
             {
                 path: "/dashboard/saas",
-                element: <SaasPage />,
+                element: '',
                 state: "dashboard.saas",
                 sidebarProps: {
                     displayText: "SaasPage"
@@ -56,7 +50,7 @@ const appRoutes = [
     },
     {
         path: "/changelog",
-        element: <ChangeLogPage />,
+        element: '',
         state: "changelog",
         sidebarProps: {
             displayText: "ChangeLog",

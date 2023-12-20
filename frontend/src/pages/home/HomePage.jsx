@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import Results from "./Results";
+import axios from "axios";
+import Topbar from "../../components/common/Topbar";
 
 const HomePage = () => {
     const data = [
@@ -19,8 +21,23 @@ const HomePage = () => {
     const options = {
     };
 
+    const execute = () => {
+        axios.post('http://localhost:4000/api/exec', {
+            input: code
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    const funcs = {'execute': execute}
+
     return (
         <>
+            <Topbar props={funcs}/>
             <div className="App">
                 <div className='Content'>
                     <div className="editor1">

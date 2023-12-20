@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Dropdown from './Dropdown'
 
-const TopbarItem = ({item, depthLevel}) => {
+const TopbarItem = ({item, depthLevel, func}) => {
     const [dropdown, setDropdown] = useState(false)
     let ref = useRef();
 
@@ -49,7 +49,8 @@ const TopbarItem = ({item, depthLevel}) => {
                         <Dropdown depthLevel={depthLevel} dropdown={dropdown} submenus={item.items} />
                     </>
                 ) : (
-                    <a href='/#'>{item.label}</a>
+                    func ?  <a href='/#' onClick={func}>{item.label}</a>
+                    :   <a href='/#'>{item.label}</a>
                 )
 
             }
