@@ -14,6 +14,7 @@ from statements.Instructions.Case import Case
 from statements.Instructions.Function import Function
 from statements.Instructions.CreateTable import CreateTable
 from statements.Instructions.InsertTable import InsertTable
+from statements.Instructions.UpdateTable import UpdateTable
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
@@ -196,13 +197,17 @@ def p_LIST_EXPS(t: Prod):
 # Actualizar Tabla
 def p_UPDATETAB(t: Prod):
     '''UPDATETAB : RW_update TK_field RW_set VALUESTAB RW_where EXP'''
+    t[0] = UpdateTable(t.lineno(1), t.lexpos(1), t[2], t[4][0], t[4][1], t[6])
 
 def p_VALUESTAB(t: Prod):
     '''VALUESTAB    : VALUESTAB TK_comma VALUETAB
                     | VALUETAB '''
+    if len(t) == 4: t[1][0].append(t[3][0]); t[1][1].append(t[3][1]); t[0] = t[1]
+    else:           t[0] = [[t[1][0]], [t[1][1]]]
 
 def p_VALUETAB(t: Prod):
     '''VALUETAB : TK_field TK_equal EXP'''
+    t[0] = [t[1], t[3]]
 
 # Truncate
 def p_TRUNCATETAB(t: Prod):
