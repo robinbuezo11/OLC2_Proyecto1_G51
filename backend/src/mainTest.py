@@ -4,15 +4,18 @@ def main():
     xml = ManageXml("backend\\files\\data.xml")
 
     xml.createDataBase("test")
-    xml.createDataBase("test")
     xml.createTable("test", "demo")
-    # xml.createTable("test", "tablaprueba")
+    #xml.createTable("test", "tablaprueba")
 
     xml.createColumn("test", "demo", "id", "int")
     xml.createColumn("test", "demo", "name", "str")
     xml.createColumn("test", "demo", "hint", "str")
 
     xml.createRow("test", "demo", [{"value": 1, "column": 'id'}, {"value": 'Grupo51', "column": 'name'}, {"value": 'Los Cabrones', "column": 'hint'}])
+    
+    #xml.createDataBase("test2")
+    #xml.createTable("test2", "demo2")
+
     #xml.dropTable("test", "demo")
     #xml.insert("test", "demo", [{"value": 2, "column": 'id'}, {"value": 'Grupo515', "column": 'name'}, {"value": 'XD', "column": 'hint'}])
     

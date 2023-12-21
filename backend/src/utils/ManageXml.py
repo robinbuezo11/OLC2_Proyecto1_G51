@@ -74,19 +74,19 @@ class ManageXml:
             return False
 
         # Verificar si la tabla ya existe en la base de datos
-        table_exists = any(tb.get("name") == table for tb in db_to_modify)
-        if not table_exists:
+        table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
+        if table_to_modify is None:
             print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
             return False
 
         # Verificar si la columna ya existe en la tabla
-        column_exists = any(col.get("name") == name for tb in db_to_modify if tb.get("name") == table for col in tb.findall("column"))
+        column_exists = any(col.get("name") == name for col in table_to_modify.findall("column"))
         if column_exists:
             print(f"La columna '{name}' ya existe en la tabla '{table}'.")
             return False
 
         # Crear nueva columna en la tabla
-        new_column = ET.SubElement(db_to_modify, table)
+        new_column = ET.SubElement(table_to_modify, "column")
         new_column.set("name", name)
         new_column.set("type", type)
 
@@ -102,22 +102,24 @@ class ManageXml:
             return False
 
         # Verificar si la tabla ya existe en la base de datos
-        table_exists = any(tb.get("name") == table for tb in db_to_modify)
-        if not table_exists:
+        table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
+        if table_to_modify is None:
             print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
             return False
 
+        # Convertir las filas existentes a conjuntos para facilitar la comparación
+        existing_rows = [{value.get("column"): value.text for value in row.findall("value")} for row in table_to_modify.findall("row")]
+
+        # Convertir la nueva fila a un conjunto
+        new_row_values = {d["column"]: str(d["value"]) for d in data}
+
         # Verificar si ya existe una fila con los mismos valores en la tabla
-        existing_rows = [row for tb in db_to_modify if tb.get("name") == table for row in tb.findall("row")]
-        if existing_rows:
-            for existing_row in existing_rows:
-                existing_values = [{"column": value.get("column"), "value": value.text} for value in existing_row.findall("value")]
-                if existing_values == data:
-                    print("Ya existe una fila con los mismos valores en la tabla.")
-                    return False
+        if new_row_values in existing_rows:
+            print("Ya existe una fila con los mismos valores en la tabla.")
+            return False
 
         # Crear nueva fila en la tabla
-        new_row = ET.SubElement(db_to_modify, table)
+        new_row = ET.SubElement(table_to_modify, "row")
         for d in data:
             value = ET.SubElement(new_row, "value")
             value.set("column", d["column"])
