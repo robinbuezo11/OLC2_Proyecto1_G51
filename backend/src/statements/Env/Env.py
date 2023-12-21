@@ -136,6 +136,18 @@ class Env:
         self.setError('Actualizar registro en tabla inexistente', line, column)
         return False
 
+    def selectTable(self, id: str, fields: list[list[any]] or str, condition: Expression, line: int, column: int):
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                table: str = env.tables.get(id.lower()).select(fields, condition, self)
+                self.setPrint(f'Selección en Tabla \'{id.lower()}\'. {line}:{column + 1}')
+                env.setPrint(table if table else '')
+                return True
+            env = env.previous
+        self.setError('Selección en tabla inexistente', line, column)
+        return False
+
     # === UTILS ===
     def setPrint(self, print_: str):
         printConsole.append(str(print_))

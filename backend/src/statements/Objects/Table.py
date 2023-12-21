@@ -158,9 +158,11 @@ class Table:
     def createSelectFields(self, titles: list[list[str]]) -> dict[str, Field]:
         newFields: dict[str, Field] = {}
         type: Type
+        # for name, field in self.fields.items():
+        #     newFields[name] = Field(field.type, [], len(name), field.notNull, field.isPrimary)
         for field in titles:
             type = self.fields.get(field[0]).type
-            newFields[field[1]] = Field(type if type else Type.NULL, [], len(field[1]))
+            newFields[field[1]] = Field(type if type else Type.NULL, [], len(field[1]), False, False)
         return newFields
 
     def select(self, fields: list[list[any]] or str, condition: Expression, env: Env) -> str:

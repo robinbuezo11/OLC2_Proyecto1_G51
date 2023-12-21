@@ -18,6 +18,7 @@ from statements.Instructions.UpdateTable import UpdateTable
 from statements.Instructions.TruncateTable import TruncateTable
 from statements.Instructions.DropTable import DropTable
 from statements.Instructions.DeleteTable import DeleteTable
+from statements.Instructions.Select import Select
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
@@ -111,8 +112,8 @@ def p_SELECT(t: Prod):
     '''SELECT   : RW_select FIELDS RW_from TK_field RW_where EXP
                 | RW_select FIELDS RW_from TK_field
                 | RW_select LIST_IDS'''
-    if len(t) == 7   : pass
-    elif len(t) == 5 : pass
+    if len(t) == 7   : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], t[6])
+    elif len(t) == 5 : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], None)
     else             : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
 
 def p_FIELDS(t: Prod):
