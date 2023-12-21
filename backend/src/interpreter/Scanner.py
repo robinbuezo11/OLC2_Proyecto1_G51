@@ -12,6 +12,8 @@ reserveds = {
     'DECLARE'    : 'RW_declare',
     'SET'        : 'RW_set',
     'CREATE'     : 'RW_create',
+    'DATA'       : 'RW_data',
+    'BASE'       : 'RW_base',
     'TABLE'      : 'RW_table',
     'PRIMARY'    : 'RW_primary',
     'FOREING'    : 'RW_foreing',
@@ -144,7 +146,7 @@ def t_TK_field(t):
     return t
 
 def t_TK_date(t):
-    r'\"\d\d\-\d\d\-\d\d\d\d\"'
+    r'\"\d\d\d\d\-\d\d\-\d\d\"'
     t.value = t.value[1 : len(t.value) - 1]
     return t
 

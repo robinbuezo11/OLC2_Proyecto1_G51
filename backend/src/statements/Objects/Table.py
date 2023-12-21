@@ -54,9 +54,12 @@ class Table:
 
     def validate(self, env: Env, fields: dict[str, list[any]], line: int, column: int) -> bool:
         for name, field in fields.items():
-            if self.fields.get(name).type != field[0]:
-                env.setError(f'No coincide el tipo de dato para la columna {name} en la tabla {self.name}', line, column)
-                return False
+            if self.fields.get(name).type == field[0] or \
+            self.fields.get(name).type == Type.DECIMAL and field[0] == Type.INT or \
+            self.fields.get(name).type == Type.NCHAR and field[0] == Type.NVARCHAR:
+                continue
+            env.setError(f'No coincide el tipo de dato para la columna {name} en la tabla {self.name}', line, column)
+            return False
         return True
 
     def validateFields(self, names: list[str]) -> bool:

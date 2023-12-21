@@ -56,7 +56,8 @@ def p_INSTRUCTIONS(t: Prod):
     else           : t[0] = [t[1]]
 
 def p_INSTRUCTION(t: Prod):
-    '''INSTRUCTION  : CREATETABLE TK_semicolon
+    '''INSTRUCTION  : CREATEDB TK_semicolon
+                    | CREATETABLE TK_semicolon
                     | ALTERTAB TK_semicolon
                     | DROPTAB TK_semicolon
                     | INSERTREG TK_semicolon
@@ -84,6 +85,10 @@ def p_INSTRUCTION(t: Prod):
     elif t.slice[1].type == 'RW_continue'               : pass
     elif t.slice[1].type == 'RW_return' and len(t) == 4 : t[0] = Return(t.lineno(1), t.lexpos(1), t[2])
     elif t.slice[1].type == 'RW_return'                 : t[0] = Return(t.lineno(1), t.lexpos(1), None)
+
+# Crear DB
+def p_CREATEDB(t: Prod):
+    '''CREATEDB     : RW_create RW_data RW_base TK_field'''
 
 # Declaración de Variables
 def p_DECLAREID(t: Prod):
