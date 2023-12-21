@@ -1,6 +1,6 @@
 import TopbarItem from "./TopbarItem";
 
-const Dropdown = ({submenus, dropdown, depthLevel}) => {
+const Dropdown = ({submenus, dropdown, depthLevel, props}) => {
     depthLevel = depthLevel + 1;
     const dropdownClass = depthLevel > 1 ? 'dropdown-submenu' : '';
 
@@ -9,7 +9,7 @@ const Dropdown = ({submenus, dropdown, depthLevel}) => {
         <ul className={`dropdown ${dropdownClass} ${dropdown ? "show" : ""}`}>
         {
             submenus.map((submenu, index) => (
-              <TopbarItem item={submenu} key={index} depthLevel={depthLevel} />
+              <TopbarItem item={submenu} key={index} depthLevel={depthLevel} props={props}/>
             ))
         }
         </ul>
