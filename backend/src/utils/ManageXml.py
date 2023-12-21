@@ -20,7 +20,6 @@ class ManageXml:
         except:
             print("Error: No se pudo cargar ni crear el archivo xml")
 
-        
     def getTree(self):
         return self.__tree
     
@@ -31,60 +30,132 @@ class ManageXml:
         self.__tree.write(self.__path, encoding="utf-8", xml_declaration=True)
 
     def createDataBase(self, name):
-        database = ET.SubElement(self.__root, "database")
-        database.set("name", name)
+        # Verificar si la base de datos ya existe
+        existing_database = next((db for db in self.__root if db.get("name") == name), None)
+        if existing_database:
+            print(f"La base de datos '{name}' ya existe.")
+            return False
+
+        # Crear nueva base de datos
+        new_database = ET.SubElement(self.__root, "database")
+        new_database.set("name", name)
+
         self.writeXml()
+        print(f"Nueva base de datos '{name}' creada exitosamente.")
+        return True
 
     def createTable(self, database, name):
-        for db in self.__root:
-            if db.get("name") == database:
-                table = ET.SubElement(db, "table")
-                table.set("name", name)
-                self.writeXml()
-                return True
-        return False
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Verificar si la tabla ya existe en la base de datos
+        table_exists = any(tb.get("name") == name for tb in db_to_modify)
+        if table_exists:
+            print(f"La tabla '{name}' ya existe en la base de datos '{database}'.")
+            return False
+
+        # Crear nueva tabla en la base de datos
+        new_table = ET.SubElement(db_to_modify, "table")
+        new_table.set("name", name)
+
+        self.writeXml()
+        print(f"Nueva tabla '{name}' creada en la base de datos '{database}' exitosamente.")
+        return True
+
 
     def createColumn(self, database, table, name, type):
-        for db in self.__root:
-            if db.get("name") == database:
-                for tb in db:
-                    if tb.get("name") == table:
-                        column = ET.SubElement(tb, "column")
-                        column.set("name", name)
-                        column.set("type", type)
-                        self.writeXml()
-                        return True
-        return False
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Verificar si la tabla ya existe en la base de datos
+        table_exists = any(tb.get("name") == table for tb in db_to_modify)
+        if not table_exists:
+            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+            return False
+
+        # Verificar si la columna ya existe en la tabla
+        column_exists = any(col.get("name") == name for tb in db_to_modify if tb.get("name") == table for col in tb.findall("column"))
+        if column_exists:
+            print(f"La columna '{name}' ya existe en la tabla '{table}'.")
+            return False
+
+        # Crear nueva columna en la tabla
+        new_column = ET.SubElement(db_to_modify, table)
+        new_column.set("name", name)
+        new_column.set("type", type)
+
+        self.writeXml()
+        print(f"Nueva columna '{name}' creada en la tabla '{table}' de la base de datos '{database}' exitosamente.")
+        return True
 
     def createRow(self, database, table, data):
-        for db in self.__root:
-            if db.get("name") == database:
-                for tb in db:
-                    if tb.get("name") == table:
-                        row = ET.SubElement(tb, "row")
-                        for d in data:
-                            value = ET.SubElement(row, "value")
-                            value.set("column", d["column"])
-                            value.text = str(d["value"])
-                        self.writeXml()
-                        return True
-        return False
-    
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Verificar si la tabla ya existe en la base de datos
+        table_exists = any(tb.get("name") == table for tb in db_to_modify)
+        if not table_exists:
+            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+            return False
+
+        # Verificar si ya existe una fila con los mismos valores en la tabla
+        existing_rows = [row for tb in db_to_modify if tb.get("name") == table for row in tb.findall("row")]
+        if existing_rows:
+            for existing_row in existing_rows:
+                existing_values = [{"column": value.get("column"), "value": value.text} for value in existing_row.findall("value")]
+                if existing_values == data:
+                    print("Ya existe una fila con los mismos valores en la tabla.")
+                    return False
+
+        # Crear nueva fila en la tabla
+        new_row = ET.SubElement(db_to_modify, table)
+        for d in data:
+            value = ET.SubElement(new_row, "value")
+            value.set("column", d["column"])
+            value.text = str(d["value"])
+
+        self.writeXml()
+        print(f"Nueva fila creada en la tabla '{table}' de la base de datos '{database}' exitosamente.")
+        return True
 
     def select(self, database, table):
-        for db in self.__root:
-            if db.get("name") == database:
-                for tb in db:
-                    if tb.get("name") == table:
-                        rows = []
-                        for row in tb:
-                            values = []
-                            for value in row:
-                                values.append({"column": value.get("column"), "value": value.text})
-                            if len(values) > 0:
-                                rows.append(values)
-                        return rows
-        return None
+        # Verificar si la base de datos existe
+        db_to_select = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_select is None:
+            print(f"La base de datos '{database}' no existe.")
+            return None
+
+        # Verificar si la tabla existe en la base de datos
+        table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
+        if table_to_select is None:
+            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+            return None
+
+        rows = []
+        for row in table_to_select.findall("row"):
+            values = []
+            for value in row.findall("value"):
+                values.append({"column": value.get("column"), "value": value.text})
+            if len(values) > 0:
+                rows.append(values)
+
+        # Mostrar los resultados en la consola
+        if len(rows) > 0:
+            for row in rows:
+                print(row)
+            return rows
+        else:
+            print("No hay datos en la tabla.")
+            return None
     
     def dropDatabase(self, database):   
         # Verificar si la base de datos existe
@@ -210,3 +281,55 @@ class ManageXml:
         self.writeXml()
         print(f"Datos actualizados en la tabla '{table}' de la base de datos '{database}' exitosamente.")
         return True
+    
+    def deleteColumn(self, database, table, columns):
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Verificar si la tabla existe en la base de datos
+        table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
+        if table_to_modify is None:
+            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+            return False
+
+        # Eliminar columnas de la tabla
+        for row in table_to_modify.findall("row"):
+            values = row.findall("value")
+            for value in values:
+                column_name = value.get("column")
+                if column_name in columns:
+                    row.remove(value)
+
+        self.writeXml()
+        print(f"Columnas eliminadas en la tabla '{table}' de la base de datos '{database}' exitosamente.")
+        return True
+
+    def deleteRow(self, database, table, columns):
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Verificar si la tabla existe en la base de datos
+        table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
+        if table_to_modify is None:
+            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+            return False
+
+        # Eliminar filas de la tabla
+        for row in table_to_modify.findall("row"):
+            values = row.findall("value")
+            for value in values:
+                column_name = value.get("column")
+                if column_name in columns:
+                    row.remove(value)
+
+        self.writeXml()
+        print(f"Datos eliminados en la tabla '{table}' de la base de datos '{database}' exitosamente.")
+        return True
+    
+

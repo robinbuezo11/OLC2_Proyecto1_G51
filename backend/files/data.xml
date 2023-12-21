@@ -1,25 +1,3 @@
 <?xml version='1.0' encoding='utf-8'?>
 <root>
-    <database name="test">
-        <table name="demo">
-            <column name="id" type="int" />
-            <column name="name" type="str" />
-            <column name="hint" type="str" />
-            <row>
-                <value column="id">255555</value>
-                <value column="name">Grupo515</value>
-                <value column="hint">XD</value>
-            </row>
-            <column name="id" type="int" />
-            <column name="name" type="str" />
-            <column name="hint" type="str" />
-            <row>
-                <value column="id">255555</value>
-                <value column="name">Grupo515</value>
-                <value column="hint">XD</value>
-            </row>
-        </table>
-        <table name="demo" />
-    </database>
-    <database name="test" />
 </root>

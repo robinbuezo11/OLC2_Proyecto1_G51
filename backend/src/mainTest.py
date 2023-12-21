@@ -4,6 +4,7 @@ def main():
     xml = ManageXml("backend\\files\\data.xml")
 
     xml.createDataBase("test")
+    xml.createDataBase("test")
     xml.createTable("test", "demo")
     # xml.createTable("test", "tablaprueba")
 
@@ -18,7 +19,7 @@ def main():
     #xml.alterTable("test", "demo2", "demo3")
 
     #xml.dropDatabase("test")
-    xml.updateRow("test", "demo", [{"value": 255555, "column": 'id'}, {"value": 'Grupo515', "column": 'name'}, {"value": 'XD', "column": 'hint'}])
+    #xml.updateRow("test", "demo", [{"value": 255555, "column": 'id'}, {"value": 'Grupo515', "column": 'name'}, {"value": 'XD', "column": 'hint'}])
     
     #rows = xml.select("test", "demo")
 
