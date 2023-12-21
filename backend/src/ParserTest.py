@@ -6,7 +6,7 @@ from utils.Outs import getStringOuts
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 
-input = open('../../Inputs/Pruebas.sql', encoding='utf-8').read()
+input = open('../../Inputs/Input1.sql', encoding='utf-8').read()
 Scanner.lineno = 1
 instructions: list[Instruction] = parser.parse(input)
 

@@ -15,9 +15,14 @@ from statements.Instructions.Function import Function
 from statements.Instructions.CreateTable import CreateTable
 from statements.Instructions.InsertTable import InsertTable
 from statements.Instructions.UpdateTable import UpdateTable
+from statements.Instructions.TruncateTable import TruncateTable
+from statements.Instructions.DropTable import DropTable
+from statements.Instructions.DeleteTable import DeleteTable
+from statements.Instructions.Select import Select
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
+from statements.Expressions.Field import Field
 from statements.Expressions.Relational import Relational
 from statements.Expressions.Arithmetic import Arithmetic
 from statements.Expressions.Logic import Logic
@@ -51,7 +56,8 @@ def p_INSTRUCTIONS(t: Prod):
     else           : t[0] = [t[1]]
 
 def p_INSTRUCTION(t: Prod):
-    '''INSTRUCTION  : CREATETABLE TK_semicolon
+    '''INSTRUCTION  : CREATEDB TK_semicolon
+                    | CREATETABLE TK_semicolon
                     | ALTERTAB TK_semicolon
                     | DROPTAB TK_semicolon
                     | INSERTREG TK_semicolon
@@ -80,6 +86,10 @@ def p_INSTRUCTION(t: Prod):
     elif t.slice[1].type == 'RW_return' and len(t) == 4 : t[0] = Return(t.lineno(1), t.lexpos(1), t[2])
     elif t.slice[1].type == 'RW_return'                 : t[0] = Return(t.lineno(1), t.lexpos(1), None)
 
+# Crear DB
+def p_CREATEDB(t: Prod):
+    '''CREATEDB     : RW_create RW_data RW_base TK_field'''
+
 # Declaración de Variables
 def p_DECLAREID(t: Prod):
     '''DECLAREID    : RW_declare DECLIDS
@@ -107,8 +117,8 @@ def p_SELECT(t: Prod):
     '''SELECT   : RW_select FIELDS RW_from TK_field RW_where EXP
                 | RW_select FIELDS RW_from TK_field
                 | RW_select LIST_IDS'''
-    if len(t) == 7   : pass
-    elif len(t) == 5 : pass
+    if len(t) == 7   : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], t[6])
+    elif len(t) == 5 : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], None)
     else             : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
 
 def p_FIELDS(t: Prod):
@@ -175,6 +185,7 @@ def p_ACTION(t: Prod):
 # Eliminar Tabla
 def p_DROPTAB(t: Prod):
     '''DROPTAB : RW_drop RW_table TK_field'''
+    t[0] = DropTable(t.lineno(1), t.lexpos(1), t[3])
 
 # Insertar registros
 def p_INSERTREG(t: Prod):
@@ -212,10 +223,12 @@ def p_VALUETAB(t: Prod):
 # Truncate
 def p_TRUNCATETAB(t: Prod):
     '''TRUNCATETAB : RW_truncate RW_table TK_field'''
+    t[0] = TruncateTable(t.lineno(1), t.lexpos(1), t[3])
 
 # Eliminar Registros
 def p_DELETETAB(t: Prod):
     '''DELETETAB : RW_delete RW_from TK_field RW_where EXP'''
+    t[0] = DeleteTable(t.lineno(1), t.lexpos(1), t[3], t[5])
 
 # Estructura IF
 def p_IFSTRUCT(t: Prod):
@@ -339,7 +352,7 @@ def p_EXP(t: Prod):
     types = ['ARITHMETICS', 'RELATIONALS', 'LOGICS', 'CAST', 'NATIVEFUNC', 'CALLFUNC', 'TERNARY']
     if t.slice[1].type in types           : t[0] = t[1]
     elif t.slice[1].type == 'TK_id'       : t[0] = AccessID(t.lineno(1), t.lexpos(1), t[1])
-    elif t.slice[1].type == 'TK_field'    : pass
+    elif t.slice[1].type == 'TK_field'    : t[0] = Field(t.lineno(1), t.lexpos(1), t[1])
     elif t.slice[1].type == 'TK_nvarchar' : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.NVARCHAR)
     elif t.slice[1].type == 'TK_int'      : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.INT)
     elif t.slice[1].type == 'TK_decimal'  : t[0] = Primitive(t.lineno(1), t.lexpos(1), t[1], Type.DECIMAL)
@@ -361,6 +374,7 @@ def p_ARITHMETICS(t: Prod):
 
 def p_RELATIONALS(t: Prod):  
     '''RELATIONALS  : EXP TK_equalequal EXP
+                    | EXP TK_equal EXP
                     | EXP TK_notequal EXP
                     | EXP TK_lessequal EXP
                     | EXP TK_greatequal EXP

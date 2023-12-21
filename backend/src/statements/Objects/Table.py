@@ -54,9 +54,12 @@ class Table:
 
     def validate(self, env: Env, fields: dict[str, list[any]], line: int, column: int) -> bool:
         for name, field in fields.items():
-            if self.fields.get(name).type != field[0]:
-                env.setError(f'No coincide el tipo de dato para la columna {name} en la tabla {self.name}', line, column)
-                return False
+            if self.fields.get(name).type == field[0] or \
+            self.fields.get(name).type == Type.DECIMAL and field[0] == Type.INT or \
+            self.fields.get(name).type == Type.NCHAR and field[0] == Type.NVARCHAR:
+                continue
+            env.setError(f'No coincide el tipo de dato para la columna {name} en la tabla {self.name}', line, column)
+            return False
         return True
 
     def validateFields(self, names: list[str]) -> bool:
@@ -93,7 +96,7 @@ class Table:
     def createTmpFields(self) -> dict[str, Field]:
         newFields: dict[str, Field] = {}
         for name, field in self.fields.items():
-            newFields[name] = Field(field.type, [], len(name))
+            newFields[name] = Field(field.type, [], len(name), field.notNull, field.isPrimary)
         return newFields
 
     def deleteWhere(self, condition: Expression, env: Env):
@@ -158,9 +161,11 @@ class Table:
     def createSelectFields(self, titles: list[list[str]]) -> dict[str, Field]:
         newFields: dict[str, Field] = {}
         type: Type
+        # for name, field in self.fields.items():
+        #     newFields[name] = Field(field.type, [], len(name), field.notNull, field.isPrimary)
         for field in titles:
             type = self.fields.get(field[0]).type
-            newFields[field[1]] = Field(type if type else Type.NULL, [], len(field[1]))
+            newFields[field[1]] = Field(type if type else Type.NULL, [], len(field[1]), False, False)
         return newFields
 
     def select(self, fields: list[list[any]] or str, condition: Expression, env: Env) -> str:

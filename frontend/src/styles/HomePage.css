@@ -1,0 +1,4 @@
+.Results {
+    height: calc(100vh - 55vh - 64px);
+    overflow-y: auto;
+}

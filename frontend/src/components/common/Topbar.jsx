@@ -25,7 +25,7 @@ const Topbar = ({props}) => {
                         {
                             TopbarItems.map((item, index) => {
                                 const depthLevel = 0;
-                                return <TopbarItem item={item} key={index} depthLevel={depthLevel} func={props[item.id]}/>
+                                return <TopbarItem item={item} key={index} depthLevel={depthLevel} props={props}/>
                             })
                         }
                     </ul>

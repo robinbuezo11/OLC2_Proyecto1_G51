@@ -12,6 +12,8 @@ reserveds = {
     'DECLARE'    : 'RW_declare',
     'SET'        : 'RW_set',
     'CREATE'     : 'RW_create',
+    'DATA'       : 'RW_data',
+    'BASE'       : 'RW_base',
     'TABLE'      : 'RW_table',
     'PRIMARY'    : 'RW_primary',
     'FOREING'    : 'RW_foreing',
@@ -119,7 +121,7 @@ t_TK_or         = r'\|\|'
 t_TK_not        = r'\!'
 
 def t_newline(t):
-    r'\n'
+    r'\n | \r'
     t.lexer.lineno += 1
 
 t_ignore = ' \t'
@@ -144,7 +146,7 @@ def t_TK_field(t):
     return t
 
 def t_TK_date(t):
-    r'\"\d\d\-\d\d\-\d\d\d\d\"'
+    r'\"\d\d\d\d\-\d\d\-\d\d\"'
     t.value = t.value[1 : len(t.value) - 1]
     return t
 

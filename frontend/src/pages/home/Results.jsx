@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableContainer, Table, TableHead, TableRow, TableCell, Paper } from '@mui/material'
+import { TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody } from '@mui/material'
 
 function Results({ data }) {
   return (
@@ -12,6 +12,7 @@ function Results({ data }) {
                     ))}
                 </TableRow>
             </TableHead>
+            <TableBody>
             {data.slice(1).map((row) => (
                 <TableRow>
                     {row.map((cell) => (
@@ -19,6 +20,7 @@ function Results({ data }) {
                     ))}
                 </TableRow>
             ))}
+            </TableBody>
         </Table>
     </TableContainer>
   )

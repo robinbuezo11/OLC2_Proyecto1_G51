@@ -15,16 +15,8 @@ const TopbarItems = [
                 id: "save",
             },
             {
-                label: "Guardar como",
-                id: "saveAs",
-            },
-            {
                 label: "Cerrar",
                 id: "close",
-            },
-            {
-                label: "Salir",
-                id: "exit",
             }
         ]
     },

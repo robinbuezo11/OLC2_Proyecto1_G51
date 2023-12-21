@@ -92,6 +92,62 @@ class Env:
         self.setError('Insertar en tabla inexistente', line, column)
         return False
 
+    def truncateTable(self, id: str, line: int, column: int) -> bool:
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                env.tables.get(id.lower()).truncate()
+                self.setPrint(f'Registros eliminados de Tabla \'{id.lower()}\'. {line}:{column + 1}')
+                return True
+            env = env.previous
+        self.setError('Truncar tabla inexistente', line, column)
+        return False
+
+    def dropTable(self, id: str, line: int, column: int) -> bool:
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                del env.tables[id.lower()]
+                self.setPrint(f'Tabla \'{id.lower()}\' eliminada. {line}:{column + 1}')
+                return True
+            env = env.previous
+        self.setError('Eliminación de tabla inexistente', line, column)
+        return False
+
+    def deleteTable(self, id: str, condition: Expression, line: int, column: int):
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                env.tables.get(id.lower()).deleteWhere(condition, self)
+                self.setPrint(f'Eliminación de Tabla \'{id.lower()}\'. {line}:{column + 1}')
+                return
+            env = env.previous
+        self.setError('Eliminar registro en tabla inexistente', line, column)
+        return False
+
+    def updateTable(self, id: str, fields: list[str], values: list[Expression], condition: Expression, line: int, column: int):
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                env.tables.get(id.lower()).updateWhere(condition, fields, values, self)
+                self.setPrint(f'Tabla \'{id.lower()}\' actualizada. {line}:{column + 1}')
+                return True
+            env = env.previous
+        self.setError('Actualizar registro en tabla inexistente', line, column)
+        return False
+
+    def selectTable(self, id: str, fields: list[list[any]] or str, condition: Expression, line: int, column: int):
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                table: str = env.tables.get(id.lower()).select(fields, condition, self)
+                self.setPrint(f'Selección en Tabla \'{id.lower()}\'. {line}:{column + 1}')
+                env.setPrint(table if table else '')
+                return True
+            env = env.previous
+        self.setError('Selección en tabla inexistente', line, column)
+        return False
+
     # === UTILS ===
     def setPrint(self, print_: str):
         printConsole.append(str(print_))
