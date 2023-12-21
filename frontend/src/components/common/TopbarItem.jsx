@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import Dropdown from './Dropdown'
 
-const TopbarItem = ({item, depthLevel, func}) => {
+const TopbarItem = ({item, depthLevel, props}) => {
     const [dropdown, setDropdown] = useState(false)
     let ref = useRef();
+    const func = props[item.id];
 
     useEffect(()=>{
         const handler = (event) => {
@@ -46,7 +47,7 @@ const TopbarItem = ({item, depthLevel, func}) => {
                             {item.label + " "}
                             {depthLevel > 0 ? <span> &raquo; </span> : <span className='arrow' />}
                         </button>
-                        <Dropdown depthLevel={depthLevel} dropdown={dropdown} submenus={item.items} />
+                        <Dropdown depthLevel={depthLevel} dropdown={dropdown} submenus={item.items} props={props}/>
                     </>
                 ) : (
                     func ?  <a href='/#' onClick={func}>{item.label}</a>
