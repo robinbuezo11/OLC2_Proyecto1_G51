@@ -19,6 +19,7 @@ from statements.Instructions.TruncateTable import TruncateTable
 from statements.Instructions.DropTable import DropTable
 from statements.Instructions.DeleteTable import DeleteTable
 from statements.Instructions.Select import Select
+from statements.Instructions.AlterTable import AlterTable
 # Expresiones
 from statements.Expressions.Primitive import Primitive
 from statements.Expressions.AccessID import AccessID
@@ -175,12 +176,17 @@ def p_PROPS(t: Prod):
 # Alter Table
 def p_ALTERTAB(t: Prod):
     '''ALTERTAB : RW_alter RW_table TK_field ACTION'''
+    t[0] = AlterTable(t.lineno(1), t.lexpos(1), t[3], t[4][0], t[4][1], t[4][2], t[4][3])
 
 def p_ACTION(t: Prod):
     '''ACTION   : RW_add TK_field TYPE
-                | RW_drop RW_column TK_field
+                | RW_drop TK_field
                 | RW_rename RW_to TK_field
                 | RW_rename RW_column TK_field RW_to TK_field'''
+    if   t.slice[1].type == 'RW_add'    : t[0] = [t[1],        t[2], None, t[3]]
+    elif t.slice[1].type == 'RW_drop'   : t[0] = [t[1],        t[2], None, None]
+    elif t.slice[2].type == 'RW_to'     : t[0] = [t[1] + t[2], t[3], None, None]
+    elif t.slice[2].type == 'RW_column' : t[0] = [t[1] + t[2], t[3], t[5], None]
 
 # Eliminar Tabla
 def p_DROPTAB(t: Prod):

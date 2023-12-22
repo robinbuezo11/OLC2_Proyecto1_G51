@@ -68,7 +68,7 @@ Rule 55    PROPS -> RW_not RW_null
 Rule 56    PROPS -> RW_primary RW_key
 Rule 57    ALTERTAB -> RW_alter RW_table TK_field ACTION
 Rule 58    ACTION -> RW_add TK_field TYPE
-Rule 59    ACTION -> RW_drop RW_column TK_field
+Rule 59    ACTION -> RW_drop TK_field
 Rule 60    ACTION -> RW_rename RW_to TK_field
 Rule 61    ACTION -> RW_rename RW_column TK_field RW_to TK_field
 Rule 62    DROPTAB -> RW_drop RW_table TK_field
@@ -171,7 +171,7 @@ RW_bit               : 144
 RW_break             : 24
 RW_cas               : 140
 RW_case              : 77 78 79 80 81 82
-RW_column            : 59 61
+RW_column            : 61
 RW_concatena         : 
 RW_contar            : 
 RW_continue          : 25
@@ -4808,7 +4808,7 @@ state 149
 
     (57) ALTERTAB -> RW_alter RW_table TK_field . ACTION
     (58) ACTION -> . RW_add TK_field TYPE
-    (59) ACTION -> . RW_drop RW_column TK_field
+    (59) ACTION -> . RW_drop TK_field
     (60) ACTION -> . RW_rename RW_to TK_field
     (61) ACTION -> . RW_rename RW_column TK_field RW_to TK_field
 
@@ -6769,9 +6769,9 @@ state 208
 
 state 209
 
-    (59) ACTION -> RW_drop . RW_column TK_field
+    (59) ACTION -> RW_drop . TK_field
 
-    RW_column       shift and go to state 247
+    TK_field        shift and go to state 247
 
 
 state 210
@@ -7745,23 +7745,23 @@ state 246
 
 state 247
 
-    (59) ACTION -> RW_drop RW_column . TK_field
+    (59) ACTION -> RW_drop TK_field .
 
-    TK_field        shift and go to state 280
+    TK_semicolon    reduce using rule 59 (ACTION -> RW_drop TK_field .)
 
 
 state 248
 
     (60) ACTION -> RW_rename RW_to . TK_field
 
-    TK_field        shift and go to state 281
+    TK_field        shift and go to state 280
 
 
 state 249
 
     (61) ACTION -> RW_rename RW_column . TK_field RW_to TK_field
 
-    TK_field        shift and go to state 282
+    TK_field        shift and go to state 281
 
 
 state 250
@@ -7777,8 +7777,8 @@ state 251
     (63) INSERTREG -> RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS . TK_rpar RW_values TK_lpar LIST_EXPS TK_rpar
     (64) LIST_ATTRIBS -> LIST_ATTRIBS . TK_comma TK_field
 
-    TK_rpar         shift and go to state 283
-    TK_comma        shift and go to state 284
+    TK_rpar         shift and go to state 282
+    TK_comma        shift and go to state 283
 
 
 state 252
@@ -7837,7 +7837,7 @@ state 252
     RW_truncate     shift and go to state 86
     RW_if           shift and go to state 87
 
-    EXP                            shift and go to state 285
+    EXP                            shift and go to state 284
     ARITHMETICS                    shift and go to state 67
     RELATIONALS                    shift and go to state 68
     LOGICS                         shift and go to state 69
@@ -7902,7 +7902,7 @@ state 253
     RW_truncate     shift and go to state 86
     RW_if           shift and go to state 87
 
-    EXP                            shift and go to state 286
+    EXP                            shift and go to state 285
     ARITHMETICS                    shift and go to state 67
     RELATIONALS                    shift and go to state 68
     LOGICS                         shift and go to state 69
@@ -7918,7 +7918,7 @@ state 254
 
     TK_field        shift and go to state 212
 
-    VALUETAB                       shift and go to state 287
+    VALUETAB                       shift and go to state 286
 
 state 255
 
@@ -8011,7 +8011,7 @@ state 256
     RW_truncate     shift and go to state 86
     RW_if           shift and go to state 87
 
-    EXP                            shift and go to state 288
+    EXP                            shift and go to state 287
     ARITHMETICS                    shift and go to state 67
     RELATIONALS                    shift and go to state 68
     LOGICS                         shift and go to state 69
@@ -8149,7 +8149,7 @@ state 259
     RW_begin        shift and go to state 38
     RW_print        shift and go to state 42
 
-    INSTRUCTIONS                   shift and go to state 289
+    INSTRUCTIONS                   shift and go to state 288
     INSTRUCTION                    shift and go to state 3
     CREATEDB                       shift and go to state 4
     CREATETABLE                    shift and go to state 5
@@ -8175,7 +8175,7 @@ state 260
 
     (75) IFSTRUCT -> RW_if EXP RW_then INSTRUCTIONS RW_end . RW_if
 
-    RW_if           shift and go to state 290
+    RW_if           shift and go to state 289
 
 
 state 261
@@ -8190,8 +8190,8 @@ state 262
     (77) CASESTRUCT_S -> RW_case EXP WHENELSE RW_end RW_as . TK_field
     (78) CASESTRUCT_S -> RW_case EXP WHENELSE RW_end RW_as . TK_nvarchar
 
-    TK_field        shift and go to state 291
-    TK_nvarchar     shift and go to state 292
+    TK_field        shift and go to state 290
+    TK_nvarchar     shift and go to state 291
 
 
 state 263
@@ -8301,7 +8301,7 @@ state 266
     RW_truncate     shift and go to state 86
     RW_if           shift and go to state 87
 
-    EXP                            shift and go to state 293
+    EXP                            shift and go to state 292
     ARITHMETICS                    shift and go to state 67
     RELATIONALS                    shift and go to state 68
     LOGICS                         shift and go to state 69
@@ -8314,7 +8314,7 @@ state 267
 
     (140) CAST -> RW_cas TK_lpar EXP RW_as TYPE . TK_rpar
 
-    TK_rpar         shift and go to state 294
+    TK_rpar         shift and go to state 293
 
 
 state 268
@@ -8335,7 +8335,7 @@ state 268
     (137) LOGICS -> EXP . TK_and EXP
     (138) LOGICS -> EXP . TK_or EXP
 
-    TK_rpar         shift and go to state 295
+    TK_rpar         shift and go to state 294
     TK_plus         shift and go to state 122
     TK_minus        shift and go to state 123
     TK_mult         shift and go to state 124
@@ -8370,7 +8370,7 @@ state 269
     (137) LOGICS -> EXP . TK_and EXP
     (138) LOGICS -> EXP . TK_or EXP
 
-    TK_comma        shift and go to state 296
+    TK_comma        shift and go to state 295
     TK_plus         shift and go to state 122
     TK_minus        shift and go to state 123
     TK_mult         shift and go to state 124
@@ -8398,13 +8398,13 @@ state 270
     (55) PROPS -> . RW_not RW_null
     (56) PROPS -> . RW_primary RW_key
 
-    TK_lpar         shift and go to state 297
+    TK_lpar         shift and go to state 296
     TK_rpar         reduce using rule 51 (ATTRIBUTE -> TK_field TYPE .)
     TK_comma        reduce using rule 51 (ATTRIBUTE -> TK_field TYPE .)
-    RW_not          shift and go to state 299
-    RW_primary      shift and go to state 300
+    RW_not          shift and go to state 298
+    RW_primary      shift and go to state 299
 
-    PROPS                          shift and go to state 298
+    PROPS                          shift and go to state 297
 
 state 271
 
@@ -8425,20 +8425,20 @@ state 272
     TK_field        shift and go to state 234
     RW_foreing      shift and go to state 237
 
-    ATTRIBUTE                      shift and go to state 301
+    ATTRIBUTE                      shift and go to state 300
 
 state 273
 
     (52) ATTRIBUTE -> RW_foreing RW_key . TK_lpar TK_field TK_rpar RW_ref TK_field TK_lpar TK_field TK_rpar
 
-    TK_lpar         shift and go to state 302
+    TK_lpar         shift and go to state 301
 
 
 state 274
 
     (93) FUNCDEC -> RW_create RW_function TK_field TK_lpar PARAMS TK_rpar . RW_returns TYPE ENCAP
 
-    RW_returns      shift and go to state 303
+    RW_returns      shift and go to state 302
 
 
 state 275
@@ -8460,7 +8460,7 @@ state 275
     RW_nchar        shift and go to state 166
     RW_nvarchar     shift and go to state 167
 
-    TYPE                           shift and go to state 304
+    TYPE                           shift and go to state 303
 
 state 276
 
@@ -8498,40 +8498,33 @@ state 279
 
 state 280
 
-    (59) ACTION -> RW_drop RW_column TK_field .
-
-    TK_semicolon    reduce using rule 59 (ACTION -> RW_drop RW_column TK_field .)
-
-
-state 281
-
     (60) ACTION -> RW_rename RW_to TK_field .
 
     TK_semicolon    reduce using rule 60 (ACTION -> RW_rename RW_to TK_field .)
 
 
-state 282
+state 281
 
     (61) ACTION -> RW_rename RW_column TK_field . RW_to TK_field
 
-    RW_to           shift and go to state 305
+    RW_to           shift and go to state 304
+
+
+state 282
+
+    (63) INSERTREG -> RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar . RW_values TK_lpar LIST_EXPS TK_rpar
+
+    RW_values       shift and go to state 305
 
 
 state 283
 
-    (63) INSERTREG -> RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar . RW_values TK_lpar LIST_EXPS TK_rpar
+    (64) LIST_ATTRIBS -> LIST_ATTRIBS TK_comma . TK_field
 
-    RW_values       shift and go to state 306
+    TK_field        shift and go to state 306
 
 
 state 284
-
-    (64) LIST_ATTRIBS -> LIST_ATTRIBS TK_comma . TK_field
-
-    TK_field        shift and go to state 307
-
-
-state 285
 
     (71) VALUETAB -> TK_field TK_equal EXP .
     (124) ARITHMETICS -> EXP . TK_plus EXP
@@ -8567,7 +8560,7 @@ state 285
     TK_or           shift and go to state 135
 
 
-state 286
+state 285
 
     (68) UPDATETAB -> RW_update TK_field RW_set VALUESTAB RW_where EXP .
     (124) ARITHMETICS -> EXP . TK_plus EXP
@@ -8602,7 +8595,7 @@ state 286
     TK_or           shift and go to state 135
 
 
-state 287
+state 286
 
     (69) VALUESTAB -> VALUESTAB TK_comma VALUETAB .
 
@@ -8610,7 +8603,7 @@ state 287
     TK_comma        reduce using rule 69 (VALUESTAB -> VALUESTAB TK_comma VALUETAB .)
 
 
-state 288
+state 287
 
     (35) SELECT -> RW_select FIELDS RW_from TK_field RW_where EXP .
     (124) ARITHMETICS -> EXP . TK_plus EXP
@@ -8645,7 +8638,7 @@ state 288
     TK_or           shift and go to state 135
 
 
-state 289
+state 288
 
     (74) IFSTRUCT -> RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS . RW_end RW_if
     (3) INSTRUCTIONS -> INSTRUCTIONS . INSTRUCTION
@@ -8709,7 +8702,7 @@ state 289
     (103) ENCAP -> . RW_begin RW_end
     (90) PRINT -> . RW_print EXP
 
-    RW_end          shift and go to state 308
+    RW_end          shift and go to state 307
     RW_break        shift and go to state 23
     RW_continue     shift and go to state 24
     RW_return       shift and go to state 25
@@ -8752,28 +8745,28 @@ state 289
     ENCAP                          shift and go to state 21
     PRINT                          shift and go to state 22
 
-state 290
+state 289
 
     (75) IFSTRUCT -> RW_if EXP RW_then INSTRUCTIONS RW_end RW_if .
 
     TK_semicolon    reduce using rule 75 (IFSTRUCT -> RW_if EXP RW_then INSTRUCTIONS RW_end RW_if .)
 
 
-state 291
+state 290
 
     (77) CASESTRUCT_S -> RW_case EXP WHENELSE RW_end RW_as TK_field .
 
     TK_semicolon    reduce using rule 77 (CASESTRUCT_S -> RW_case EXP WHENELSE RW_end RW_as TK_field .)
 
 
-state 292
+state 291
 
     (78) CASESTRUCT_S -> RW_case EXP WHENELSE RW_end RW_as TK_nvarchar .
 
     TK_semicolon    reduce using rule 78 (CASESTRUCT_S -> RW_case EXP WHENELSE RW_end RW_as TK_nvarchar .)
 
 
-state 293
+state 292
 
     (92) FORSTRUCT -> RW_for TK_id RW_in EXP TK_dot EXP . ENCAP RW_loop
     (124) ARITHMETICS -> EXP . TK_plus EXP
@@ -8809,9 +8802,9 @@ state 293
     TK_or           shift and go to state 135
     RW_begin        shift and go to state 38
 
-    ENCAP                          shift and go to state 309
+    ENCAP                          shift and go to state 308
 
-state 294
+state 293
 
     (140) CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .
 
@@ -8843,7 +8836,7 @@ state 294
     RW_where        reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
 
 
-state 295
+state 294
 
     (141) NATIVEFUNC -> RW_truncate TK_lpar EXP TK_comma EXP TK_rpar .
 
@@ -8875,7 +8868,7 @@ state 295
     RW_where        reduce using rule 141 (NATIVEFUNC -> RW_truncate TK_lpar EXP TK_comma EXP TK_rpar .)
 
 
-state 296
+state 295
 
     (142) TERNARY -> RW_if TK_lpar EXP TK_comma EXP TK_comma . EXP TK_rpar
     (108) EXP -> . ARITHMETICS
@@ -8931,7 +8924,7 @@ state 296
     RW_truncate     shift and go to state 86
     RW_if           shift and go to state 87
 
-    EXP                            shift and go to state 310
+    EXP                            shift and go to state 309
     ARITHMETICS                    shift and go to state 67
     RELATIONALS                    shift and go to state 68
     LOGICS                         shift and go to state 69
@@ -8940,15 +8933,15 @@ state 296
     CALLFUNC                       shift and go to state 72
     TERNARY                        shift and go to state 73
 
-state 297
+state 296
 
     (48) ATTRIBUTE -> TK_field TYPE TK_lpar . TK_int TK_rpar PROPS
     (50) ATTRIBUTE -> TK_field TYPE TK_lpar . TK_int TK_rpar
 
-    TK_int          shift and go to state 311
+    TK_int          shift and go to state 310
 
 
-state 298
+state 297
 
     (49) ATTRIBUTE -> TK_field TYPE PROPS .
 
@@ -8956,23 +8949,23 @@ state 298
     TK_comma        reduce using rule 49 (ATTRIBUTE -> TK_field TYPE PROPS .)
 
 
-state 299
+state 298
 
     (53) PROPS -> RW_not . RW_null RW_primary RW_key
     (55) PROPS -> RW_not . RW_null
 
-    RW_null         shift and go to state 312
+    RW_null         shift and go to state 311
 
 
-state 300
+state 299
 
     (54) PROPS -> RW_primary . RW_key RW_not RW_null
     (56) PROPS -> RW_primary . RW_key
 
-    RW_key          shift and go to state 313
+    RW_key          shift and go to state 312
 
 
-state 301
+state 300
 
     (46) ATTRIBUTES -> ATTRIBUTES TK_comma ATTRIBUTE .
 
@@ -8980,14 +8973,14 @@ state 301
     TK_comma        reduce using rule 46 (ATTRIBUTES -> ATTRIBUTES TK_comma ATTRIBUTE .)
 
 
-state 302
+state 301
 
     (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar . TK_field TK_rpar RW_ref TK_field TK_lpar TK_field TK_rpar
 
-    TK_field        shift and go to state 314
+    TK_field        shift and go to state 313
 
 
-state 303
+state 302
 
     (93) FUNCDEC -> RW_create RW_function TK_field TK_lpar PARAMS TK_rpar RW_returns . TYPE ENCAP
     (143) TYPE -> . RW_int
@@ -9006,9 +8999,9 @@ state 303
     RW_nchar        shift and go to state 166
     RW_nvarchar     shift and go to state 167
 
-    TYPE                           shift and go to state 315
+    TYPE                           shift and go to state 314
 
-state 304
+state 303
 
     (94) FUNCDEC -> RW_create RW_function TK_field TK_lpar TK_rpar RW_returns TYPE . ENCAP
     (102) ENCAP -> . RW_begin INSTRUCTIONS RW_end
@@ -9016,23 +9009,23 @@ state 304
 
     RW_begin        shift and go to state 38
 
-    ENCAP                          shift and go to state 316
+    ENCAP                          shift and go to state 315
 
-state 305
+state 304
 
     (61) ACTION -> RW_rename RW_column TK_field RW_to . TK_field
 
-    TK_field        shift and go to state 317
+    TK_field        shift and go to state 316
 
 
-state 306
+state 305
 
     (63) INSERTREG -> RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar RW_values . TK_lpar LIST_EXPS TK_rpar
 
-    TK_lpar         shift and go to state 318
+    TK_lpar         shift and go to state 317
 
 
-state 307
+state 306
 
     (64) LIST_ATTRIBS -> LIST_ATTRIBS TK_comma TK_field .
 
@@ -9040,21 +9033,21 @@ state 307
     TK_comma        reduce using rule 64 (LIST_ATTRIBS -> LIST_ATTRIBS TK_comma TK_field .)
 
 
-state 308
+state 307
 
     (74) IFSTRUCT -> RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end . RW_if
 
-    RW_if           shift and go to state 319
+    RW_if           shift and go to state 318
 
 
-state 309
+state 308
 
     (92) FORSTRUCT -> RW_for TK_id RW_in EXP TK_dot EXP ENCAP . RW_loop
 
-    RW_loop         shift and go to state 320
+    RW_loop         shift and go to state 319
 
 
-state 310
+state 309
 
     (142) TERNARY -> RW_if TK_lpar EXP TK_comma EXP TK_comma EXP . TK_rpar
     (124) ARITHMETICS -> EXP . TK_plus EXP
@@ -9072,7 +9065,7 @@ state 310
     (137) LOGICS -> EXP . TK_and EXP
     (138) LOGICS -> EXP . TK_or EXP
 
-    TK_rpar         shift and go to state 321
+    TK_rpar         shift and go to state 320
     TK_plus         shift and go to state 122
     TK_minus        shift and go to state 123
     TK_mult         shift and go to state 124
@@ -9089,42 +9082,42 @@ state 310
     TK_or           shift and go to state 135
 
 
-state 311
+state 310
 
     (48) ATTRIBUTE -> TK_field TYPE TK_lpar TK_int . TK_rpar PROPS
     (50) ATTRIBUTE -> TK_field TYPE TK_lpar TK_int . TK_rpar
 
-    TK_rpar         shift and go to state 322
+    TK_rpar         shift and go to state 321
 
 
-state 312
+state 311
 
     (53) PROPS -> RW_not RW_null . RW_primary RW_key
     (55) PROPS -> RW_not RW_null .
 
-    RW_primary      shift and go to state 323
+    RW_primary      shift and go to state 322
     TK_rpar         reduce using rule 55 (PROPS -> RW_not RW_null .)
     TK_comma        reduce using rule 55 (PROPS -> RW_not RW_null .)
 
 
-state 313
+state 312
 
     (54) PROPS -> RW_primary RW_key . RW_not RW_null
     (56) PROPS -> RW_primary RW_key .
 
-    RW_not          shift and go to state 324
+    RW_not          shift and go to state 323
     TK_rpar         reduce using rule 56 (PROPS -> RW_primary RW_key .)
     TK_comma        reduce using rule 56 (PROPS -> RW_primary RW_key .)
 
 
-state 314
+state 313
 
     (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar TK_field . TK_rpar RW_ref TK_field TK_lpar TK_field TK_rpar
 
-    TK_rpar         shift and go to state 325
+    TK_rpar         shift and go to state 324
 
 
-state 315
+state 314
 
     (93) FUNCDEC -> RW_create RW_function TK_field TK_lpar PARAMS TK_rpar RW_returns TYPE . ENCAP
     (102) ENCAP -> . RW_begin INSTRUCTIONS RW_end
@@ -9132,23 +9125,23 @@ state 315
 
     RW_begin        shift and go to state 38
 
-    ENCAP                          shift and go to state 326
+    ENCAP                          shift and go to state 325
 
-state 316
+state 315
 
     (94) FUNCDEC -> RW_create RW_function TK_field TK_lpar TK_rpar RW_returns TYPE ENCAP .
 
     TK_semicolon    reduce using rule 94 (FUNCDEC -> RW_create RW_function TK_field TK_lpar TK_rpar RW_returns TYPE ENCAP .)
 
 
-state 317
+state 316
 
     (61) ACTION -> RW_rename RW_column TK_field RW_to TK_field .
 
     TK_semicolon    reduce using rule 61 (ACTION -> RW_rename RW_column TK_field RW_to TK_field .)
 
 
-state 318
+state 317
 
     (63) INSERTREG -> RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar RW_values TK_lpar . LIST_EXPS TK_rpar
     (66) LIST_EXPS -> . LIST_EXPS TK_comma EXP
@@ -9206,8 +9199,8 @@ state 318
     RW_truncate     shift and go to state 86
     RW_if           shift and go to state 87
 
-    LIST_EXPS                      shift and go to state 327
-    EXP                            shift and go to state 328
+    LIST_EXPS                      shift and go to state 326
+    EXP                            shift and go to state 327
     ARITHMETICS                    shift and go to state 67
     RELATIONALS                    shift and go to state 68
     LOGICS                         shift and go to state 69
@@ -9216,21 +9209,21 @@ state 318
     CALLFUNC                       shift and go to state 72
     TERNARY                        shift and go to state 73
 
-state 319
+state 318
 
     (74) IFSTRUCT -> RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end RW_if .
 
     TK_semicolon    reduce using rule 74 (IFSTRUCT -> RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end RW_if .)
 
 
-state 320
+state 319
 
     (92) FORSTRUCT -> RW_for TK_id RW_in EXP TK_dot EXP ENCAP RW_loop .
 
     TK_semicolon    reduce using rule 92 (FORSTRUCT -> RW_for TK_id RW_in EXP TK_dot EXP ENCAP RW_loop .)
 
 
-state 321
+state 320
 
     (142) TERNARY -> RW_if TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar .
 
@@ -9262,7 +9255,7 @@ state 321
     RW_where        reduce using rule 142 (TERNARY -> RW_if TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar .)
 
 
-state 322
+state 321
 
     (48) ATTRIBUTE -> TK_field TYPE TK_lpar TK_int TK_rpar . PROPS
     (50) ATTRIBUTE -> TK_field TYPE TK_lpar TK_int TK_rpar .
@@ -9273,49 +9266,49 @@ state 322
 
     TK_rpar         reduce using rule 50 (ATTRIBUTE -> TK_field TYPE TK_lpar TK_int TK_rpar .)
     TK_comma        reduce using rule 50 (ATTRIBUTE -> TK_field TYPE TK_lpar TK_int TK_rpar .)
-    RW_not          shift and go to state 299
-    RW_primary      shift and go to state 300
+    RW_not          shift and go to state 298
+    RW_primary      shift and go to state 299
 
-    PROPS                          shift and go to state 329
+    PROPS                          shift and go to state 328
 
-state 323
+state 322
 
     (53) PROPS -> RW_not RW_null RW_primary . RW_key
 
-    RW_key          shift and go to state 330
+    RW_key          shift and go to state 329
+
+
+state 323
+
+    (54) PROPS -> RW_primary RW_key RW_not . RW_null
+
+    RW_null         shift and go to state 330
 
 
 state 324
 
-    (54) PROPS -> RW_primary RW_key RW_not . RW_null
+    (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar TK_field TK_rpar . RW_ref TK_field TK_lpar TK_field TK_rpar
 
-    RW_null         shift and go to state 331
+    RW_ref          shift and go to state 331
 
 
 state 325
-
-    (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar TK_field TK_rpar . RW_ref TK_field TK_lpar TK_field TK_rpar
-
-    RW_ref          shift and go to state 332
-
-
-state 326
 
     (93) FUNCDEC -> RW_create RW_function TK_field TK_lpar PARAMS TK_rpar RW_returns TYPE ENCAP .
 
     TK_semicolon    reduce using rule 93 (FUNCDEC -> RW_create RW_function TK_field TK_lpar PARAMS TK_rpar RW_returns TYPE ENCAP .)
 
 
-state 327
+state 326
 
     (63) INSERTREG -> RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar RW_values TK_lpar LIST_EXPS . TK_rpar
     (66) LIST_EXPS -> LIST_EXPS . TK_comma EXP
 
-    TK_rpar         shift and go to state 333
-    TK_comma        shift and go to state 334
+    TK_rpar         shift and go to state 332
+    TK_comma        shift and go to state 333
 
 
-state 328
+state 327
 
     (67) LIST_EXPS -> EXP .
     (124) ARITHMETICS -> EXP . TK_plus EXP
@@ -9351,7 +9344,7 @@ state 328
     TK_or           shift and go to state 135
 
 
-state 329
+state 328
 
     (48) ATTRIBUTE -> TK_field TYPE TK_lpar TK_int TK_rpar PROPS .
 
@@ -9359,7 +9352,7 @@ state 329
     TK_comma        reduce using rule 48 (ATTRIBUTE -> TK_field TYPE TK_lpar TK_int TK_rpar PROPS .)
 
 
-state 330
+state 329
 
     (53) PROPS -> RW_not RW_null RW_primary RW_key .
 
@@ -9367,7 +9360,7 @@ state 330
     TK_comma        reduce using rule 53 (PROPS -> RW_not RW_null RW_primary RW_key .)
 
 
-state 331
+state 330
 
     (54) PROPS -> RW_primary RW_key RW_not RW_null .
 
@@ -9375,21 +9368,21 @@ state 331
     TK_comma        reduce using rule 54 (PROPS -> RW_primary RW_key RW_not RW_null .)
 
 
-state 332
+state 331
 
     (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar TK_field TK_rpar RW_ref . TK_field TK_lpar TK_field TK_rpar
 
-    TK_field        shift and go to state 335
+    TK_field        shift and go to state 334
 
 
-state 333
+state 332
 
     (63) INSERTREG -> RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar RW_values TK_lpar LIST_EXPS TK_rpar .
 
     TK_semicolon    reduce using rule 63 (INSERTREG -> RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar RW_values TK_lpar LIST_EXPS TK_rpar .)
 
 
-state 334
+state 333
 
     (66) LIST_EXPS -> LIST_EXPS TK_comma . EXP
     (108) EXP -> . ARITHMETICS
@@ -9445,7 +9438,7 @@ state 334
     RW_truncate     shift and go to state 86
     RW_if           shift and go to state 87
 
-    EXP                            shift and go to state 336
+    EXP                            shift and go to state 335
     ARITHMETICS                    shift and go to state 67
     RELATIONALS                    shift and go to state 68
     LOGICS                         shift and go to state 69
@@ -9454,14 +9447,14 @@ state 334
     CALLFUNC                       shift and go to state 72
     TERNARY                        shift and go to state 73
 
-state 335
+state 334
 
     (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar TK_field TK_rpar RW_ref TK_field . TK_lpar TK_field TK_rpar
 
-    TK_lpar         shift and go to state 337
+    TK_lpar         shift and go to state 336
 
 
-state 336
+state 335
 
     (66) LIST_EXPS -> LIST_EXPS TK_comma EXP .
     (124) ARITHMETICS -> EXP . TK_plus EXP
@@ -9497,21 +9490,21 @@ state 336
     TK_or           shift and go to state 135
 
 
-state 337
+state 336
 
     (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar TK_field TK_rpar RW_ref TK_field TK_lpar . TK_field TK_rpar
 
-    TK_field        shift and go to state 338
+    TK_field        shift and go to state 337
 
 
-state 338
+state 337
 
     (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar TK_field TK_rpar RW_ref TK_field TK_lpar TK_field . TK_rpar
 
-    TK_rpar         shift and go to state 339
+    TK_rpar         shift and go to state 338
 
 
-state 339
+state 338
 
     (52) ATTRIBUTE -> RW_foreing RW_key TK_lpar TK_field TK_rpar RW_ref TK_field TK_lpar TK_field TK_rpar .
 
