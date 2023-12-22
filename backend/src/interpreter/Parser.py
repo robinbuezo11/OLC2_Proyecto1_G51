@@ -400,7 +400,9 @@ def p_CAST(t: Prod):
 
 # Funciones Nativas
 def p_NATIVEFUNC(t: Prod):
-    '''NATIVEFUNC : RW_truncate TK_lpar EXP TK_comma EXP TK_rpar'''
+    '''NATIVEFUNC   : RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
+                    | RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
+                    | RW_hoy TK_lpar TK_rpar'''
 
 def p_TERNARY(t: Prod):
     '''TERNARY : RW_if TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar'''

@@ -51,7 +51,7 @@ reserveds = {
     'PROCEDURE'  : 'RW_procedure',
     'PRINT'      : 'RW_print',
     'TRUNCATE'   : 'RW_truncate',
-    'CONCATENA'  : 'RW_concatena',
+    'CONCATENAR' : 'RW_concatenar',
     'SUMBSTRAER' : 'RW_substraer',
     'HOY'        : 'RW_hoy',
     'CONTAR'     : 'RW_contar',
