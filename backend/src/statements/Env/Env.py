@@ -148,6 +148,63 @@ class Env:
         self.setError('Selección en tabla inexistente', line, column)
         return False
 
+    def addColumn(self, id: str, newColumn: str, type: Type, line: int, column: int) -> bool:
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                if not newColumn.lower() in env.tables.get(id.lower()).fields:
+                    env.tables.get(id.lower()).addColumn(newColumn, type)
+                    self.setPrint(f'Columna {newColumn.lower()} insertada exitosamente en Tabla \'{id.lower()}\'. {line}:{column + 1}')
+                    return True
+                self.setError(f'Ya hay una columna {newColumn.lower()} en Tabla \'{id.lower()}\'', line, column)
+                return False
+            env = env.previous
+        self.setError('Alterar tabla inexistente', line, column)
+        return False
+
+    def dropColumn(self, id: str, dropColumn: str, line: int, column: int) -> bool:
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                if dropColumn.lower() in env.tables.get(id.lower()).fields:
+                    env.tables.get(id.lower()).dropColumn(dropColumn)
+                    self.setPrint(f'Columna {dropColumn.lower()} eliminada exitosamente de la Tabla \'{id.lower()}\'. {line}:{column + 1}')
+                    return True
+                self.setError(f'La columna {dropColumn.lower()} no existe en Tabla \'{id.lower()}\'', line, column)
+                return False
+            env = env.previous
+        self.setError('Alterar tabla inexistente', line, column)
+        return False
+
+    def renameTo(self, id: str, newId: str, line: int, column: int) -> bool:
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                table = env.tables.get(id.lower())
+                if table:
+                    table.renameTo(newId.lower())
+                    env.tables[newId.lower()] = table
+                    del env.tables[id.lower()]
+                    self.setPrint(f'Tabla \'{id.lower()}\' renombrada como {newId.lower()}. {line}:{column + 1}')
+                    return True
+            env = env.previous
+        self.setError(f'La tabla \'{id.lower()}\' no existe', line, column)
+        return False
+
+    def renameColumn(self, id: str, currentColumn: str, newColumn: str, line: int, column: int) -> bool:
+        env: Env = self
+        while env:
+            if id.lower() in env.tables:
+                if currentColumn.lower() in env.tables.get(id.lower()).fields:
+                    env.tables.get(id.lower()).renameColumn(currentColumn.lower(), newColumn.lower())
+                    self.setPrint(f'Columna {currentColumn.lower()} actualizada exitosamente a {newColumn.lower()}. {line}:{column + 1}')
+                    return True
+                self.setError(f'La columna {currentColumn.lower()} no existe en Tabla \'{id.lower()}\'', line, column)
+                return False
+            env = env.previous
+        self.setError('Alterar tabla inexistente', line, column)
+        return False
+
     # === UTILS ===
     def setPrint(self, print_: str):
         printConsole.append(str(print_))
