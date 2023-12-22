@@ -20,3 +20,4 @@ class TypeInst(Enum):
     ALTER_TABLE    = "ALTER_TABLE"
     DELETE_TABLE   = "DELETE_TABLE"
     UPDATE_TABLE   = "UPDATE_TABLE"
+    NATIVE_FUNC    = 'NATIVE_FUNC'

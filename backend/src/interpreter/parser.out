@@ -146,7 +146,7 @@ Rule 136   RELATIONALS -> EXP TK_great EXP
 Rule 137   LOGICS -> EXP TK_and EXP
 Rule 138   LOGICS -> EXP TK_or EXP
 Rule 139   LOGICS -> TK_not EXP
-Rule 140   CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+Rule 140   CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar
 Rule 141   NATIVEFUNC -> RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
 Rule 142   NATIVEFUNC -> RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
 Rule 143   NATIVEFUNC -> RW_hoy TK_lpar TK_rpar
@@ -168,8 +168,8 @@ RW_base              : 28
 RW_begin             : 76 102 103
 RW_bit               : 146
 RW_break             : 24
-RW_cas               : 140
 RW_case              : 77 78 79 80 81 82
+RW_cast              : 140
 RW_column            : 61
 RW_concatenar        : 141
 RW_contar            : 
@@ -740,7 +740,7 @@ state 25
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -760,7 +760,7 @@ state 25
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -893,7 +893,7 @@ state 35
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -913,7 +913,7 @@ state 35
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -981,7 +981,7 @@ state 37
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -1000,7 +1000,7 @@ state 37
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -1168,7 +1168,7 @@ state 39
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -1191,7 +1191,7 @@ state 39
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -1247,7 +1247,7 @@ state 40
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -1266,7 +1266,7 @@ state 40
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -1323,7 +1323,7 @@ state 42
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -1342,7 +1342,7 @@ state 42
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -2577,7 +2577,7 @@ state 82
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -2596,7 +2596,7 @@ state 82
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -2646,7 +2646,7 @@ state 83
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -2665,7 +2665,7 @@ state 83
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -2715,7 +2715,7 @@ state 84
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -2734,7 +2734,7 @@ state 84
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -2751,7 +2751,7 @@ state 84
 
 state 85
 
-    (140) CAST -> RW_cas . TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> RW_cast . TK_lpar EXP RW_as TYPE TK_rpar
 
     TK_lpar         shift and go to state 141
 
@@ -2854,7 +2854,7 @@ state 94
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -2874,7 +2874,7 @@ state 94
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3337,7 +3337,7 @@ state 119
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -3356,7 +3356,7 @@ state 119
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3515,7 +3515,7 @@ state 124
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -3534,7 +3534,7 @@ state 124
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3584,7 +3584,7 @@ state 125
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -3603,7 +3603,7 @@ state 125
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3653,7 +3653,7 @@ state 126
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -3672,7 +3672,7 @@ state 126
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3722,7 +3722,7 @@ state 127
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -3741,7 +3741,7 @@ state 127
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3791,7 +3791,7 @@ state 128
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -3810,7 +3810,7 @@ state 128
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3860,7 +3860,7 @@ state 129
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -3879,7 +3879,7 @@ state 129
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3929,7 +3929,7 @@ state 130
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -3948,7 +3948,7 @@ state 130
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -3998,7 +3998,7 @@ state 131
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4017,7 +4017,7 @@ state 131
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4067,7 +4067,7 @@ state 132
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4086,7 +4086,7 @@ state 132
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4136,7 +4136,7 @@ state 133
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4155,7 +4155,7 @@ state 133
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4205,7 +4205,7 @@ state 134
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4224,7 +4224,7 @@ state 134
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4274,7 +4274,7 @@ state 135
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4293,7 +4293,7 @@ state 135
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4343,7 +4343,7 @@ state 136
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4362,7 +4362,7 @@ state 136
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4412,7 +4412,7 @@ state 137
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4431,7 +4431,7 @@ state 137
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4605,7 +4605,7 @@ state 140
 
 state 141
 
-    (140) CAST -> RW_cas TK_lpar . EXP RW_as TYPE TK_rpar
+    (140) CAST -> RW_cast TK_lpar . EXP RW_as TYPE TK_rpar
     (108) EXP -> . ARITHMETICS
     (109) EXP -> . RELATIONALS
     (110) EXP -> . LOGICS
@@ -4638,7 +4638,7 @@ state 141
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4657,7 +4657,7 @@ state 141
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4707,7 +4707,7 @@ state 142
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4726,7 +4726,7 @@ state 142
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4776,7 +4776,7 @@ state 143
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4795,7 +4795,7 @@ state 143
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -4852,7 +4852,7 @@ state 145
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -4871,7 +4871,7 @@ state 145
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -5080,7 +5080,7 @@ state 157
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -5099,7 +5099,7 @@ state 157
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -5183,7 +5183,7 @@ state 162
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -5202,7 +5202,7 @@ state 162
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -5637,7 +5637,7 @@ state 179
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -5656,7 +5656,7 @@ state 179
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -5748,7 +5748,7 @@ state 182
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -5767,7 +5767,7 @@ state 182
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -6684,7 +6684,7 @@ state 197
 
 state 198
 
-    (140) CAST -> RW_cas TK_lpar EXP . RW_as TYPE TK_rpar
+    (140) CAST -> RW_cast TK_lpar EXP . RW_as TYPE TK_rpar
     (124) ARITHMETICS -> EXP . TK_plus EXP
     (125) ARITHMETICS -> EXP . TK_minus EXP
     (126) ARITHMETICS -> EXP . TK_mult EXP
@@ -7007,7 +7007,7 @@ state 212
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -7026,7 +7026,7 @@ state 212
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -7175,7 +7175,7 @@ state 222
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -7194,7 +7194,7 @@ state 222
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -7309,7 +7309,7 @@ state 229
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -7328,7 +7328,7 @@ state 229
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -7648,7 +7648,7 @@ state 235
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -7667,7 +7667,7 @@ state 235
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -7719,7 +7719,7 @@ state 236
 
 state 237
 
-    (140) CAST -> RW_cas TK_lpar EXP RW_as . TYPE TK_rpar
+    (140) CAST -> RW_cast TK_lpar EXP RW_as . TYPE TK_rpar
     (145) TYPE -> . RW_int
     (146) TYPE -> . RW_bit
     (147) TYPE -> . RW_decimal
@@ -7773,7 +7773,7 @@ state 238
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -7792,7 +7792,7 @@ state 238
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -7842,7 +7842,7 @@ state 239
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -7861,7 +7861,7 @@ state 239
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -7911,7 +7911,7 @@ state 240
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -7930,7 +7930,7 @@ state 240
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -8193,7 +8193,7 @@ state 259
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -8212,7 +8212,7 @@ state 259
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -8262,7 +8262,7 @@ state 260
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -8281,7 +8281,7 @@ state 260
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -8375,7 +8375,7 @@ state 263
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -8394,7 +8394,7 @@ state 263
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -8669,7 +8669,7 @@ state 273
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -8688,7 +8688,7 @@ state 273
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -8705,7 +8705,7 @@ state 273
 
 state 274
 
-    (140) CAST -> RW_cas TK_lpar EXP RW_as TYPE . TK_rpar
+    (140) CAST -> RW_cast TK_lpar EXP RW_as TYPE . TK_rpar
 
     TK_rpar         shift and go to state 301
 
@@ -9234,34 +9234,34 @@ state 300
 
 state 301
 
-    (140) CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .
+    (140) CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .
 
-    TK_semicolon    reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_plus         reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_minus        reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_mult         reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_div          reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_mod          reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_equalequal   reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_equal        reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_notequal     reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_lessequal    reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_greatequal   reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_less         reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_great        reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_and          reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_or           reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    RW_as           reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_comma        reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    RW_from         reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    RW_then         reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    RW_begin        reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    RW_else         reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    RW_when         reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_rpar         reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    RW_end          reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    TK_dot          reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
-    RW_where        reduce using rule 140 (CAST -> RW_cas TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_semicolon    reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_plus         reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_minus        reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_mult         reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_div          reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_mod          reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_equalequal   reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_equal        reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_notequal     reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_lessequal    reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_greatequal   reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_less         reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_great        reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_and          reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_or           reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    RW_as           reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_comma        reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    RW_from         reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    RW_then         reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    RW_begin        reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    RW_else         reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    RW_when         reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_rpar         reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    RW_end          reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    TK_dot          reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
+    RW_where        reduce using rule 140 (CAST -> RW_cast TK_lpar EXP RW_as TYPE TK_rpar .)
 
 
 state 302
@@ -9331,7 +9331,7 @@ state 303
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -9350,7 +9350,7 @@ state 303
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -9400,7 +9400,7 @@ state 304
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -9419,7 +9419,7 @@ state 304
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -9714,7 +9714,7 @@ state 327
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -9733,7 +9733,7 @@ state 327
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
@@ -9989,7 +9989,7 @@ state 344
     (137) LOGICS -> . EXP TK_and EXP
     (138) LOGICS -> . EXP TK_or EXP
     (139) LOGICS -> . TK_not EXP
-    (140) CAST -> . RW_cas TK_lpar EXP RW_as TYPE TK_rpar
+    (140) CAST -> . RW_cast TK_lpar EXP RW_as TYPE TK_rpar
     (141) NATIVEFUNC -> . RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
     (142) NATIVEFUNC -> . RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
     (143) NATIVEFUNC -> . RW_hoy TK_lpar TK_rpar
@@ -10008,7 +10008,7 @@ state 344
     TK_lpar         shift and go to state 82
     TK_minus        shift and go to state 83
     TK_not          shift and go to state 84
-    RW_cas          shift and go to state 85
+    RW_cast         shift and go to state 85
     RW_concatenar   shift and go to state 86
     RW_substraer    shift and go to state 87
     RW_hoy          shift and go to state 88
