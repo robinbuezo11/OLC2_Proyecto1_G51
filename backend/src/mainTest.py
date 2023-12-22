@@ -5,13 +5,16 @@ def main():
 
     # xml.createDataBase("test")
     # xml.createTable("test", "demo")
-    #xml.createTable("test", "tablaprueba")
+    # xml.createTable("test", "tablaprueba")
 
     # xml.createColumn("test", "demo", "id", "int")
     # xml.createColumn("test", "demo", "name", "str")
     # xml.createColumn("test", "demo", "hint", "str")
 
     # xml.createRow("test", "demo", [{"value": 1, "column": 'id'}, {"value": 'Grupo51', "column": 'name'}, {"value": 'Los Cabrones', "column": 'hint'}])
+    # xml.createRow("test", "demo", [{"value": 2, "column": 'id'}, {"value": 'Grupo511', "column": 'name'}, {"value": 'Los Cabroness', "column": 'hint'}])
+    # xml.createRow("test", "demo", [{"value": 3, "column": 'id'}, {"value": 'Grupo5111', "column": 'name'}, {"value": 'Los Cabronesss', "column": 'hint'}])
+    # xml.createRow("test", "demo", [{"value": 4, "column": 'id'}, {"value": 'Grupo51111', "column": 'name'}, {"value": 'Los Cabronessss', "column": 'hint'}])
     
     # xml.createDataBase("test2")
     # xml.createTable("test2", "demo2")
@@ -31,16 +34,23 @@ def main():
     #xml.dropDatabase("test")
     #xml.updateRow("test", "demo2", [{"value": 00000, "column": 'id'}, {"value": 'Grupo515400', "column": 'name'}, {"value": 'Hola', "column": 'hint'}])
     #xml.deleteRow("test", "demo2", [{"value": 0, "column": 'id'}, {"value": 'Grupo515400', "column": 'name'}, {"value": 'Hola', "column": 'hint'}])
-    xml.deleteColumn("test", "demo2", "id")
+    #xml.deleteColumn("test", "demo2", "id")
+    #xml.deleteColumn("test", "demo2", "name")
     #rows = xml.select("test", "demo")
 
     #xml.select("test", "demo")
-    #
-    #xml.update("test", "demo", [{"value": 2, "column": 'id'}, {"value": 'Grupo515', "column": 'name'}, {"value": 'XD', "column": 'hint'}])
-    #xml.select("test", "demo")
+    #xml.updateRow("test", "demo2", [{"value": 2, "column": 'id'}, {"value": 'Grupo515', "column": 'name'}, {"value": 'XD', "column": 'hint'}])
+    
+    salidaWhere = xml.selectWhere("test", "demo", [{"column": 'id', "value": 4}, {"column": 'name', "value": 'Grupo51111'}])
+    salidaWhere1 = xml.selectWhere("test", "demo", [{"column": 'id', "value": 3}])
+    #salidaWhere2 = xml.selectWhere("test", "demo", [{"column": 'id', "value": 2}])
+    print(salidaWhere)
+    print(salidaWhere1)
+    #print(salidaWhere2)
 
+    # xml.select("test", "demo")
     # rows = xml.select("test", "demo")
-    # # Obtener las columnas únicas
+    # Obtener las columnas únicas
     # data = []
     # columns = []
     # for row in rows[0]:

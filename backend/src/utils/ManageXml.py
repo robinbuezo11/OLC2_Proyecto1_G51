@@ -158,6 +158,45 @@ class ManageXml:
         else:
             print("No hay datos en la tabla.")
             return None
+        
+    def selectWhere(self, database, table, conditions=None):
+        # Verificar si la base de datos existe
+        db_to_select = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_select is None:
+            print(f"La base de datos '{database}' no existe.")
+            return None
+
+        # Verificar si la tabla existe en la base de datos
+        table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
+        if table_to_select is None:
+            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+            return None
+
+        rows = []
+
+        # Filtrar las filas según las condiciones si se proporcionan
+        if conditions:
+            for row in table_to_select.findall("row"):
+                row_values = {value.get("column"): value.text for value in row.findall("value")}
+                if all(row_values.get(cond["column"]) == str(cond["value"]) for cond in conditions):
+                    values = [{"column": value.get("column"), "value": value.text} for value in row.findall("value")]
+                    if len(values) > 0:
+                        rows.append(values)
+        else:
+            # Si no se proporcionan condiciones, seleccionar todas las filas
+            for row in table_to_select.findall("row"):
+                values = [{"column": value.get("column"), "value": value.text} for value in row.findall("value")]
+                if len(values) > 0:
+                    rows.append(values)
+
+        # Mostrar los resultados en la consola
+        if len(rows) > 0:
+            for row in rows:
+                print(row)
+            return rows
+        else:
+            print("No hay datos en la tabla.")
+            return None
     
     def dropDatabase(self, database):   
         # Verificar si la base de datos existe
