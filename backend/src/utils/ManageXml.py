@@ -305,33 +305,47 @@ class ManageXml:
                 if column_name in columns:
                     row.remove(value)
 
+        # Eliminar las definiciones de columna de la tabla
+        for col in table_to_modify.findall("column"):
+            if col.get("name") in columns:
+                table_to_modify.remove(col)
+
         self.writeXml()
         print(f"Columnas eliminadas en la tabla '{table}' de la base de datos '{database}' exitosamente.")
         return True
 
-    def deleteRow(self, database, table, columns):
+    def deleteRow(self, database, table, conditions):
         # Verificar si la base de datos existe
         db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
         if db_to_modify is None:
             print(f"La base de datos '{database}' no existe.")
             return False
 
-        # Verificar si la tabla existe en la base de datos
+        # Verificar si la tabla ya existe en la base de datos
         table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
         if table_to_modify is None:
             print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
             return False
 
-        # Eliminar filas de la tabla
-        for row in table_to_modify.findall("row"):
-            values = row.findall("value")
-            for value in values:
-                column_name = value.get("column")
-                if column_name in columns:
-                    row.remove(value)
+        # Obtener las filas que coinciden con las condiciones especificadas
+        rows_to_delete = [row for row in table_to_modify.findall("row") if self.matchesConditions(row, conditions)]
+
+        # Verificar si se encontraron filas para eliminar
+        if not rows_to_delete:
+            print("No se encontraron filas que coincidan con las condiciones especificadas.")
+            return False
+
+        # Eliminar las filas encontradas
+        for row_to_delete in rows_to_delete:
+            table_to_modify.remove(row_to_delete)
 
         self.writeXml()
-        print(f"Datos eliminados en la tabla '{table}' de la base de datos '{database}' exitosamente.")
+        print(f"Filas eliminadas de la tabla '{table}' de la base de datos '{database}' exitosamente.")
         return True
+
+    def matchesConditions(self, row, conditions):
+        # Verificar si la fila cumple con las condiciones especificadas
+        row_values = {value.get("column"): value.text for value in row.findall("value")}
+        return all(row_values.get(cond["column"]) == str(cond["value"]) for cond in conditions)
     
 
