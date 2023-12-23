@@ -27,4 +27,7 @@
             </row>
         </table>
     </database>
-</root>
+    <database name="prueba" />
+    <database name="Otra" />
+    <database name="Nueva" />
+<database name="SioSi" /></root>

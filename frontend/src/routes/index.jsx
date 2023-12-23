@@ -6,6 +6,7 @@ const generateRoute = (routes) => {
     return routes.map((route, index) => (
         route.index ? (
             <Route
+                key={index}
                 index
                 path={route.path}
                 element={
@@ -16,13 +17,13 @@ const generateRoute = (routes) => {
             />
         ) : (
             <Route
+                key={index}
                 path={route.path}
                 element={
                     <PageWrapper state={route.child ? undefined : route.state}>
                         {route.element}
                     </PageWrapper>
                 }
-                key={index}
             >
                 {route.child && (
                     generateRoute(route.child)

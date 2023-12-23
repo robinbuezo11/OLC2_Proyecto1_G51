@@ -47,7 +47,7 @@ const TopbarItem = ({item, depthLevel, props}) => {
                             {item.label + " "}
                             {depthLevel > 0 ? <span> &raquo; </span> : <span className='arrow' />}
                         </button>
-                        <Dropdown depthLevel={depthLevel} dropdown={dropdown} submenus={item.items} props={props}/>
+                        <Dropdown depthLevel={depthLevel} dropdown={dropdown} submenus={item.items} props={props} />
                     </>
                 ) : (
                     func ?  <a href='/#' onClick={func}>{item.label}</a>

@@ -17,8 +17,8 @@ class ManageXml:
                 self.__root = ET.Element("root")
                 self.__tree = ET.ElementTree(self.__root)
                 self.writeXml()
-        except:
-            print("Error: No se pudo cargar ni crear el archivo xml")
+        except Exception as e:
+            print("Error: No se pudo cargar ni crear el archivo xml" + str(e))
 
     def getTree(self):
         return self.__tree
@@ -32,7 +32,7 @@ class ManageXml:
     def createDataBase(self, name):
         # Verificar si la base de datos ya existe
         existing_database = next((db for db in self.__root if db.get("name") == name), None)
-        if existing_database:
+        if existing_database is not None:
             print(f"La base de datos '{name}' ya existe.")
             return False
 

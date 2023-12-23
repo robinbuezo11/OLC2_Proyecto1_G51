@@ -7,6 +7,9 @@ from statements.Env.Env import Env
 from utils.Outs import getStringOuts
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
+from utils.ManageXml import ManageXml
+
+xml = ManageXml("..\\backend\\files\\data.xml")
 
 app = Flask(__name__)
 CORS(app)
@@ -39,11 +42,41 @@ def exec():
     print(result)
 
     return jsonify({
-        'status': 'success',
+        'success': True,
         'message': 'Ejecutado correctamente',
         'result': result,
         'error': ''
     })
+
+@app.route('/api/createDB', methods=['POST'])
+def createDB():
+    try:
+        data = request.get_json()
+        print(data['dbName'])
+        create = True if data['action'] == 'create' else False
+        res = xml.createDataBase(data['dbName']) if create else xml.dropDatabase(data['dbName'])
+        if res:
+            return jsonify({
+                'success': True,
+                'message': 'Base de datos creada correctamente' if create else 'Base de datos eliminada correctamente',
+                'result': '',
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al crear la base de datos' if create else 'Error al eliminar la base de datos',
+                'result': '',
+                'error': 'Base de datos ya existente' if create else 'Base de datos no existente'
+            })  
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al obtener los parametros',
+            'result': '',
+            'error': str(e)
+        })
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
