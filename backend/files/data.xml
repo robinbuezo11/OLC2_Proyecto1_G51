@@ -6,21 +6,6 @@
             <column name="name" type="str" />
             <column name="hint" type="str" />
             <row>
-                <value column="id">1</value>
-                <value column="name">Grupo51</value>
-                <value column="hint">Los Cabrones</value>
-            </row>
-            <row>
-                <value column="id">2</value>
-                <value column="name">Grupo511</value>
-                <value column="hint">Los Cabroness</value>
-            </row>
-            <row>
-                <value column="id">3</value>
-                <value column="name">Grupo5111</value>
-                <value column="hint">Los Cabronesss</value>
-            </row>
-            <row>
                 <value column="id">4</value>
                 <value column="name">Grupo51111</value>
                 <value column="hint">Los Cabronessss</value>
