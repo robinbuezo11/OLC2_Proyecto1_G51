@@ -18,6 +18,33 @@ CORS(app)
 def index():
     return jsonify({'message': 'Bienvenido a XSQL'})
 
+@app.route('/api/getStruct', methods=['GET'])
+def getStruct():
+    try:
+        res = xml.getStruct()
+        if res:
+            return jsonify({
+                'success': True,
+                'message': 'Estructura obtenida correctamente',
+                'result': res,
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener la estructura',
+                'result': '',
+                'error': 'No existen bases de datos'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+    
+
 @app.route('/api/exec', methods=['POST'])
 def exec():
     data = request.get_json()
@@ -76,7 +103,6 @@ def createDB():
             'result': '',
             'error': str(e)
         })
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=4000)

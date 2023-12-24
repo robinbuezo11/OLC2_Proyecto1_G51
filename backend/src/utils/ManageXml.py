@@ -26,6 +26,40 @@ class ManageXml:
     def getRoot(self):
         return self.__root
     
+    def getStruct(self):
+        struct = []
+        for db in self.__root:
+            struct.append({
+                'name': db.get('name'),
+                'child': self.getTables(db),
+                'type': 'database',
+                'level': '0'
+            })
+        return struct
+    
+    def getTables(self, db):
+        tables = []
+        for table in db:
+            tables.append({
+                'name': table.get('name'),
+                'child': self.getColumns(table),
+                'type': 'table',
+                'level': '1'
+            })
+        return tables
+    
+    def getColumns(self, table):
+        columns = []
+        for column in table:
+            if column.tag == 'column':
+                columns.append({
+                    'name': column.get('name'),
+                    'type': 'column',
+                    'dataType': column.get('type'),
+                    'level': '2'
+                })
+        return columns
+    
     def writeXml(self):
         self.__tree.write(self.__path, encoding="utf-8", xml_declaration=True)
 
