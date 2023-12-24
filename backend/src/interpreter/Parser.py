@@ -32,6 +32,10 @@ from utils.Attribute import Attribute
 from utils.ForeignKey import ForeignKey
 from statements.Expressions.CallFunction import CallFunction
 from statements.Expressions.Return import Return
+from statements.Expressions.Cast import Cast
+from statements.Expressions.Concatenar import Concatenar
+from statements.Expressions.Substraer import Substraer
+from statements.Expressions.Hoy import Hoy
 
 precedence = (
     ('left', 'TK_or'),
@@ -396,13 +400,17 @@ def p_LOGICS(t: Prod):
     else                             : t[0] = Logic(t.lineno(1), t.lexpos(1), None, t[2], t[3])
 
 def p_CAST(t: Prod):
-    '''CAST : RW_cas TK_lpar EXP RW_as TYPE TK_rpar'''
+    '''CAST : RW_cast TK_lpar EXP RW_as TYPE TK_rpar'''
+    t[0] = Cast(t.lineno(1), t.lexpos(1), t[3], t[5])
 
 # Funciones Nativas
 def p_NATIVEFUNC(t: Prod):
     '''NATIVEFUNC   : RW_concatenar TK_lpar EXP TK_comma EXP TK_rpar
                     | RW_substraer TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar
                     | RW_hoy TK_lpar TK_rpar'''
+    if len(t) == 7   : t[0] = Concatenar(t.lineno(1), t.lexpos(1), t[3], t[5])
+    elif len(t) == 9 : t[0] = Substraer(t.lineno(1), t.lexpos(1), t[3], t[5], t[7])
+    else             : t[0] = Hoy(t.lineno(1), t.lexpos(1))
 
 def p_TERNARY(t: Prod):
     '''TERNARY : RW_if TK_lpar EXP TK_comma EXP TK_comma EXP TK_rpar'''

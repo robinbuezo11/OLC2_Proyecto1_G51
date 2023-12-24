@@ -52,10 +52,10 @@ reserveds = {
     'PRINT'      : 'RW_print',
     'TRUNCATE'   : 'RW_truncate',
     'CONCATENAR' : 'RW_concatenar',
-    'SUMBSTRAER' : 'RW_substraer',
+    'SUBSTRAER'  : 'RW_substraer',
     'HOY'        : 'RW_hoy',
     'CONTAR'     : 'RW_contar',
-    'CAS'        : 'RW_cas',
+    'CAST'       : 'RW_cast',
     # TIPOS DE DATOS
     'INT'        : 'RW_int',
     'BIT'        : 'RW_bit',

@@ -17,8 +17,8 @@ class ManageXml:
                 self.__root = ET.Element("root")
                 self.__tree = ET.ElementTree(self.__root)
                 self.writeXml()
-        except:
-            print("Error: No se pudo cargar ni crear el archivo xml")
+        except Exception as e:
+            print("Error: No se pudo cargar ni crear el archivo xml" + str(e))
 
     def getTree(self):
         return self.__tree
@@ -26,13 +26,47 @@ class ManageXml:
     def getRoot(self):
         return self.__root
     
+    def getStruct(self):
+        struct = []
+        for db in self.__root:
+            struct.append({
+                'name': db.get('name'),
+                'child': self.getTables(db),
+                'type': 'database',
+                'level': '0'
+            })
+        return struct
+    
+    def getTables(self, db):
+        tables = []
+        for table in db:
+            tables.append({
+                'name': table.get('name'),
+                'child': self.getColumns(table),
+                'type': 'table',
+                'level': '1'
+            })
+        return tables
+    
+    def getColumns(self, table):
+        columns = []
+        for column in table:
+            if column.tag == 'column':
+                columns.append({
+                    'name': column.get('name'),
+                    'type': 'column',
+                    'dataType': column.get('type'),
+                    'level': '2'
+                })
+        return columns
+    
     def writeXml(self):
         self.__tree.write(self.__path, encoding="utf-8", xml_declaration=True)
 
     def createDataBase(self, name):
         # Verificar si la base de datos ya existe
         existing_database = next((db for db in self.__root if db.get("name") == name), None)
-        if existing_database:
+        if existing_database is not None:
             print(f"La base de datos '{name}' ya existe.")
             return False
 

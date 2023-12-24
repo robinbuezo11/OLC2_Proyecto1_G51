@@ -7,16 +7,20 @@ function Results({ data }) {
         <Table aria-label="simple table">
             <TableHead>
                 <TableRow>
-                    {data[0].map((header) => (
-                        <TableCell>{header}</TableCell>
+                    {data[0].map((header,index) => (
+                        <TableCell key={index}>
+                            {header}
+                        </TableCell>
                     ))}
                 </TableRow>
             </TableHead>
             <TableBody>
-            {data.slice(1).map((row) => (
-                <TableRow>
-                    {row.map((cell) => (
-                        <TableCell>{cell}</TableCell>
+            {data.slice(1).map((row, index) => (
+                <TableRow key={index}>
+                    {row.map((cell,index1) => (
+                        <TableCell key={index1}>
+                            {cell}
+                        </TableCell>
                     ))}
                 </TableRow>
             ))}

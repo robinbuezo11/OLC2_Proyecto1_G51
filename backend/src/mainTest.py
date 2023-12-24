@@ -43,12 +43,21 @@ def main():
     #xml.select("test", "demo")
     #xml.updateRow("test", "demo2", [{"value": 2, "column": 'id'}, {"value": 'Grupo515', "column": 'name'}, {"value": 'XD', "column": 'hint'}])
     
+#<<<<<<< HEAD
     #salidaWhere = xml.selectWhere("test", "demo", [{"column": 'id', "value": 4}, {"column": 'name', "value": 'Grupo51111'}])
     #salidaWhere1 = xml.selectWhere("test", "demo", [{"column": 'id', "value": 3}])
     #salidaWhere2 = xml.selectWhere("test", "demo", [{"column": 'id', "value": 2}])
     #print(salidaWhere)
     #print(salidaWhere1)
     #print(salidaWhere2)
+#=======
+    # salidaWhere = xml.selectWhere("test", "demo", [{"column": 'id', "value": 4}, {"column": 'name', "value": 'Grupo51111'}])
+    # salidaWhere1 = xml.selectWhere("test", "demo", [{"column": 'id', "value": 3}])
+    # salidaWhere2 = xml.selectWhere("test", "demo", [{"column": 'id', "value": 2}])
+    # print(salidaWhere)
+    # print(salidaWhere1)
+    # print(salidaWhere2)
+#>>>>>>> d6de5daf695121cadf9236295fc7452aa41cfb5c
 
     # xml.select("test", "demo")
     # rows = xml.select("test", "demo")
@@ -64,5 +73,6 @@ def main():
     #        values.append(value['value'])
     #    data.append(values)    
     # print(data)
+    #xml.createDataBase("test")
 
 main()

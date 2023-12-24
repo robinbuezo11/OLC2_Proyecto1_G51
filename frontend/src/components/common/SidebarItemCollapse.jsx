@@ -27,7 +27,8 @@ const SidebarItemCollapse = ({item}) => {
                             backgroundColor: colorConfigs.sidebar.hoverBg
                         },
                         paddingY: "12px",
-                        paddingX: "24px",
+                        paddingLeft: `${12 * item.level + 12}px`,
+                        paddingRight: '12px',
                     }}
                 >
                     <ListItemIcon sx={{
@@ -47,12 +48,12 @@ const SidebarItemCollapse = ({item}) => {
                 </ListItemButton>
                 <Collapse in={open} timeout="auto">
                     <List>
-                        {item.child.map((route, index) => (
-                            route.sidebarProps ? (
-                                route.child ? (
-                                <SidebarItemCollapse item={route} key={index} />
+                        {item.child.map((child, index) => (
+                            child.sidebarProps ? (
+                                child.child ? (
+                                <SidebarItemCollapse item={child} key={index} />
                                 ) : (
-                                <SidebarItem item={route} key={index} />
+                                <SidebarItem item={child} key={index} />
                                 )
                         ) : null
                         ))}
