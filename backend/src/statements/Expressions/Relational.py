@@ -20,6 +20,8 @@ class Relational(Expression):
         match self.sign:
             case '==':
                 return self.equal(env)
+            case '=':
+                return self.equal(env)
             case '!=':
                 return self.notEqual(env)
             case '>=':
@@ -113,7 +115,7 @@ class Relational(Expression):
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()
-        dot = f'node_${id}[label="{self.sign}"];'
+        dot = f'node_{id}[label="{self.sign}"];'
         value1: ReturnAST = self.exp1.ast(ast)
         dot += '\n' + value1.dot
         dot += f'\nnode_{id} -> node_{value1.id};'

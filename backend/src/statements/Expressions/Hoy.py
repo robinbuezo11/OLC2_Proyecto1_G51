@@ -19,5 +19,5 @@ class Hoy(Expression):
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()
-        dot = f'node_{id}[label="Hoy"];'
+        dot = f'node_{id}[label="HOY"];'
         return ReturnAST(dot, id)

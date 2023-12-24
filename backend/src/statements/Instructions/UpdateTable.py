@@ -25,10 +25,10 @@ class UpdateTable(Instruction):
         dot += f'\nnode_{id} -> node_{id}_condition;'
         value: ReturnAST
         for i in range(len(self.fields)):
-            dot += f'\nnode_{id}_field${i}[label="{self.fields[i]}"]'
+            dot += f'\nnode_{id}_field{i}[label="{self.fields[i]}"]'
             dot += f'\nnode_{id}_set -> node_{id}_field{i};'
             value = self.values[i].ast(ast)
-            dot += f'\n${value.dot}'
+            dot += f'\n{value.dot}'
             dot += f'\nnode_{id}_field{i} -> node_{value.id};'
         condition = self.condition.ast(ast)
         dot += f'\n{condition.dot}'
