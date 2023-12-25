@@ -4,7 +4,7 @@ from interpreter.Parser import *
 from statements.Abstracts.Expression import Expression
 from statements.Abstracts.Instruction import Instruction
 from statements.Env.Env import Env
-from utils.Outs import getStringOuts
+from utils.Outs import getStringOuts, getPrintConsole
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.ManageXml import ManageXml
@@ -65,13 +65,17 @@ def exec():
                 instruction.execute(globalEnv)
         except ValueError as e: print(e)
 
-    result = getStringOuts()
-    print(result)
+    result = getPrintConsole()
+    result.insert(0, 'Resultado')
+    data = []
+    for res in result:
+        data.append([res])
+
 
     return jsonify({
         'success': True,
         'message': 'Ejecutado correctamente',
-        'result': result,
+        'result': data,
         'error': ''
     })
 

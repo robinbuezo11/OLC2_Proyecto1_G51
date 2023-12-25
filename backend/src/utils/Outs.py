@@ -33,3 +33,7 @@ def resetOuts():
     printConsole.clear()
     errors.clear()
     tokens.clear()
+
+def getPrintConsole():
+    global printConsole
+    return printConsole
