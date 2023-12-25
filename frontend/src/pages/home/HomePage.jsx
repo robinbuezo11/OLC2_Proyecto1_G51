@@ -9,17 +9,7 @@ import { Alert, Button, Input, Tab, Tabs, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 
 const HomePage = () => {
-    const data = [
-        ['id', 'name', 'age', 'address', 'salary', 'join_date'],
-        [1, 'Paul', 32, 'California', 20000, '2018-01-25'],
-        [2, 'Allen', 25, 'Texas', 15000, '2018-01-25'],
-        [3, 'Teddy', 23, 'Norway', 20000, '2018-01-25'],
-        [4, 'Mark', 25, 'Rich-Mond', 65000, '2018-01-25'],
-        [5, 'David', 27, 'Texas', 85000, '2018-01-25'],
-        [6, 'Kim', 22, 'South-Hall', 45000, '2018-01-25'],
-        [7, 'James', 24, 'Houston', 10000, '2018-01-25']
-    ]
-
+    const [data, setData] = useState([['Consola']]);
     const [alert, setAlert] = useState(null);
     const inputFileRef = useRef(null);
     const [idEditor, setIdEditor] = useState(1);
@@ -75,7 +65,17 @@ const HomePage = () => {
             input: activeTab.code
         })
         .then(function (response) {
-            console.log(response);
+            if (response.data.success) {
+                setData(response.data.result);
+            } else {
+                document.getElementById('overlay').style.display = 'block';
+                setAlert(<Alert 
+                            severity="error" 
+                            style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000}}
+                            >
+                            {`${response.data.message}\n${response.data.error}`}
+                        </Alert>);
+            }
         })
         .catch(function (error) {
             console.log(error);
