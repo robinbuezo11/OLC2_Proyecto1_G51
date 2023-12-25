@@ -98,4 +98,4 @@ class Cast(Expression):
         dot += f'\nnode_{id}_type[label="{self.getType(self.destinyType)}"];'
         dot += f'\nnode_{id} -> node_{value1.id};'
         dot += f'\nnode_{id} -> node_{id}_type;'
-        return {dot: dot, id: id}
+        return ReturnAST(dot, id)
