@@ -62,6 +62,7 @@ def p_INSTRUCTIONS(t: Prod):
 
 def p_INSTRUCTION(t: Prod):
     '''INSTRUCTION  : CREATEDB TK_semicolon
+                    | USEDB TK_semicolon
                     | CREATETABLE TK_semicolon
                     | ALTERTAB TK_semicolon
                     | DROPTAB TK_semicolon
@@ -94,6 +95,10 @@ def p_INSTRUCTION(t: Prod):
 # Crear DB
 def p_CREATEDB(t: Prod):
     '''CREATEDB     : RW_create RW_data RW_base TK_field'''
+
+# Usar DB
+def p_USEDB(t: Prod):
+    '''USEDB    : RW_use TK_field'''
 
 # Declaración de Variables
 def p_DECLAREID(t: Prod):
