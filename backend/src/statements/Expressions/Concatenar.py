@@ -19,4 +19,12 @@ class Concatenar(Expression):
         return ReturnType(exp1.value + exp2.value, Type.NVARCHAR)
 
     def ast(self, ast: AST) -> ReturnAST:
-        pass
+        id = ast.getNewID()
+        dot = f'node_{id}[label="CONCATENAR"];'
+        value1: ReturnAST = self.exp1.ast(ast)
+        dot += '\n' + value1.dot
+        value2: ReturnAST = self.exp2.ast(ast)
+        dot += '\n' + value2.dot
+        dot += f'\nnode_{id} -> node_{value1.id};'
+        dot += f'\nnode_{id} -> node_{value2.id};'
+        return {dot: dot, id: id}

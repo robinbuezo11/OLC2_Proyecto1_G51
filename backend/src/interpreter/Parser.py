@@ -303,14 +303,14 @@ def p_FUNCDEC(t: Prod):
                 | RW_create RW_function TK_field TK_lpar TK_rpar RW_returns TYPE ENCAP
                 | RW_create RW_procedure TK_field PARAMS RW_as ENCAP
                 | RW_create RW_procedure TK_field RW_as ENCAP
-                | RW_create RW_procedure TK_field PARAMS ENCAP
+                | RW_create RW_procedure TK_field TK_lpar PARAMS TK_rpar ENCAP
                 | RW_create RW_procedure TK_field ENCAP'''
-    if len(t) == 10                                 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[5], t[9], t[8])
-    elif len(t) == 9                                : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[8], t[7])
-    elif len(t) == 7                                : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[4], t[6], Type.NULL)
-    elif len(t) == 6 and t.slice[4].type == 'RW_as' : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[5], Type.NULL)
-    elif len(t) == 6                                : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[4], t[5], Type.NULL)
-    else                                            : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[4], Type.NULL)
+    if len(t) == 10  : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[5], t[9], t[8])
+    elif len(t) == 9 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[8], t[7])
+    elif len(t) == 7 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[4], t[6], Type.NULL)
+    elif len(t) == 6 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[5], Type.NULL)
+    elif len(t) == 8 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[5], t[7], Type.NULL)
+    else             : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[4], Type.NULL)
 
 def p_PARAMS(t: Prod):
     '''PARAMS   : PARAMS TK_comma PARAM

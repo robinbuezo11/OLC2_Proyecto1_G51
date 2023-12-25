@@ -73,7 +73,7 @@ class Cast(Expression):
         env.setError(f'No hay casteo de "{self.getType(value.type)}" a "{self.getType(self.destinyType)}"', self.value.line, self.value.column)
         return ReturnType('NULL', Type.NULL)
 
-    def getType(type: Type) -> str:
+    def getType(self, type: Type) -> str:
         match type:
             case Type.INT:
                 return "INT"

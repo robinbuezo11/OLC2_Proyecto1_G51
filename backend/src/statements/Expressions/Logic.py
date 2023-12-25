@@ -56,4 +56,4 @@ class Logic(Expression):
         value2: ReturnAST = self.exp2.ast(ast)
         dot += '\n' + value2.dot
         dot += f'\nnode_{id} -> node_{value2.id};'
-        return ReturnType(dot, id)
+        return ReturnAST(dot, id)

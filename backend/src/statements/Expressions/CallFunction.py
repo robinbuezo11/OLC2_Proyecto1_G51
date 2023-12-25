@@ -74,4 +74,4 @@ class CallFunction(Expression):
                 param = self.args[i].ast(ast)
                 dot += '\n' + param.dot
                 dot += f'\nnode_{id}_name -> node_{param.id}'
-        return ReturnType(dot, id)
+        return ReturnAST(dot, id)
