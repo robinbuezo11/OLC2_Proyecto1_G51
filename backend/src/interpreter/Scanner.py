@@ -14,6 +14,7 @@ reserveds = {
     'CREATE'     : 'RW_create',
     'DATA'       : 'RW_data',
     'BASE'       : 'RW_base',
+    'USE'        : 'RW_use',
     'TABLE'      : 'RW_table',
     'PRIMARY'    : 'RW_primary',
     'FOREING'    : 'RW_foreing',
