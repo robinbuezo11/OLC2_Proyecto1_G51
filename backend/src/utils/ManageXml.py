@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import os
+from statements.Env.Env import Env
 
 class ManageXml:
     def __init__(self, path) -> None:
@@ -422,3 +423,33 @@ class ManageXml:
         return all(row_values.get(cond["column"]) == str(cond["value"]) for cond in conditions)
     
 
+
+#------------------------------------- BD TO XML && XML TO BD -------------------------------------#
+#----------------------------------- IN PROGRESS TO BE FINISHED -----------------------------------#
+    
+    def bdToXml(self, database: Env, name: str):
+        try:
+            # Verificar si la base de datos existe
+            db_to_save = next((db for db in self.__root if db.get("name") == name), None)
+            if db_to_save is None:
+                self.createDataBase(name)
+                db_to_save = next((db for db in self.__root if db.get("name") == name), None)
+            
+            return True
+        except Exception as e:
+            print(f"Error: No se pudo guardar la base de datos {name} en el archivo xml" + str(e))
+            return False
+        
+
+    def xmlToBd(self, name: str):
+        try:
+            # Verificar si la base de datos existe
+            db_to_load = next((db for db in self.__root if db.get("name") == name), None)
+            if db_to_load is None:
+                print(f"La base de datos '{name}' no existe.")
+                return False
+
+            return True
+        except Exception as e:
+            print(f"Error: No se pudo cargar la base de datos {name} en el archivo xml" + str(e))
+            return False

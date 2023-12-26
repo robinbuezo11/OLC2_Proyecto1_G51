@@ -236,3 +236,19 @@ class Table:
         for name, field in self.fields.items():
             base[name] = [field.type, 'NULL']
         return base
+    
+#---------------------------------- SELECT RETURN IN FORMAT REQUIRED TO FRONTEND ----------------------------------
+    
+    def getTableList(self, fields: dict[str, Field], rows: int) -> str:
+        data: list[list[any]] = []
+        header: list[str] = []
+        for name, _ in fields.items():
+            header.append(name)
+        data.append(header)
+        
+        for i in range(rows):
+            row: list[any] = []
+            for name, field in fields.items():
+                row.append(field.values[i].value)
+            data.append(row)
+        return data
