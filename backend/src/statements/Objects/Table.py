@@ -190,7 +190,7 @@ class Table:
                     selectedFields.get(field[1]).values.append(Data(resField.type if resField.type else Type.NULL, resField.value))
                     selectedFields.get(field[1]).updateLength(len(str(resField.value)))
                 newRows += 1
-        return self.getTable(selectedFields, newRows)
+        return self.getTableList(selectedFields, newRows)
 
     def getTable(self, fields: dict[str, Field], rows: int) -> str:
         consult: str = ''

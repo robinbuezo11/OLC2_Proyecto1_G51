@@ -4,7 +4,7 @@ from interpreter.Parser import *
 from statements.Abstracts.Expression import Expression
 from statements.Abstracts.Instruction import Instruction
 from statements.Env.Env import Env
-from utils.Outs import getStringOuts, getPrintConsole
+from utils.Outs import getStringOuts, getPrintConsole, resetOuts
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.ManageXml import ManageXml
@@ -51,6 +51,7 @@ def exec():
     print(data['input'])
     instructions = parser.parse(data['input'])
     globalEnv = Env(None, 'Global')
+    resetOuts()
     for instruction in instructions:
         try:
             if isinstance(instruction, Instruction) and instruction.typeInst == TypeInst.INIT_FUNCTION:
@@ -66,16 +67,17 @@ def exec():
         except ValueError as e: print(e)
 
     result = getPrintConsole()
-    result.insert(0, 'Resultado')
-    data = []
-    for res in result:
-        data.append([res])
+
+    # result.insert(0, 'Resultado')
+    # data = []
+    # for res in result:
+    #     data.append([res])
 
 
     return jsonify({
         'success': True,
         'message': 'Ejecutado correctamente',
-        'result': data,
+        'result': result,
         'error': ''
     })
 

@@ -140,9 +140,9 @@ class Env:
         env: Env = self
         while env:
             if id.lower() in env.tables:
-                table: str = env.tables.get(id.lower()).select(fields, condition, self)
+                table = env.tables.get(id.lower()).select(fields, condition, self)
                 self.setPrint(f'Selección en Tabla \'{id.lower()}\'. {line}:{column + 1}')
-                env.setPrint(table if table else '')
+                env.selectPrint(table if table else [])
                 return True
             env = env.previous
         self.setError('Selección en tabla inexistente', line, column)
@@ -207,7 +207,10 @@ class Env:
 
     # === UTILS ===
     def setPrint(self, print_: str):
-        printConsole.append(str(print_))
+        printConsole.append([print_])
+
+    def selectPrint(self, select: list[list[any]]):
+        printConsole.extend(select)
 
     def setError(self, errorD: str, line: int, column: int):
         if not self.match(errorD, line, column + 1):

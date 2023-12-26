@@ -37,32 +37,5 @@
             </row>
         </table>
     </database>
-    <database name="prueba">
-        <table name="tabla_prueba">
-            <column name="prueba_id" type="int" />
-            <column name="prueba" type="str" />
-            <column name="nombre" type="str" />
-            <row>
-                <value column="prueba_id">1</value>
-                <value column="prueba">Grupo51</value>
-                <value column="nombre">Los Cabrones</value>
-            </row>
-            <row>
-                <value column="prueba_id">2</value>
-                <value column="prueba">Grupo511</value>
-                <value column="nombre">Los Cabroness</value>
-            </row>
-            <row>
-                <value column="prueba_id">3</value>
-                <value column="prueba">Grupo5111</value>
-                <value column="nombre">Los Cabronesss</value>
-            </row>
-            <row>
-                <value column="prueba_id">4</value>
-                <value column="prueba">Grupo51111</value>
-                <value column="nombre">Los Cabronessss</value>
-            </row>
-        </table>
-    </database>
     <database name="Otra" />
-    </root>
+    <database name="Nueva" /></root>
