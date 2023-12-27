@@ -28,7 +28,7 @@ class SymTab:
             return f'<tr><td bgcolor="white">{self.num}</td><td bgcolor="white">%{self.id}/td><td bgcolor="white">Función</td><td bgcolor="white">{self.getType(self.type)}</td><td bgcolor="white">{self.nameEnv}</td><td bgcolor="white">{self.line}</td><td bgcolor="white">{self.column}</td></tr>'
         return f'<tr><td bgcolor="white">{self.num}</td><td bgcolor="white">{self.id}</td><td bgcolor="white">Método</td><td bgcolor="white">{self.getType(self.type)}</td><td bgcolor="white">{self.nameEnv}</td><td bgcolor="white">{self.line}</td><td bgcolor="white">{self.column}</td></tr>'
 
-    def getType(self, type):
+    def getType(self, type: Type):
         switcher = {
             Type.INT: "INT",
             Type.DOUBLE: "DOUBLE",
