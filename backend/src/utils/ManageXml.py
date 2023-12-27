@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as ET
 import os
-from statements.Env.Env import Env
 import re
 from datetime import datetime
 
@@ -30,26 +29,72 @@ class ManageXml:
         return self.__root
     
     def getStruct(self):
+        self.loadXml()
         struct = []
         for db in self.__root:
             struct.append({
                 'name': db.get('name'),
-                'child': self.getTables(db),
+                'child': [
+                    self.getTables(db),
+                    self.getProcedures(db),
+                    self.getFunctions(db)
+                ],
                 'type': 'database',
                 'level': '0'
             })
         return struct
     
     def getTables(self, db):
-        tables = []
+        childTables = []
         for table in db:
-            tables.append({
-                'name': table.get('name'),
-                'child': self.getColumns(table),
-                'type': 'table',
-                'level': '1'
-            })
+            if table.tag == 'table':
+                childTables.append({
+                    'name': table.get('name'),
+                    'child': self.getColumns(table),
+                    'type': 'table',
+                    'level': '2'
+                })
+        tables = {
+            'name': 'Tablas',
+            'child': childTables,
+            'type': 'tables',
+            'level': '1'
+        }
         return tables
+    
+    def getProcedures(self, db):
+        childProcedures = []
+        for procedure in db:
+            if procedure.tag == 'procedure':
+                childProcedures.append({
+                    'name': procedure.get('name'),
+                    'type': 'procedure',
+                    'level': '2'
+                })
+        procedures = {
+            'name': 'Procedimientos',
+            'child': childProcedures,
+            'type': 'procedures',
+            'level': '1'
+        }
+        return procedures
+    
+    def getFunctions(self, db):
+        childFunctions = []
+        for function in db:
+            if function.tag == 'function':
+                childFunctions.append({
+                    'name': function.get('name'),
+                    'type': 'function',
+                    'level': '2'
+                })
+        functions = {
+            'name': 'Funciones',
+            'child': childFunctions,
+            'type': 'functions',
+            'level': '1'
+        }
+        return functions
     
     def getColumns(self, table):
         columns = []
@@ -59,7 +104,7 @@ class ManageXml:
                     'name': column.get('name'),
                     'type': 'column',
                     'dataType': column.get('type'),
-                    'level': '2'
+                    'level': '3'
                 })
         return columns
     
@@ -67,6 +112,7 @@ class ManageXml:
         self.__tree.write(self.__path, encoding="utf-8", xml_declaration=True)
 
     def createDataBase(self, name):
+        self.loadXml()
         # Verificar si la base de datos ya existe
         existing_database = next((db for db in self.__root if db.get("name") == name), None)
         if existing_database is not None:
@@ -82,6 +128,7 @@ class ManageXml:
         return True
 
     def createTable(self, database, name):
+        self.loadXml()
         # Verificar si la base de datos existe
         db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
         if db_to_modify is None:
@@ -103,7 +150,8 @@ class ManageXml:
         return True
 
 
-    def createColumn(self, database, table, name, type):
+    def createColumn(self, database, table, name, type, length=None, not_null=False, primary_key=False):
+        self.loadXml()
         # Verificar si la base de datos existe
         db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
         if db_to_modify is None:
@@ -126,12 +174,19 @@ class ManageXml:
         new_column = ET.SubElement(table_to_modify, "column")
         new_column.set("name", name)
         new_column.set("type", type)
+        if length is not None:
+            new_column.set("length", str(length))
+        if not_null:
+            new_column.set("not_null", "true")
+        if primary_key:
+            new_column.set("primary_key", "true")
 
         self.writeXml()
         print(f"Nueva columna '{name}' creada en la tabla '{table}' de la base de datos '{database}' exitosamente.")
         return True
 
     def createRow(self, database, table, data):
+        self.loadXml()
         # Verificar si la base de datos existe
         db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
         if db_to_modify is None:
@@ -559,6 +614,7 @@ class ManageXml:
         # Verificar si la fila cumple con las condiciones especificadas
         row_values = {value.get("column"): value.text for value in row.findall("value")}
         return all(row_values.get(cond["column"]) == str(cond["value"]) for cond in conditions)
+#<<<<<<< HEAD
     
     def createProcedure(self, database, procedure, params):
         # Verificar si la base de datos existe
@@ -679,3 +735,6 @@ class ManageXml:
         except Exception as e:
             print(f"Error: No se pudo cargar la base de datos {name} en el archivo xml" + str(e))
             return False
+# =======
+    
+# >>>>>>> a1628d326b12608efe125976a616d531cc749e95

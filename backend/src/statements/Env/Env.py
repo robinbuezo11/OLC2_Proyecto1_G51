@@ -4,6 +4,7 @@ from utils.Error import Error
 from utils.TypeError import TypeError
 from statements.Env.Symbol import Symbol
 from statements.Abstracts.Expression import Expression
+from utils.Global import *
 
 
 class Env:
@@ -79,10 +80,13 @@ class Env:
                 if env.tables.get(id.lower()).validateFields(fields):
                     newRow: dict[str, list[any]] = env.tables.get(id.lower()).getFieldsRow()
                     result: ReturnType
+                    dataXml = []
                     for i in range(len(fields)):
                         result = values[i].execute(self)
                         newRow[fields[i].lower()] = [result.type, result.value]
+                        dataXml.append({"value": result.value, "column": fields[i].lower()})
                     if env.tables.get(id.lower()).insert(env, newRow, line, column):
+                        xml.insert(getUsedDatabase(), id.lower(), dataXml)
                         self.setPrint(f'Registro insertado exitosamente en Tabla \'{id.lower()}\'. {line}:{column + 1}')
                         return True
                     return False

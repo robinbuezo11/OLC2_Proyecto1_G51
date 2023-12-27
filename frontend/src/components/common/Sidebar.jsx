@@ -12,6 +12,9 @@ import SidebarItemCollapse from "./SidebarItemCollapse";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import StorageOutlinedIcon from '@mui/icons-material/StorageOutlined';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import CodeIcon from '@mui/icons-material/Code';
+import FolderIcon from '@mui/icons-material/Folder';
 import axios from "axios";
 
 const Sidebar = () => {
@@ -25,6 +28,7 @@ const Sidebar = () => {
       if (response.data.success) {
         const updatedStructDB = setStructDBData(response.data.result);
         setStructDB(updatedStructDB);
+        console.log(updatedStructDB)
       }
     } catch (error) {
       console.log(error);
@@ -51,6 +55,21 @@ const Sidebar = () => {
         item.sidebarProps = {
           displayText: item.name + " (" + item.dataType + ")",
         }
+      } else if (item.type === 'function') {
+        item.sidebarProps = {
+          displayText: item.name,
+          icon: <CompareArrowsIcon />
+        }
+      } else if (item.type === 'procedure') {
+        item.sidebarProps = {
+          displayText: item.name,
+          icon: <CodeIcon />
+        }
+      } else if (item.type === 'tables' || item.type === 'functions' || item.type === 'procedures') {
+        item.sidebarProps = {
+          displayText: item.name,
+          icon: <FolderIcon />
+        }
       }
       if (item.child) {
         item.child = setStructDBData(item.child);
@@ -61,6 +80,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     fetchStructDB();
+    // eslint-disable-next-line
   }, []);
 
   return (

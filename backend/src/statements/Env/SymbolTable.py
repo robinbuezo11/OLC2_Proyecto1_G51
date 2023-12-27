@@ -1,4 +1,4 @@
-from SymTab import SymTab
+from statements.Env.SymTab import SymTab
 
 class SymbolTable:
     def __init__(self):
