@@ -7,6 +7,8 @@ import Topbar from "../../components/common/Topbar";
 import "../../styles/HomePage.css";
 import { Alert, Button, Input, Tab, Tabs, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import * as d3 from 'd3';
+import 'd3-graphviz';
 
 const HomePage = () => {
     const [data, setData] = useState([['Consola']]);
@@ -68,13 +70,7 @@ const HomePage = () => {
             if (response.data.success) {
                 setData(response.data.result);
             } else {
-                document.getElementById('overlay').style.display = 'block';
-                setAlert(<Alert 
-                            severity="error" 
-                            style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000}}
-                            >
-                            {`${response.data.message}\n${response.data.error}`}
-                        </Alert>);
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
             }
         })
         .catch(function (error) {
@@ -92,32 +88,37 @@ const HomePage = () => {
         .then(function (response) {
             closeModalDB();
             if (response.data.success) {
-                document.getElementById('overlay').style.display = 'block';
-                setAlert(<Alert 
-                            severity="success" 
-                            style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000}}
-                            >
-                            {`${response.data.message}`}
-                        </Alert>);
+                showMessage('success', response.data.message);
             } else {
-                document.getElementById('overlay').style.display = 'block';
-                setAlert(<Alert 
-                            severity="error" 
-                            style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000}}
-                            >
-                            {`${response.data.message}\n${response.data.error}`}
-                        </Alert>);
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
             }
         })
         .catch(function (error) {
             closeModalDB();
-            document.getElementById('overlay').style.display = 'block';
-            setAlert(<Alert 
-                        severity="error" 
-                        style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000}}
-                        >
-                        {`${error}`}
-                    </Alert>);
+            showMessage('error', `${error}`);
+        });
+    }
+
+    const generateAst = () => {
+        axios.get('http://localhost:4000/api/getAst')
+        .then(function (response) {
+            if(response.data.success) {
+                const dotCode = response.data.result;
+                if(dotCode) {
+                    const newWindow = window.open('','_blank');
+                    newWindow.document.write('<html><head><title>AST</title></head><body><div id="graph"></div></body></html>');
+                    newWindow.document.close();
+
+                    d3.select(newWindow.document.getElementById('graph')).graphviz().scale(1).width(newWindow.document.getElementById('graph').clientWidth).renderDot(dotCode);
+                } else {
+                    showMessage('error', 'No se ha recibido el código dot');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
         });
     }
 
@@ -170,6 +171,16 @@ const HomePage = () => {
         setOpDB(null);
     }
 
+    function showMessage(type, message) {
+        document.getElementById('overlay').style.display = 'block';
+        setAlert(<Alert
+                    severity={type}
+                    style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000}}
+                    >
+                    {message}
+                </Alert>);
+    }
+
     useEffect(() => {
         if (alert) {
             const timer = setTimeout(() => {
@@ -189,7 +200,8 @@ const HomePage = () => {
         'createDB': openModalDB,
         'dropDB': openModalDBDel,
         'newQuery': handleNewTab,
-        'executeQuery': execute
+        'executeQuery': execute,
+        'ast': generateAst
     }
 
     return (

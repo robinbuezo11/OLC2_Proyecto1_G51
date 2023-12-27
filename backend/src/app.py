@@ -4,12 +4,14 @@ from interpreter.Parser import *
 from statements.Abstracts.Expression import Expression
 from statements.Abstracts.Instruction import Instruction
 from statements.Env.Env import Env
+from statements.Env.AST import AST
 from utils.Outs import getStringOuts, getPrintConsole, resetOuts
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.ManageXml import ManageXml
 from statements.Env import SymbolTable
 xml = ManageXml("..\\backend\\files\\data.xml")
+dotAst = ''
 
 app = Flask(__name__)
 CORS(app)
@@ -48,23 +50,39 @@ def getStruct():
 @app.route('/api/exec', methods=['POST'])
 def exec():
     data = request.get_json()
-    print(data['input'])
+    Scanner.lineno = 1
     instructions = parser.parse(data['input'])
     globalEnv = Env(None, 'Global')
     resetOuts()
+
+    global dotAst
+    dotAst = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
+    dotAst += '\nnode_r[label="INSTRUCTIONS"];'
+    ast = AST()    
     for instruction in instructions:
         try:
             if isinstance(instruction, Instruction) and instruction.typeInst == TypeInst.INIT_FUNCTION:
                 instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dotAst += '\n' + resultAST.dot
+                dotAst += f'\nnode_r -> node_{resultAST.id};'
         except ValueError as e: pass
 
     for instruction in instructions:
         try:
             if isinstance(instruction, Instruction) and instruction.typeInst != TypeInst.INIT_FUNCTION:
                 instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dotAst += '\n' + resultAST.dot
+                dotAst += f'\nnode_r -> node_{resultAST.id}'
             elif isinstance(instruction, Expression) and instruction.typeExp == TypeExp.CALL_FUNC:
                 instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dotAst += '\n' + resultAST.dot
+                dotAst += f'\nnode_r -> node_{resultAST.id}'
         except ValueError as e: print(e)
+    dotAst += '\n}'
+    print(dotAst)
 
     result = getPrintConsole()
 
@@ -109,6 +127,16 @@ def createDB():
             'result': '',
             'error': str(e)
         })
+    
+@app.route('/api/getAst', methods=['GET'])
+def getAst():
+    print(dotAst)
+    return jsonify({
+        'success': True,
+        'message': 'AST generado correctamente',
+        'result': dotAst,
+        'error': ''
+    })
 
 @app.route('/api/TablaDeSimbolos', methods=['POST'])
 def getDotSymbolTable():
