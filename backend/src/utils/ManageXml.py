@@ -196,69 +196,6 @@ class ManageXml:
             print("No hay datos en la tabla.")
             return None
     
-    # def execute_sql_function(func_name, row_values):
-    #     Funciones SQL permitidas
-    #     if func_name == "HOY":
-    #         return datetime.now().strftime("%Y-%m-%d")
-    #     elif func_name.startswith("SUBSTR"):
-    #         Ejemplo: SUBSTR(column_name, start, length)
-    #         match = re.match(r"SUBSTR\((\w+),(\d+),(\d+)\)", func_name)
-    #         if match:
-    #             column_name, start, length = match.groups()
-    #             column_value = row_values.get(column_name, "")
-    #             return column_value[int(start):int(start) + int(length)]
-    #     Puedes agregar más funciones según sea necesario
-
-    #     Si no se encuentra la función, devolver el valor original
-    #     return func_name
-
-    # def selectConFunciones(self, database, sql_query):
-    #     Verificar si la base de datos existe
-    #     db_to_select = next((db for db in self.__root if db.get("name") == database), None)
-    #     if db_to_select is None:
-    #         print(f"La base de datos '{database}' no existe.")
-    #         return None
-
-    #     Extraer columnas y tabla de la consulta SQL
-    #     match = re.match(r"SELECT (.+?) FROM (.+)", sql_query)
-    #     if not match:
-    #         print("Consulta SQL no válida.")
-    #         return None
-
-    #     columns, table = match.groups()
-
-    #     Convertir nombres de columnas a lista
-    #     columns = [col.strip() for col in columns.split(",")]
-
-    #     Verificar si la tabla existe en la base de datos
-    #     table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
-    #     if table_to_select is None:
-    #         print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
-    #         return None
-
-    #     rows = []
-    #     for row in table_to_select.findall("row"):
-    #         row_values = {value.get("column"): value.text for value in row.findall("value")}
-    #         result_row = {}
-    #         for col in columns:
-    #             if col.startswith("SUBSTR") or col == "HOY()":
-    #                 Ejecutar funciones SQL
-    #                 result_row[col] = execute_sql_function(col, row_values)
-    #             else:
-    #                 Obtener valores directos de las columnas
-    #                 result_row[col] = row_values.get(col, None)
-    #         rows.append(result_row)
-
-    #     Mostrar los resultados en la consola
-    #     if len(rows) > 0:
-    #         for row in rows:
-    #             print(row)
-    #         return rows
-    #     else:
-    #         print("No hay datos en la tabla.")
-    #         return None
-
-
     def selectWhere(self, database, table, conditions=None):
         # Verificar si la base de datos existe
         db_to_select = next((db for db in self.__root if db.get("name") == database), None)
@@ -297,6 +234,122 @@ class ManageXml:
         else:
             print("No hay datos en la tabla.")
             return None
+    
+    def selectMultipleCondiciones(self, database, query):
+        # Verificar si la base de datos existe
+        db_to_select = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_select is None:
+            print(f"La base de datos '{database}' no existe.")
+            return None
+
+        # Analizar la consulta SQL
+        match = re.match(r"SELECT (.+?) FROM (.+?) WHERE (.+)", query)
+        if not match:
+            print("Consulta SQL no válida.")
+            return None
+
+        columns, tables, conditions = match.groups()
+
+        # Convertir nombres de columnas a lista
+        columns = [col.strip() for col in columns.split(",")]
+
+        # Convertir nombres de tablas a lista
+        tables = [table.strip() for table in tables.split(",")]
+
+        # Convertir condiciones a lista
+        conditions = [cond.strip() for cond in conditions.split("&&")]
+
+        # Verificar si las tablas existen en la base de datos
+        for table in tables:
+            table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
+            if table_to_select is None:
+                print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+                return None
+
+        rows = []
+
+        # Filtrar las filas según las condiciones
+        for row in table_to_select.findall("row"):
+            row_values = {value.get("column"): value.text for value in row.findall("value")}
+
+            # Verificar las condiciones
+            if all(eval(cond, {}, row_values) for cond in conditions):
+                result_row = {}
+                for col in columns:
+                    result_row[col] = row_values.get(col, None)
+                rows.append(result_row)
+
+        # Mostrar los resultados en la consola
+        if len(rows) > 0:
+            for row in rows:
+                print(row)
+            return rows
+        else:
+            print("No hay datos que cumplan con las condiciones.")
+            return None
+    
+    def execute_sql_function(self, func_name, row_values):
+        #Funciones SQL permitidas
+        if func_name == "HOY":
+            return datetime.now().strftime("%Y-%m-%d")
+        elif func_name.startswith("SUBSTR"):
+            #Ejemplo: SUBSTR(column_name, start, length)
+            match = re.match(r"SUBSTR\((\w+),(\d+),(\d+)\)", func_name)
+            if match:
+                column_name, start, length = match.groups()
+                column_value = row_values.get(column_name, "")
+                return column_value[int(start):int(start) + int(length)]
+        #Puedes agregar más funciones según sea necesario
+        #
+        #Si no se encuentra la función, devolver el valor original
+        return func_name
+
+    def selectConFunciones(self, database, sql_query):
+        #Verificar si la base de datos existe
+        db_to_select = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_select is None:
+            print(f"La base de datos '{database}' no existe.")
+            return None
+
+        #Extraer columnas y tabla de la consulta SQL
+        match = re.match(r"SELECT (.+?) FROM (.+)", sql_query)
+        if not match:
+            print("Consulta SQL no válida.")
+            return None
+
+        columns, table = match.groups()
+
+        #Convertir nombres de columnas a lista
+        columns = [col.strip() for col in columns.split(",")]
+
+        #Verificar si la tabla existe en la base de datos
+        table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
+        if table_to_select is None:
+            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+            return None
+
+        rows = []
+        for row in table_to_select.findall("row"):
+            row_values = {value.get("column"): value.text for value in row.findall("value")}
+            result_row = {}
+            for col in columns:
+                if col.startswith("SUBSTR") or col == "HOY()":
+                    #Ejecutar funciones SQL
+                    result_row[col] = self.execute_sql_function(col, row_values)
+                else:
+                    #Obtener valores directos de las columnas
+                    result_row[col] = row_values.get(col, None)
+            rows.append(result_row)
+
+        #Mostrar los resultados en la consola
+        if len(rows) > 0:
+            for row in rows:
+                print(row)
+            return rows
+        else:
+            print("No hay datos en la tabla.")
+            return None
+
     
     
     def alterDatabase(self, databaseOld, databaseNew):
@@ -507,6 +560,94 @@ class ManageXml:
         row_values = {value.get("column"): value.text for value in row.findall("value")}
         return all(row_values.get(cond["column"]) == str(cond["value"]) for cond in conditions)
     
+    def createProcedure(self, database, procedure, params):
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Verificar si el procedimiento ya existe en la base de datos
+        existing_procedure = next((proc for proc in db_to_modify.findall(f".//procedure[@name='{procedure}']")), None)
+        if existing_procedure is not None:
+            print(f"El procedimiento '{procedure}' ya existe en la base de datos '{database}'.")
+            return False
+
+        # Crear nuevo procedimiento
+        new_procedure = ET.SubElement(db_to_modify, "procedure", {"name": procedure})
+
+        # Agregar parámetros al procedimiento
+        for param in params:
+           ET.SubElement(new_procedure, "parameter", {"name": param["name"], "type": param["type"]})
+
+        # Guardar cambios en el archivo XML
+        self.writeXml()
+
+        print(f"Procedimiento '{procedure}' creado en la base de datos '{database}' exitosamente.")
+        return True
+    
+    def createFunction(self, database, function, params, return_type):
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database))
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Verificar si la función ya existe en la base de datos
+        existing_function = next((func for func in db_to_modify.findall(f".//function[@name='{function}']")), None)
+        if existing_function is not None:
+            print(f"La función '{function}' ya existe en la base de datos '{database}'.")
+            return False
+
+        # Crear nueva función
+        new_function = ET.SubElement(db_to_modify, "function", {"name": function, "returnType": return_type})
+
+        # Agregar parámetros a la función
+        for param in params:
+           ET.SubElement(new_function, "parameter", {"name": param["name"], "type": param["type"]})
+
+        # Guardar cambios en el archivo XML
+        self.writeXml()
+
+        print(f"Función '{function}' creada en la base de datos '{database}' exitosamente.")
+        return True
+
+    
+    def declare(self, database, variables):
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Iterar sobre las variables proporcionadas
+        for var_info in variables:
+            # Separar el nombre y el tipo (si hay alias)
+            parts = var_info.split(' ')
+            if len(parts) == 1:
+                var_name = parts[0]
+                var_type = "UNKNOWN"  # O ajusta esto a un tipo por defecto
+            elif len(parts) == 3 and parts[1].lower() == "as":
+                var_name = parts[0]
+                var_type = parts[2]
+            else:
+                print(f"Error al analizar la declaración de variable: {var_info}")
+                return False
+
+            # Verificar si la variable ya existe en la base de datos
+            existing_variable = next((var for var in db_to_modify.findall(f".//variable[@name='{var_name}']")), None)
+            if existing_variable is not None:
+                print(f"La variable '{var_name}' ya existe en la base de datos '{database}'.")
+                return False
+
+            # Crear nueva variable
+            ET.SubElement(db_to_modify, "variable", {"name": var_name, "type": var_type})
+
+        # Guardar cambios en el archivo XML
+        self.writeXml()
+
+        print(f"Variables creadas en la base de datos '{database}' exitosamente.")
+        return True
 
 
 #------------------------------------- BD TO XML && XML TO BD -------------------------------------#
