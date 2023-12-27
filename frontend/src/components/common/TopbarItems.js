@@ -70,6 +70,23 @@ const TopbarItems = [
     {
         label: "Ejecutar",
         id: "execute",
+    },
+    {
+        label: "Reportes",
+        items: [
+            {
+                label: "AST",
+                id: "ast",
+            },
+            {
+                label: "Tabla de Símbolos",
+                id: "symbols",
+            },
+            {
+                label: "Errores",
+                id: "errors",
+            }
+        ]
     }
 ];
 
