@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 import os
 from statements.Env.Env import Env
+import re
+from datetime import datetime
 
 class ManageXml:
     def __init__(self, path) -> None:
@@ -164,36 +166,99 @@ class ManageXml:
         print(f"Nueva fila creada en la tabla '{table}' de la base de datos '{database}' exitosamente.")
         return True
 
-    def select(self, database, table):
-        # Verificar si la base de datos existe
-        db_to_select = next((db for db in self.__root if db.get("name") == database), None)
-        if db_to_select is None:
-            print(f"La base de datos '{database}' no existe.")
-            return None
+    # def select(self, database, table):
+    #     Verificar si la base de datos existe
+    #     db_to_select = next((db for db in self.__root if db.get("name") == database), None)
+    #     if db_to_select is None:
+    #         print(f"La base de datos '{database}' no existe.")
+    #         return None
 
-        # Verificar si la tabla existe en la base de datos
-        table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
-        if table_to_select is None:
-            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
-            return None
+    #     Verificar si la tabla existe en la base de datos
+    #     table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
+    #     if table_to_select is None:
+    #         print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+    #         return None
 
-        rows = []
-        for row in table_to_select.findall("row"):
-            values = []
-            for value in row.findall("value"):
-                values.append({"column": value.get("column"), "value": value.text})
-            if len(values) > 0:
-                rows.append(values)
+    #     rows = []
+    #     for row in table_to_select.findall("row"):
+    #         values = []
+    #         for value in row.findall("value"):
+    #             values.append({"column": value.get("column"), "value": value.text})
+    #         if len(values) > 0:
+    #             rows.append(values)
 
-        # Mostrar los resultados en la consola
-        if len(rows) > 0:
-            for row in rows:
-                print(row)
-            return rows
-        else:
-            print("No hay datos en la tabla.")
-            return None
-        
+    #     Mostrar los resultados en la consola
+    #     if len(rows) > 0:
+    #         for row in rows:
+    #             print(row)
+    #         return rows
+    #     else:
+    #         print("No hay datos en la tabla.")
+    #         return None
+    
+    # def execute_sql_function(func_name, row_values):
+    #     Funciones SQL permitidas
+    #     if func_name == "HOY":
+    #         return datetime.now().strftime("%Y-%m-%d")
+    #     elif func_name.startswith("SUBSTR"):
+    #         Ejemplo: SUBSTR(column_name, start, length)
+    #         match = re.match(r"SUBSTR\((\w+),(\d+),(\d+)\)", func_name)
+    #         if match:
+    #             column_name, start, length = match.groups()
+    #             column_value = row_values.get(column_name, "")
+    #             return column_value[int(start):int(start) + int(length)]
+    #     Puedes agregar más funciones según sea necesario
+
+    #     Si no se encuentra la función, devolver el valor original
+    #     return func_name
+
+    # def selectConFunciones(self, database, sql_query):
+    #     Verificar si la base de datos existe
+    #     db_to_select = next((db for db in self.__root if db.get("name") == database), None)
+    #     if db_to_select is None:
+    #         print(f"La base de datos '{database}' no existe.")
+    #         return None
+
+    #     Extraer columnas y tabla de la consulta SQL
+    #     match = re.match(r"SELECT (.+?) FROM (.+)", sql_query)
+    #     if not match:
+    #         print("Consulta SQL no válida.")
+    #         return None
+
+    #     columns, table = match.groups()
+
+    #     Convertir nombres de columnas a lista
+    #     columns = [col.strip() for col in columns.split(",")]
+
+    #     Verificar si la tabla existe en la base de datos
+    #     table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
+    #     if table_to_select is None:
+    #         print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+    #         return None
+
+    #     rows = []
+    #     for row in table_to_select.findall("row"):
+    #         row_values = {value.get("column"): value.text for value in row.findall("value")}
+    #         result_row = {}
+    #         for col in columns:
+    #             if col.startswith("SUBSTR") or col == "HOY()":
+    #                 Ejecutar funciones SQL
+    #                 result_row[col] = execute_sql_function(col, row_values)
+    #             else:
+    #                 Obtener valores directos de las columnas
+    #                 result_row[col] = row_values.get(col, None)
+    #         rows.append(result_row)
+
+    #     Mostrar los resultados en la consola
+    #     if len(rows) > 0:
+    #         for row in rows:
+    #             print(row)
+    #         return rows
+    #     else:
+    #         print("No hay datos en la tabla.")
+    #         return None
+
+
     def selectWhere(self, database, table, conditions=None):
         # Verificar si la base de datos existe
         db_to_select = next((db for db in self.__root if db.get("name") == database), None)
@@ -233,6 +298,26 @@ class ManageXml:
             print("No hay datos en la tabla.")
             return None
     
+    
+    def alterDatabase(self, databaseOld, databaseNew):
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == databaseOld), None)
+        if db_to_modify is None:
+            print(f"La base de datos '{databaseOld}' no existe.")
+            return False
+
+        # Verificar si la nueva base de datos ya existe
+        existing_database = next((db for db in self.__root if db.get("name") == databaseNew), None)
+        if existing_database is not None:
+            print(f"La base de datos '{databaseNew}' ya existe.")
+            return False
+
+        # Cambiar el nombre de la base de datos
+        db_to_modify.set("name", databaseNew)
+        self.writeXml()
+        print(f"El nombre de la base de datos '{databaseOld}' ha sido cambiado a '{databaseNew}' exitosamente.")
+        return True
+
     def dropDatabase(self, database):   
         # Verificar si la base de datos existe
         db_to_remove = next((db for db in self.__root if db.get("name") == database), None)
