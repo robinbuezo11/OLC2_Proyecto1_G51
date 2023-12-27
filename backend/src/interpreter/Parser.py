@@ -36,6 +36,7 @@ from statements.Expressions.Cast import Cast
 from statements.Expressions.Concatenar import Concatenar
 from statements.Expressions.Substraer import Substraer
 from statements.Expressions.Hoy import Hoy
+from utils.Global import *
 
 precedence = (
     ('left', 'TK_or'),
@@ -95,10 +96,12 @@ def p_INSTRUCTION(t: Prod):
 # Crear DB
 def p_CREATEDB(t: Prod):
     '''CREATEDB     : RW_create RW_data RW_base TK_field'''
+    xml.createDataBase(t[4])
 
 # Usar DB
 def p_USEDB(t: Prod):
     '''USEDB    : RW_use TK_field'''
+    setUsedDatabase(t[2])
 
 # Declaración de Variables
 def p_DECLAREID(t: Prod):

@@ -8,10 +8,10 @@ from statements.Env.AST import AST
 from utils.Outs import getStringOuts, getPrintConsole, resetOuts
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
-from utils.ManageXml import ManageXml
+from utils.Global import *
 
-xml = ManageXml("..\\backend\\files\\data.xml")
 dotAst = ''
+
 
 app = Flask(__name__)
 CORS(app)
@@ -82,7 +82,6 @@ def exec():
                 dotAst += f'\nnode_r -> node_{resultAST.id}'
         except ValueError as e: print(e)
     dotAst += '\n}'
-    print(dotAst)
 
     result = getPrintConsole()
 

@@ -1,41 +1,40 @@
 <?xml version='1.0' encoding='utf-8'?>
 <root>
-    <database name="test">
-        <table name="demo">
-            <column name="id" type="int" />
-            <column name="name" type="str" />
-            <column name="hint" type="str" />
+    <database name="tbbanco">
+        <table name="productos">
+            <column name="ProductoID" type="int" not_null="true" primary_key="true" />
+            <column name="Nombre" type="nvarchar" length="150" not_null="true" />
+            <column name="PrecioUnitario" type="decimal" />
+            <column name="Stock" type="int" />
+            <column name="Categoria" type="nvarchar" length="50" />
             <row>
-                <value column="id">4</value>
-                <value column="name">Grupo51111</value>
-                <value column="hint">Los Cabronessss</value>
+                <value column="productoid">1</value>
+                <value column="categoria">Electrónicos</value>
+                <value column="preciounitario">1000.0</value>
+                <value column="stock">50</value>
+                <value column="nombre">Producto X</value>
+            </row>
+            <row>
+                <value column="productoid">2</value>
+                <value column="nombre">Producto Y</value>
+                <value column="preciounitario">750.5</value>
+                <value column="stock">30</value>
+                <value column="categoria">Ropa</value>
             </row>
         </table>
-        <table name="demo2">
-            <column name="llave" type="int" />
-            <column name="nombre" type="str" />
-            <column name="desc" type="str" />
-            <row>
-                <value column="llave">1</value>
-                <value column="nombre">Grupo51</value>
-                <value column="desc">Los Cabrones</value>
-            </row>
-            <row>
-                <value column="llave">2</value>
-                <value column="nombre">Grupo511</value>
-                <value column="desc">Los Cabroness</value>
-            </row>
-            <row>
-                <value column="llave">3</value>
-                <value column="nombre">Grupo5111</value>
-                <value column="desc">Los Cabronesss</value>
-            </row>
-            <row>
-                <value column="llave">4</value>
-                <value column="nombre">Grupo51111</value>
-                <value column="desc">Los Cabronessss</value>
-            </row>
-        </table>
+        <procedure name="sp_productos">
+            <parameter name="ProductoID" type="int" />
+            <parameter name="Nombre" type="nvarchar" length="150" />
+            <body>
+                SELECT * FROM productos
+            </body>
+        </procedure>
+        <function name="fn_productos" type="int">
+            <parameter name="ProductoID" type="int" action="in" />
+            <parameter name="Nombre" type="nvarchar" length="150" action="in" />
+            <body>
+                SELECT * FROM productos
+            </body>
+        </function>
     </database>
-    <database name="Otra" />
-    <database name="Nueva" /></root>
+</root>
