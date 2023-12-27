@@ -109,8 +109,7 @@ const HomePage = () => {
                     newWindow.document.write('<html><head><title>AST</title></head><body><div id="graph"></div></body></html>');
                     newWindow.document.close();
 
-                    const svg = d3.select(newWindow.document.getElementById('graph')).graphviz()
-                    svg.renderDot(dotCode);
+                    d3.select(newWindow.document.getElementById('graph')).graphviz().scale(1).width(newWindow.document.getElementById('graph').clientWidth).renderDot(dotCode);
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
