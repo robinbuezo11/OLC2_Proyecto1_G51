@@ -9,7 +9,7 @@ from utils.Outs import getStringOuts, getPrintConsole, resetOuts
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.Global import *
-from statements.Env import SymbolTable
+from statements.Env.SymbolTable import SymbolTable
 from utils.Outs import getErrors
 from utils.Outs import getTokens
 

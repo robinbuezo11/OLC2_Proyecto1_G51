@@ -80,6 +80,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     fetchStructDB();
+    // eslint-disable-next-line
   }, []);
 
   return (
