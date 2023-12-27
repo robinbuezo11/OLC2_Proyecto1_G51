@@ -166,35 +166,35 @@ class ManageXml:
         print(f"Nueva fila creada en la tabla '{table}' de la base de datos '{database}' exitosamente.")
         return True
 
-    # def select(self, database, table):
-    #     Verificar si la base de datos existe
-    #     db_to_select = next((db for db in self.__root if db.get("name") == database), None)
-    #     if db_to_select is None:
-    #         print(f"La base de datos '{database}' no existe.")
-    #         return None
+    def select(self, database, table):
+        #Verificar si la base de datos existe
+        db_to_select = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_select is None:
+            print(f"La base de datos '{database}' no existe.")
+            return None
 
-    #     Verificar si la tabla existe en la base de datos
-    #     table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
-    #     if table_to_select is None:
-    #         print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
-    #         return None
+        #Verificar si la tabla existe en la base de datos
+        table_to_select = next((tb for tb in db_to_select if tb.get("name") == table), None)
+        if table_to_select is None:
+            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
+            return None
 
-    #     rows = []
-    #     for row in table_to_select.findall("row"):
-    #         values = []
-    #         for value in row.findall("value"):
-    #             values.append({"column": value.get("column"), "value": value.text})
-    #         if len(values) > 0:
-    #             rows.append(values)
+        rows = []
+        for row in table_to_select.findall("row"):
+            values = []
+            for value in row.findall("value"):
+                values.append({"column": value.get("column"), "value": value.text})
+            if len(values) > 0:
+                rows.append(values)
 
-    #     Mostrar los resultados en la consola
-    #     if len(rows) > 0:
-    #         for row in rows:
-    #             print(row)
-    #         return rows
-    #     else:
-    #         print("No hay datos en la tabla.")
-    #         return None
+        #Mostrar los resultados en la consola
+        if len(rows) > 0:
+            for row in rows:
+                print(row)
+            return rows
+        else:
+            print("No hay datos en la tabla.")
+            return None
     
     # def execute_sql_function(func_name, row_values):
     #     Funciones SQL permitidas

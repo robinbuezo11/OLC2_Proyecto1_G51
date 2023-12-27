@@ -8,7 +8,7 @@ from utils.Outs import getStringOuts, getPrintConsole, resetOuts
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.ManageXml import ManageXml
-
+from statements.Env import SymbolTable
 xml = ManageXml("..\\backend\\files\\data.xml")
 
 app = Flask(__name__)
@@ -106,6 +106,33 @@ def createDB():
         return jsonify({
             'success': False,
             'message': 'Error al obtener los parametros',
+            'result': '',
+            'error': str(e)
+        })
+
+@app.route('/api/TablaDeSimbolos', methods=['POST'])
+def getDotSymbolTable():
+    try:
+        res = SymbolTable.symTable.getDot()
+        print(res)
+        if res:
+            return jsonify({
+                'success': True,
+                'message': 'Tabla de simbolos obtenida correctamente',
+                'result': res,
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener la tabla de simbolos',
+                'result': '',
+                'error': 'No existen bases de datos'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
             'result': '',
             'error': str(e)
         })
