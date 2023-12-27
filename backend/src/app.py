@@ -10,6 +10,10 @@ from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.ManageXml import ManageXml
 from statements.Env import SymbolTable
+from utils.Outs import getErrors
+from utils.Outs import getTokens
+
+
 xml = ManageXml("..\\backend\\files\\data.xml")
 dotAst = ''
 
@@ -164,6 +168,61 @@ def getDotSymbolTable():
             'result': '',
             'error': str(e)
         })
+    
+@app.route('/api/Errores', methods=['POST'])
+def getErrores():
+    try:
+        res = getErrors()
+        print(res)
+        if res:
+            return jsonify({
+                'success': True,
+                'message': 'Errores obtenidos correctamente',
+                'result': res,
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener los errores',
+                'result': '',
+                'error': 'No existen errores'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+
+@app.route('/api/Tokens', methods=['POST'])
+def getToken():
+    try:
+        res = getTokens()
+        print(res)
+        if res:
+            return jsonify({
+                'success': True,
+                'message': 'Errores obtenidos correctamente',
+                'result': res,
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener los errores',
+                'result': '',
+                'error': 'No existen errores'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
