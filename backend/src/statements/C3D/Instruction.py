@@ -14,9 +14,9 @@ class Instruction:
         self.lbl: str
 
     def changeLbl(self, lbls: dict[str, int]):
-        lbl = 'L' + str(lbls.get(self.lbl))
+        self.lbl = 'L' + str(lbls.get(self.lbl))
 
-    def change_tmp(self, tmps: dict[str, int]):
+    def changeTmp(self, tmps: dict[str, int]):
         if self.target is not None and self.target != "H" and self.target != "P":
             if re.match(r"[t][0-9]+", self.target):
                 self.target = "t" + str(tmps.get(self.target))
