@@ -1,5 +1,6 @@
 from statements.C3D.Instruction import Instruction
 from statements.C3D.Type import Type
+from utils.Type import Type as TypeData
 from statements.C3D.Label import Label
 from statements.C3D.If import If
 from statements.C3D.Goto import Goto
@@ -434,24 +435,24 @@ class C3DGen:
             self.restoreSetting()
             self.thereIsCharToString = True
 
-    def generateParserString(self, type: Type):
+    def generateParserString(self, type: TypeData):
         match type:
-            case Type.INT:
+            case TypeData.INT:
                 self.generateIntToString()
-            case Type.DECIMAL:
+            case TypeData.DECIMAL:
                 self.generateDoubleToString()
-            case Type.NVARCHAR:
+            case TypeData.NVARCHAR:
                 self.generateCharToString()
             case _:
                 pass
 
-    def addCallParserString(self, type: Type):
+    def addCallParserString(self, type: TypeData):
         match type:
-            case Type.INT:
+            case TypeData.INT:
                 self.addCall('_intToString')
-            case Type.DECIMAL:
+            case TypeData.DECIMAL:
                 self.addCall('_doubleToString')
-            case Type.NVARCHAR:
+            case TypeData.NVARCHAR:
                 self.addCall('_charToString')
             case _:
                 pass
@@ -506,11 +507,11 @@ class C3DGen:
         id = 0
         for i in range(len(self.C3DCode)):
             # Verificar si el tipo no está en la lista types
-            if self.C3DCode[i].type not in types:
+            if not self.C3DCode[i].type in types:
                 # Verificar otras condiciones
                 if (
-                    self.C3DCode[i].target is not None and
-                    self.C3DCode[i].target not in newTemps and
+                    self.C3DCode[i].target and
+                    not self.C3DCode[i].target in newTemps and
                     self.C3DCode[i].target != "H" and
                     self.C3DCode[i].target != "P"
                 ):
@@ -518,7 +519,7 @@ class C3DGen:
                     newTemps[self.C3DCode[i].target] = id
                     id += 1
         for i in range(len(self.C3DCode)):
-            if self.C3DCode[i].type not in types:
+            if not self.C3DCode[i].type in types:
                 self.C3DCode[i].changeTmp(newTemps)
         return "\n".join(str(instruction) for instruction in self.C3DCode)
 
