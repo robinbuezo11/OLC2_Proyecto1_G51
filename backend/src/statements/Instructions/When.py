@@ -1,9 +1,10 @@
 from statements.Abstracts.Instruction import Instruction
 from statements.Abstracts.Expression import Expression
 from utils.TypeInst import TypeInst
-from utils.Type import ReturnType
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 
 class When(Instruction):
     def __init__(self, line: int, column: int, when_: Expression, result: Expression):
@@ -28,6 +29,9 @@ class When(Instruction):
             condition: ReturnType = self.when_.execute(env)
             if condition.value:
                 return self.result.execute(env)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

@@ -1,5 +1,5 @@
-from C3D.Instruction import Instruction
-from C3D.Type import Type
+from statements.C3D.Instruction import Instruction
+from statements.C3D.Type import Type
 
 class GetHeap(Instruction):
     def __init__(self, target: str, index: str):
@@ -8,4 +8,4 @@ class GetHeap(Instruction):
         self.index = index
 
     def __str__(self) -> str:
-        return '\t' + self.target + ' = heap[int(int) ' + self.index + '];'
+        return f'\t{self.target} = heap[int(int) {self.index}];'

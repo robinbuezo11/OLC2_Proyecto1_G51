@@ -3,6 +3,8 @@ from statements.Env.Env import Env
 from statements.Abstracts.Instruction import Instruction
 from statements.Abstracts.Expression import Expression
 from utils.TypeInst import TypeInst
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 
 class AsignID(Instruction):
     def __init__(self, line: int, column: int, id: str, value: Expression):
@@ -13,6 +15,9 @@ class AsignID(Instruction):
     def execute(self, env: Env):
         value = self.value.execute(env)
         env.reasignID(self.id, value, self.line, self.column)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

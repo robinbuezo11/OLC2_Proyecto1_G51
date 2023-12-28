@@ -2,9 +2,10 @@ from statements.Abstracts.Expression import Expression
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from statements.Objects.Table import Field
-from utils.Type import ReturnType, Type
 from utils.TypeExp import TypeExp
 from utils.DomineOp import plus, minus, mult, div
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 
 class Arithmetic(Expression):
     def __init__(self, line: int, column: int, exp1: Expression, sign: str, exp2: Expression):
@@ -33,6 +34,9 @@ class Arithmetic(Expression):
                 return self.div(env)
             case _:
                 return ReturnType('NULL', Type.NULL)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def plus(self, env: Env) -> ReturnType:
         value1: ReturnType = self.exp1.execute(env)

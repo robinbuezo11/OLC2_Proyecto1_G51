@@ -1,17 +1,17 @@
 import re
-from C3D.Type import Type
+from statements.C3D.Type import Type
 
 class Instruction:
     def __init__(self, type):
         self.type: Type = type
-        self.target: str
-        self.value: str
-        self.id: str
-        self.left: str
-        self.operator: str
-        self.right: str
-        self.index: str
-        self.lbl: str
+        self.target: str = None
+        self.value: str = None
+        self.id: str = None
+        self.left: str = None
+        self.operator: str = None
+        self.right: str = None
+        self.index: str = None
+        self.lbl: str = None
 
     def changeLbl(self, lbls: dict[str, int]):
         self.lbl = 'L' + str(lbls.get(self.lbl))

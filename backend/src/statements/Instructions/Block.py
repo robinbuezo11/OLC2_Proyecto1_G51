@@ -2,6 +2,8 @@ from statements.Abstracts.Instruction import Instruction
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from utils.TypeInst import TypeInst
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 
 class Block(Instruction):
     def __init__(self, line: int, column: int, instructions: list[Instruction]):
@@ -16,6 +18,9 @@ class Block(Instruction):
                 if ret:
                     return ret
             except: {}
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

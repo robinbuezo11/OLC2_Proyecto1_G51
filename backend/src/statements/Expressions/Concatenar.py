@@ -1,8 +1,9 @@
 from statements.Abstracts.Expression import Expression
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
-from utils.Type import ReturnType, Type
 from utils.TypeInst import TypeInst
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 
 class Concatenar(Expression):
     def __init__(self, line: int, column: int, exp1: Expression, exp2: Expression):
@@ -17,6 +18,9 @@ class Concatenar(Expression):
         exp1 = self.exp1.execute(env)
         exp2 = self.exp2.execute(env)
         return ReturnType(exp1.value + exp2.value, Type.NVARCHAR)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

@@ -16,7 +16,6 @@ from statements.C3D.SetHeap import SetHeap
 from statements.C3D.GetHeap import GetHeap
 from statements.C3D.SetStack import SetStack
 from statements.C3D.GetStack import GetStack
-from utils.Type import Type
 
 class C3DGen:
     def __init__(self):
@@ -30,7 +29,6 @@ class C3DGen:
         self.C3DGlobals: list[Instruction] = []
         self.temporalsSaved: dict[str, str] = {}
         self.temporals: list = []
-        self.declarations: list = []
         self.thereIsPow: bool = False
         self.thereIsMod: bool = False
         self.thereIsPrintString = False
@@ -138,7 +136,7 @@ class C3DGen:
     def addExpression(self, target: str, left: str, operator: str, right: str):
         self.addInstruction(Expression(target, left, operator, right))
 
-    def addComent(self, comment: str):
+    def addComment(self, comment: str):
         self.addInstruction(Generic('\t/* ' + comment + ' */'))
 
     def addPrintf(self, type: str, value: str):
@@ -146,7 +144,7 @@ class C3DGen:
 
     def addPrint(self, value: str):
         for ascii in value:
-            self.addPrint('c', '(char) ' + str(ord(ascii)))
+            self.addPrintf('c', '(char) ' + str(ord(ascii)))
 
     def addFunction(self, id: str):
         self.addInstruction(Function(id))
@@ -459,10 +457,6 @@ class C3DGen:
 
     def generateFinalCode(self):
         self.C3DCode.append(Generic("/* ----- HEADER ----- */"))
-        if len(self.declarations) > 0:
-            self.thereAreDeclarations = True
-            self.declarations.append(0, "/* -- DECLARATIONS -- */")
-            self.C3DCode.append(Generic("#include \"./" + self.name + ".hpp\""))
         self.C3DCode.append(Generic("#include <stdio.h>"))
         self.C3DCode.append(Generic(""))
         self.C3DCode.append(Generic("float heap[30101999];"))
@@ -522,6 +516,3 @@ class C3DGen:
             if not self.C3DCode[i].type in types:
                 self.C3DCode[i].changeTmp(newTemps)
         return "\n".join(str(instruction) for instruction in self.C3DCode)
-
-    def getDeclarations(self):
-        return "\n".join(map(str, self.declarations))

@@ -2,6 +2,10 @@ from ply.yacc import YaccProduction as Prod
 from ply.lex import LexToken
 # Tipos
 from utils.Type import Type
+from utils.Parameter import Parameter
+from utils.Attribute import Attribute
+from utils.ForeignKey import ForeignKey
+from utils.Global import *
 # Instrucciones
 from statements.Instructions.InitID import InitID
 from statements.Instructions.AsignID import AsignID
@@ -27,16 +31,12 @@ from statements.Expressions.Field import Field
 from statements.Expressions.Relational import Relational
 from statements.Expressions.Arithmetic import Arithmetic
 from statements.Expressions.Logic import Logic
-from utils.Parameter import Parameter
-from utils.Attribute import Attribute
-from utils.ForeignKey import ForeignKey
 from statements.Expressions.CallFunction import CallFunction
 from statements.Expressions.Return import Return
 from statements.Expressions.Cast import Cast
 from statements.Expressions.Concatenar import Concatenar
 from statements.Expressions.Substraer import Substraer
 from statements.Expressions.Hoy import Hoy
-from utils.Global import *
 
 precedence = (
     ('left', 'TK_or'),

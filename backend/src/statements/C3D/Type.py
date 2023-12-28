@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 class Type(Enum):
     ASIGN        = 'Asign'
@@ -16,9 +16,3 @@ class Type(Enum):
     RETURN       = 'Return'
     SETHEAP      = 'SetHeap'
     SETSTACK     = 'SetStack'
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value

@@ -1,5 +1,5 @@
-from C3D.Instruction import Instruction
-from C3D.Type import Type
+from statements.C3D.Instruction import Instruction
+from statements.C3D.Type import Type
 
 class Expression(Instruction):
     def __init__(self, target: str, left: str, operator: str, right: str):
@@ -10,4 +10,4 @@ class Expression(Instruction):
         self.right = right
 
     def __str__(self) -> str:
-        return '\t' + self.target + ' = ' + self.left + ' ' + self.right + ';'
+        return f'\t{self.target} = {self.left} {self.operator} {self.right};'

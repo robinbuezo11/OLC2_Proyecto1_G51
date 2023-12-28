@@ -3,6 +3,8 @@ from statements.Abstracts.Expression import Expression
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from utils.TypeInst import TypeInst
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 
 class InsertTable(Instruction):
     def __init__(self, line: int, column: int, name: str, fields: list[str], values: list[Expression]):
@@ -19,6 +21,9 @@ class InsertTable(Instruction):
             env.setError('Inserta más valores de los esperados', self.line, self.column)
             return
         env.setError('Inserta menos valores de los esperados', self.line, self.column)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

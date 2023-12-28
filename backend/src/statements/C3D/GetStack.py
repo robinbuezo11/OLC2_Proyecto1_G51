@@ -1,5 +1,5 @@
-from C3D.Instruction import Instruction
-from C3D.Type import Type
+from statements.C3D.Instruction import Instruction
+from statements.C3D.Type import Type
 
 class GetStack(Instruction):
     def __init__(self, target: str, index: str):
@@ -8,4 +8,4 @@ class GetStack(Instruction):
         self.index = index
 
     def __str__(self) -> str:
-        return '\t' + self.target + ' = stack[(int) ' + self.index + '];'
+        return '\t' + self.target + ' = stack[(int) ' + str(self.index) + '];'

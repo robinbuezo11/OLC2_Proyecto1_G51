@@ -1,10 +1,11 @@
 import re
 from statements.Objects.Table import Field
-from utils.Type import ReturnType, Type
 from utils.TypeExp import TypeExp
 from statements.Env.AST import AST, ReturnAST
 from statements.Abstracts.Expression import Expression
 from statements.Env.Env import Env
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 
 class Cast(Expression):
     def __init__(self, line: int, column: int, value: Expression, destinyType: Type):
@@ -72,6 +73,9 @@ class Cast(Expression):
             return ReturnType('NULL', Type.NULL)
         env.setError(f'No hay casteo de "{self.getType(value.type)}" a "{self.getType(self.destinyType)}"', self.value.line, self.value.column)
         return ReturnType('NULL', Type.NULL)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def getType(self, type: Type) -> str:
         match type:

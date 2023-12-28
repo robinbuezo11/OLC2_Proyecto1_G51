@@ -1,7 +1,8 @@
 from statements.Abstracts.Instruction import Instruction
 from statements.Env.Env import Env
 from utils.TypeInst import TypeInst
-from utils.Type import Type
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 from utils.Parameter import Parameter
 from statements.Env.AST import AST, ReturnAST
 
@@ -15,6 +16,9 @@ class Function(Instruction):
 
     def execute(self, env: Env) -> any:
         env.saveFunction(self.id, self)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

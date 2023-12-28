@@ -1,5 +1,6 @@
 from statements.Objects.Table import Field
-from utils.Type import ReturnType, Type
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 from utils.TypeExp import TypeExp
 from statements.Env.AST import AST, ReturnAST
 from statements.Abstracts.Expression import Expression
@@ -18,6 +19,9 @@ class Return(Expression):
             value: ReturnType = self.exp.execute(env)
             return ReturnType(value.value, value.type)
         return ReturnType(self.typeExp, Type.NULL)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()
