@@ -704,6 +704,28 @@ class ManageXml:
 
         print(f"Variables creadas en la base de datos '{database}' exitosamente.")
         return True
+    
+    def setVariable(self, database, variable, value):
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database))
+        if db_to_modify is None:
+            print(f"La base de datos '{database}' no existe.")
+            return False
+
+        # Verificar si la variable existe en la base de datos
+        existing_variable = next((var for var in db_to_modify.findall(f".//variable[@name='{variable}']")), None)
+        if existing_variable is None:
+            print(f"La variable '{variable}' no existe en la base de datos '{database}'.")
+            return False
+
+        # Actualizar el valor de la variable
+        existing_variable.text = value
+
+        # Guardar cambios en el archivo XML
+        self.writeXml()
+
+        print(f"Variable '{variable}' actualizada en la base de datos '{database}' exitosamente.")
+        return True
 
 
 #------------------------------------- BD TO XML && XML TO BD -------------------------------------#
