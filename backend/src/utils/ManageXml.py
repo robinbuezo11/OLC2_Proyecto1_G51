@@ -693,4 +693,40 @@ class ManageXml:
 
         print(f"Variable '{variable}' actualizada en la base de datos '{database}' exitosamente.")
         return True
+
+
+
+#------------------------------------- BD TO XML && XML TO BD -------------------------------------#
+#----------------------------------- IN PROGRESS TO BE FINISHED -----------------------------------#
+    
+    #def bdToXml(self, database: Env, name: str):
+        try:
+            # Verificar si la base de datos existe
+            db_to_save = next((db for db in self.__root if db.get("name") == name), None)
+            if db_to_save is None:
+                self.createDataBase(name)
+                db_to_save = next((db for db in self.__root if db.get("name") == name), None)
+            
+            return True
+        except Exception as e:
+            print(f"Error: No se pudo guardar la base de datos {name} en el archivo xml" + str(e))
+            return False
+        
+
+    def xmlToBd(self, name: str):
+        try:
+            # Verificar si la base de datos existe
+            db_to_load = next((db for db in self.__root if db.get("name") == name), None)
+            if db_to_load is None:
+                print(f"La base de datos '{name}' no existe.")
+                return False
+
+            return True
+        except Exception as e:
+            print(f"Error: No se pudo cargar la base de datos {name} en el archivo xml" + str(e))
+            return False
+# =======
+    
+# >>>>>>> a1628d326b12608efe125976a616d531cc749e95
+=======
 '''
