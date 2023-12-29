@@ -110,11 +110,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    const newWindow = window.open('','_blank');
-                    newWindow.document.write('<html><head><title>AST</title></head><body><div id="graph"></div></body></html>');
-                    newWindow.document.close();
-
-                    d3.select(newWindow.document.getElementById('graph')).graphviz().scale(1).width(newWindow.document.getElementById('graph').clientWidth).renderDot(dotCode);
+                    generateGraph(dotCode);
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -125,6 +121,71 @@ const HomePage = () => {
         .catch(function (error) {
             showMessage('error', `${error}`);
         });
+    }
+
+    const generateSymbols = () => {
+        axios.get('http://localhost:4000/api/getSymbols')
+        .then(function (response) {
+            if(response.data.success) {
+                const dotCode = response.data.result;
+                if(dotCode) {
+                    generateGraph(dotCode);
+                } else {
+                    showMessage('error', 'No se ha recibido el código dot');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
+        });
+    }
+
+    const generateError = () => {
+        axios.get('http://localhost:4000/api/getError')
+        .then(function (response) {
+            if(response.data.success) {
+                const dotCode = response.data.result;
+                if(dotCode) {
+                    generateGraph(dotCode);
+                } else {
+                    showMessage('error', 'No se ha recibido el código dot');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
+        });
+    }
+
+    const generateToken = () => {
+        axios.get('http://localhost:4000/api/getToken')
+        .then(function (response) {
+            if(response.data.success) {
+                const dotCode = response.data.result;
+                if(dotCode) {
+                    generateGraph(dotCode);
+                } else {
+                    showMessage('error', 'No se ha recibido el código dot');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
+        });
+    }
+
+    function generateGraph(dotCode) {
+        const newWindow = window.open('','_blank');
+        newWindow.document.write('<html><head><title>AST</title></head><body><div id="graph"></div></body></html>');
+        newWindow.document.close();
+
+        d3.select(newWindow.document.getElementById('graph')).graphviz().scale(1).width(newWindow.document.getElementById('graph').clientWidth).renderDot(dotCode);
     }
 
     const newFile = () => {
@@ -206,7 +267,10 @@ const HomePage = () => {
         'dropDB': openModalDBDel,
         'newQuery': handleNewTab,
         'executeQuery': execute,
-        'ast': generateAst
+        'ast': generateAst,
+        'symbols': generateSymbols,
+        'errors': generateError,
+        'tokens': generateToken
     }
 
     return (

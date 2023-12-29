@@ -133,13 +133,13 @@ def createDB():
     
 @app.route('/api/getAst', methods=['GET'])
 def getAst():
-    print(dotAst)
     return jsonify({
         'success': True,
         'message': 'AST generado correctamente',
         'result': dotAst,
         'error': ''
     })
+
 
 @app.route('/api/TablaDeSimbolos', methods=['POST'])
 def get_symbols_table():
@@ -148,19 +148,20 @@ def get_symbols_table():
     except Exception as error:
         return jsonify({"table": str(error)})
     
-@app.route('/getErrors', methods=['POST'])
-def get_errors():
+
+@app.route('/api/getErrors', methods=['POST'])
+def getError():
     try:
         return jsonify({"errors": getErrors()})
     except Exception as error:
         return jsonify({"errors": str(error)})
-
-@app.route('/getTokens', methods=['POST'])
+    
+@app.route('/api/getTokens', methods=['POST'])
 def get_tokens():
     try:
         return jsonify({"tokens": getTokens()})
     except Exception as error:
         return jsonify({"tokens": str(error)})
-
+    
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
