@@ -133,7 +133,6 @@ def createDB():
     
 @app.route('/api/getAst', methods=['GET'])
 def getAst():
-    print(dotAst)
     return jsonify({
         'success': True,
         'message': 'AST generado correctamente',
@@ -141,8 +140,8 @@ def getAst():
         'error': ''
     })
 
-@app.route('/api/TablaDeSimbolos', methods=['POST'])
-def getDotSymbolTable():
+@app.route('/api/getSymbols', methods=['GET'])
+def getSymbols():
     try:
         res = SymbolTable.symTable.getDot()
         print(res)
@@ -168,8 +167,8 @@ def getDotSymbolTable():
             'error': str(e)
         })
     
-@app.route('/api/Errores', methods=['POST'])
-def getErrores():
+@app.route('/api/getError', methods=['GET'])
+def getError():
     try:
         res = getErrors()
         print(res)
@@ -195,7 +194,7 @@ def getErrores():
             'error': str(e)
         })
 
-@app.route('/api/Tokens', methods=['POST'])
+@app.route('/api/getTokens', methods=['GET'])
 def getToken():
     try:
         res = getTokens()
@@ -203,16 +202,16 @@ def getToken():
         if res:
             return jsonify({
                 'success': True,
-                'message': 'Errores obtenidos correctamente',
+                'message': 'Tokens obtenidos correctamente',
                 'result': res,
                 'error': ''
             })
         else:
             return jsonify({
                 'success': False,
-                'message': 'Error al obtener los errores',
+                'message': 'Error al obtener los tokens',
                 'result': '',
-                'error': 'No existen errores'
+                'error': 'No existen tokens'
             })
     except Exception as e:
         return jsonify({
