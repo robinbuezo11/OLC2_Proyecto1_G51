@@ -6,6 +6,8 @@ class Expression(ABC):
         self.line = line
         self.column = column
         self.typeExp = typeExp
+        self.trueLabel = ''
+        self.falseLabel = ''
 
     @abstractmethod
     def setField(self, field):
@@ -13,6 +15,10 @@ class Expression(ABC):
 
     @abstractmethod
     def execute(self, env):
+        pass
+
+    @abstractmethod
+    def compile(self, env, c3dgen):
         pass
 
     @abstractmethod

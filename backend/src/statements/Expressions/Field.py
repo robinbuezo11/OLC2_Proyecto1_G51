@@ -1,8 +1,9 @@
-from utils.Type import ReturnType, Type
 from utils.TypeExp import TypeExp
 from statements.Env.AST import AST, ReturnAST
 from statements.Abstracts.Expression import Expression
 from statements.Env.Env import Env
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 
 class Field(Expression):
     def __init__(self, line: int, column: int, id: str):
@@ -24,6 +25,9 @@ class Field(Expression):
             env.setError(f'No existe el campo {self.id.lower()}', self.line, self.column)
             return ReturnType('NULL', Type.NULL)
         return ReturnType(self.id, Type.NULL)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

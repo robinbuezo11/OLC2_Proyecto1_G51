@@ -2,9 +2,10 @@ from statements.Abstracts.Expression import Expression
 from statements.Abstracts.Instruction import Instruction
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
-from utils.Type import ReturnType
 from utils.TypeInst import TypeInst
 from statements.Instructions.When import When
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 
 class Case(Instruction):
     def __init__(self, line: int, column: int, arg: Expression, whens: list[When], else_: Expression, alias: str):
@@ -36,6 +37,9 @@ class Case(Instruction):
             if default_:
                 env.setPrint(f'{self.alias + ": " if self.alias else ""}' + default_.value + f'. {self.else_.line}:{self.else_.column}')
                 return
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

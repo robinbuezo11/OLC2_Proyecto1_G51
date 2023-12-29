@@ -1,7 +1,8 @@
 from statements.Abstracts.Instruction import Instruction
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
-from utils.Type import Type
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 from utils.TypeInst import TypeInst
 
 class AlterTable(Instruction):
@@ -24,6 +25,9 @@ class AlterTable(Instruction):
             env.renameTo(self.id, self.field1, self.line, self.column)
         if self.action.lower() == 'renamecolumn':
             env.renameColumn(self.id, self.field1, self.field2, self.line, self.column)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

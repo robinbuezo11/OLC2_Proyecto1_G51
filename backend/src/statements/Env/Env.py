@@ -86,7 +86,10 @@ class Env:
                         newRow[fields[i].lower()] = [result.type, result.value]
                         dataXml.append({"value": result.value, "column": fields[i].lower()})
                     if env.tables.get(id.lower()).insert(env, newRow, line, column):
-                        xml.insert(getUsedDatabase(), id.lower(), dataXml)
+                        res = xml.insert(getUsedDatabase(), id.lower(), dataXml)
+                        if not res[0]:
+                            self.setPrint(res[1])
+                            return False
                         self.setPrint(f'Registro insertado exitosamente en Tabla \'{id.lower()}\'. {line}:{column + 1}')
                         return True
                     return False

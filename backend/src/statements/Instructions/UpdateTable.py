@@ -3,6 +3,8 @@ from statements.Abstracts.Expression import Expression
 from utils.TypeInst import TypeInst
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 
 class UpdateTable(Instruction):
     def __init__(self, line: int, column: int, id: str, fields: list[str], values: list[Expression], condition: Expression):
@@ -15,6 +17,9 @@ class UpdateTable(Instruction):
     def execute(self, env: Env) -> any:
         env.updateTable(self.id, self.fields, self.values, self.condition, self.line, self.column)
         return
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

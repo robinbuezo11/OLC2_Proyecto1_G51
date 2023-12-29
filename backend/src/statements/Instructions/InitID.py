@@ -2,7 +2,8 @@ from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from statements.Abstracts.Instruction import Instruction
 from statements.Abstracts.Expression import Expression
-from utils.Type import Type, ReturnType
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 from utils.TypeInst import TypeInst
 from typing import Union, List
 
@@ -25,6 +26,9 @@ class InitID(Instruction):
         elif type(self.id) == list and type(self.type) == list and not self.value:
             for i in range(len(self.id)):
                 env.saveID(self.id[i], 'NULL', self.type[i], self.line, self.column)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

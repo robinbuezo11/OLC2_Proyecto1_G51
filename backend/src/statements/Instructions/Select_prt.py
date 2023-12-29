@@ -2,7 +2,8 @@ from statements.Abstracts.Instruction import Instruction
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from utils.TypeInst import TypeInst
-from utils.Type import ReturnType
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 
 class Select_prt(Instruction):
     def __init__(self, line: int, column: int, expression: list[list[any]]):
@@ -18,6 +19,18 @@ class Select_prt(Instruction):
                     env.setPrint(self.expression[i][1] + ': ' + str(value.value))
                 else:
                     env.setPrint(value.value)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        c3dgen.addComment('---------- Print ----------')
+        if len(self.expression) > 0:
+            for exp in self.expression:
+                value: ReturnC3D = exp[0].compile(env, c3dgen)
+                if value.type == Type.INT:
+                    c3dgen.addPrintf('d', '(int) ' + value.strValue)
+                elif value.type == Type.DECIMAL:
+                    c3dgen.addPrintf('f', '(float) ' + value.strValue)
+            c3dgen.addPrint("\n")
+        c3dgen.addComment("-------- Fin Print --------")
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

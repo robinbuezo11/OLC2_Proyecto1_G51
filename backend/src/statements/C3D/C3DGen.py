@@ -1,5 +1,6 @@
 from statements.C3D.Instruction import Instruction
 from statements.C3D.Type import Type
+from utils.Type import Type as TypeData
 from statements.C3D.Label import Label
 from statements.C3D.If import If
 from statements.C3D.Goto import Goto
@@ -15,7 +16,6 @@ from statements.C3D.SetHeap import SetHeap
 from statements.C3D.GetHeap import GetHeap
 from statements.C3D.SetStack import SetStack
 from statements.C3D.GetStack import GetStack
-from utils.Type import Type
 
 class C3DGen:
     def __init__(self):
@@ -29,7 +29,6 @@ class C3DGen:
         self.C3DGlobals: list[Instruction] = []
         self.temporalsSaved: dict[str, str] = {}
         self.temporals: list = []
-        self.declarations: list = []
         self.thereIsPow: bool = False
         self.thereIsMod: bool = False
         self.thereIsPrintString = False
@@ -137,7 +136,7 @@ class C3DGen:
     def addExpression(self, target: str, left: str, operator: str, right: str):
         self.addInstruction(Expression(target, left, operator, right))
 
-    def addComent(self, comment: str):
+    def addComment(self, comment: str):
         self.addInstruction(Generic('\t/* ' + comment + ' */'))
 
     def addPrintf(self, type: str, value: str):
@@ -145,7 +144,7 @@ class C3DGen:
 
     def addPrint(self, value: str):
         for ascii in value:
-            self.addPrint('c', '(char) ' + str(ord(ascii)))
+            self.addPrintf('c', '(char) ' + str(ord(ascii)))
 
     def addFunction(self, id: str):
         self.addInstruction(Function(id))
@@ -434,34 +433,30 @@ class C3DGen:
             self.restoreSetting()
             self.thereIsCharToString = True
 
-    def generateParserString(self, type: Type):
+    def generateParserString(self, type: TypeData):
         match type:
-            case Type.INT:
+            case TypeData.INT:
                 self.generateIntToString()
-            case Type.DECIMAL:
+            case TypeData.DECIMAL:
                 self.generateDoubleToString()
-            case Type.NVARCHAR:
+            case TypeData.NVARCHAR:
                 self.generateCharToString()
             case _:
                 pass
 
-    def addCallParserString(self, type: Type):
+    def addCallParserString(self, type: TypeData):
         match type:
-            case Type.INT:
+            case TypeData.INT:
                 self.addCall('_intToString')
-            case Type.DECIMAL:
+            case TypeData.DECIMAL:
                 self.addCall('_doubleToString')
-            case Type.NVARCHAR:
+            case TypeData.NVARCHAR:
                 self.addCall('_charToString')
             case _:
                 pass
 
     def generateFinalCode(self):
         self.C3DCode.append(Generic("/* ----- HEADER ----- */"))
-        if len(self.declarations) > 0:
-            self.thereAreDeclarations = True
-            self.declarations.append(0, "/* -- DECLARATIONS -- */")
-            self.C3DCode.append(Generic("#include \"./" + self.name + ".hpp\""))
         self.C3DCode.append(Generic("#include <stdio.h>"))
         self.C3DCode.append(Generic(""))
         self.C3DCode.append(Generic("float heap[30101999];"))
@@ -506,11 +501,11 @@ class C3DGen:
         id = 0
         for i in range(len(self.C3DCode)):
             # Verificar si el tipo no está en la lista types
-            if self.C3DCode[i].type not in types:
+            if not self.C3DCode[i].type in types:
                 # Verificar otras condiciones
                 if (
-                    self.C3DCode[i].target is not None and
-                    self.C3DCode[i].target not in newTemps and
+                    self.C3DCode[i].target and
+                    not self.C3DCode[i].target in newTemps and
                     self.C3DCode[i].target != "H" and
                     self.C3DCode[i].target != "P"
                 ):
@@ -518,9 +513,6 @@ class C3DGen:
                     newTemps[self.C3DCode[i].target] = id
                     id += 1
         for i in range(len(self.C3DCode)):
-            if self.C3DCode[i].type not in types:
+            if not self.C3DCode[i].type in types:
                 self.C3DCode[i].changeTmp(newTemps)
         return "\n".join(str(instruction) for instruction in self.C3DCode)
-
-    def getDeclarations(self):
-        return "\n".join(map(str, self.declarations))

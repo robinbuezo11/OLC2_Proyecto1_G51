@@ -1,9 +1,11 @@
 from statements.Abstracts.Instruction import Instruction
 from statements.Abstracts.Expression import Expression
 from utils.TypeInst import TypeInst
-from utils.Type import ReturnType
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
+
 
 class While(Instruction):
     def __init__(self, line: int, column: int, condition: Expression, block: Instruction):
@@ -24,6 +26,9 @@ class While(Instruction):
                     break
                 return block
             condition = self.condition.execute(whileEnv)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

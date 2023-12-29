@@ -1,7 +1,8 @@
 from statements.Abstracts.Expression import Expression
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
-from utils.Type import ReturnType, Type
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 from utils.TypeInst import TypeInst
 
 class Substraer(Expression):
@@ -28,6 +29,9 @@ class Substraer(Expression):
             return ReturnType('NULL', Type.NULL)
         # error
         return ReturnType('NULL', Type.NULL)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

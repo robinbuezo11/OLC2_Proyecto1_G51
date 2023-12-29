@@ -1,5 +1,5 @@
-from C3D.Instruction import Instruction
-from C3D.Type import Type
+from statements.C3D.Instruction import Instruction
+from statements.C3D.Type import Type
 
 class SetHeap(Instruction):
     def __init__(self, index: str, value: str):
@@ -8,4 +8,4 @@ class SetHeap(Instruction):
         self.value = value
 
     def __str__(self) -> str:
-        return '\theap[(int) ' + self.index + '] = ' + self.value + ';'
+        return f'\theap[(int) {self.index} ] = {self.value};'

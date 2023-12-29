@@ -6,7 +6,8 @@ from utils.TypeInst import TypeInst
 from utils.Attribute import Attribute
 from utils.ForeignKey import ForeignKey
 from utils.Global import *
-from utils.Type import Type
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 
 class CreateTable(Instruction):
     def __init__(self, line: int, column: int, name: str, attribs: list[Attribute | ForeignKey]):
@@ -19,10 +20,18 @@ class CreateTable(Instruction):
         env.saveTable(self.name, table, self.line, self.column)
         
         #-----------------XML------------------
-        xml.createTable(getUsedDatabase(), self.name.lower())
+        res = xml.createTable(getUsedDatabase(), self.name.lower())
+        if not res[0]:
+            env.setPrint(res[1])
+            return
         for attrib in self.attribs:
             if type(attrib) == Attribute:
-                xml.createColumn(getUsedDatabase(), self.name.lower(), attrib.id, self.getTypeOf(attrib.type).lower(), attrib.length, attrib.props['notNull'], attrib.props['primaryKey'])
+                res = xml.createColumn(getUsedDatabase(), self.name.lower(), attrib.id.lower(), self.getTypeOf(attrib.type).lower(), attrib.length, attrib.props)
+                if not res[0]:
+                    env.setPrint(res[1])
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

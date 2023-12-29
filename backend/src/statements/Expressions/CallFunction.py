@@ -5,8 +5,9 @@ from statements.Env.Symbol import Symbol
 from utils.Parameter import Parameter
 from statements.Instructions.Function import Function
 from statements.Objects.Table import Field
-from utils.Type import ReturnType, Type
 from utils.TypeExp import TypeExp
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnType, ReturnC3D, Type
 
 class CallFunction(Expression):
     def __init__(self, line: int, column: int, id: str, args: list[Expression]):
@@ -45,6 +46,9 @@ class CallFunction(Expression):
             env.setError(f'Cantidad errónea de parámetros enviados', self.line, self.column)
             return
         env.setError(f'La Función "{self.id}" no existe, línea {self.line} columna {self.column}', self.line, self.column)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def getType(type: Type) -> str:
         match type:

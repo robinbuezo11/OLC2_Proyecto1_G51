@@ -2,6 +2,10 @@ from ply.yacc import YaccProduction as Prod
 from ply.lex import LexToken
 # Tipos
 from utils.Type import Type
+from utils.Parameter import Parameter
+from utils.Attribute import Attribute
+from utils.ForeignKey import ForeignKey
+from utils.Global import *
 # Instrucciones
 from statements.Instructions.InitID import InitID
 from statements.Instructions.AsignID import AsignID
@@ -27,16 +31,12 @@ from statements.Expressions.Field import Field
 from statements.Expressions.Relational import Relational
 from statements.Expressions.Arithmetic import Arithmetic
 from statements.Expressions.Logic import Logic
-from utils.Parameter import Parameter
-from utils.Attribute import Attribute
-from utils.ForeignKey import ForeignKey
 from statements.Expressions.CallFunction import CallFunction
 from statements.Expressions.Return import Return
 from statements.Expressions.Cast import Cast
 from statements.Expressions.Concatenar import Concatenar
 from statements.Expressions.Substraer import Substraer
 from statements.Expressions.Hoy import Hoy
-from utils.Global import *
 
 precedence = (
     ('left', 'TK_or'),
@@ -176,14 +176,27 @@ def p_ATTRIBUTE(t: Prod):
     else             : t[0] = ForeignKey(t.lineno(1), t.lexpos(1), t[4], t[7], t[9])
 
 def p_PROPS(t: Prod):
-    '''PROPS    : RW_not RW_null RW_primary RW_key
+    '''PROPS    : RW_not RW_null RW_primary RW_key FKEY
+                | RW_not RW_null RW_primary RW_key
+                | RW_primary RW_key RW_not RW_null FKEY
                 | RW_primary RW_key RW_not RW_null
+                | RW_not RW_null FKEY
                 | RW_not RW_null
-                | RW_primary RW_key'''
-    if len(t) == 5 and t.slice[1].type == 'RW_not'     : t[0] = {'notNull': True,  'primaryKey': True }
-    if len(t) == 5 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': True,  'primaryKey': True }
-    if len(t) == 3 and t.slice[1].type == 'RW_not'     : t[0] = {'notNull': True,  'primaryKey': False}
-    if len(t) == 3 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': False, 'primaryKey': True }
+                | RW_primary RW_key FKEY
+                | RW_primary RW_key
+                | FKEY'''
+    if len(t) == 5 or len(t) == 6 and t.slice[1].type == 'RW_not'     : t[0] = {'notNull': True,  'primaryKey': True }
+    if len(t) == 5 or len(t) == 6 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': True,  'primaryKey': True }
+    if len(t) == 3 or len(t) == 4 and t.slice[1].type == 'RW_not'     : t[0] = {'notNull': True,  'primaryKey': False}
+    if len(t) == 3 or len(t) == 4 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': False, 'primaryKey': True }
+    if len(t) == 2                                                    : t[0] = {'notNull': False, 'primaryKey': False}
+    
+    if len(t) == 6 or len(t) == 4 or len(t) == 2                      : t[0].update(t[len(t) - 1])
+    else                                                              : t[0].update({'foreignKey': False})
+
+def p_FKEY(t: Prod):
+    '''FKEY : RW_ref TK_field TK_lpar TK_field TK_rpar'''
+    t[0] = {'foreignKey': True, 'table': t[2], 'field': t[4]}
 
 # Alter Table
 def p_ALTERTAB(t: Prod):

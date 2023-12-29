@@ -1,27 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <root>
     <database name="tbbanco">
-        <table name="productos">
-            <column name="ProductoID" type="int" not_null="true" primary_key="true" />
-            <column name="Nombre" type="nvarchar" length="150" not_null="true" />
-            <column name="PrecioUnitario" type="decimal" />
-            <column name="Stock" type="int" />
-            <column name="Categoria" type="nvarchar" length="50" />
-            <row>
-                <value column="productoid">1</value>
-                <value column="categoria">Electrónicos</value>
-                <value column="preciounitario">1000.0</value>
-                <value column="stock">50</value>
-                <value column="nombre">Producto X</value>
-            </row>
-            <row>
-                <value column="productoid">2</value>
-                <value column="nombre">Producto Y</value>
-                <value column="preciounitario">750.5</value>
-                <value column="stock">30</value>
-                <value column="categoria">Ropa</value>
-            </row>
-        </table>
         <procedure name="sp_productos">
             <parameter name="ProductoID" type="int" />
             <parameter name="Nombre" type="nvarchar" length="150" />
@@ -36,5 +15,5 @@
                 SELECT * FROM productos
             </body>
         </function>
-    </database>
+    <table name="productos"><column name="productoid" type="int" primary_key="true" /><column name="nombre" type="nvarchar" length="100" primary_key="true" /><column name="preciounitario" type="decimal" length="2" /><column name="stock" type="int" length="10" /><column name="categoria" type="nvarchar" foreign_key="true" table="tbcategorias" field="categoriaid" /><row><value column="productoid">1</value><value column="nombre">Producto X</value><value column="preciounitario">1000.0</value><value column="stock">50</value><value column="categoria">Electrónicos</value></row><row><value column="productoid">2</value><value column="nombre">Producto Y</value><value column="preciounitario">750.5</value><value column="stock">30</value><value column="categoria">Ropa</value></row></table></database>
 </root>

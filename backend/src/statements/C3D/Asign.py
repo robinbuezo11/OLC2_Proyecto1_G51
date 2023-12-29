@@ -1,5 +1,5 @@
-from C3D.Instruction import Instruction
-from C3D.Type import Type
+from statements.C3D.Instruction import Instruction
+from statements.C3D.Type import Type
 
 class Asign(Instruction):
     def __init__(self, target: str, value: str):
@@ -8,4 +8,4 @@ class Asign(Instruction):
         self.value = value
 
     def __str__(self) -> str:
-        return f'\t' + self.target + ' = ' + self.value + ';'
+        return f'\t{self.target} = {self.value};'

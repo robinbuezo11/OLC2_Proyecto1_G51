@@ -4,7 +4,8 @@ from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from statements.Expressions.Primitive import Primitive
 from utils.TypeInst import TypeInst
-from utils.Type import Type
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 
 class Select(Instruction):
     def __init__(self, line: int, column: int, id: str, fields: list[list[any]] or str, condition: Expression):
@@ -16,6 +17,9 @@ class Select(Instruction):
     def execute(self, env: Env) -> any:
         self.condition = self.condition if self.condition else Primitive(self.line, self.column, 'true', Type.BOOLEAN)
         env.selectTable(self.id, self.fields, self.condition, self.line, self.column)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

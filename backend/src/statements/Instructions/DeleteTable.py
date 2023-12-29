@@ -3,6 +3,8 @@ from statements.Abstracts.Instruction import Instruction
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from utils.TypeInst import TypeInst
+from statements.C3D.C3DGen import C3DGen
+from utils.Type import ReturnC3D, Type
 
 class DeleteTable(Instruction):
     def __init__(self, line: int, column: int, id: str, condition: Expression):
@@ -13,6 +15,9 @@ class DeleteTable(Instruction):
     def execute(self, env: Env) -> any:
         if self.condition:
             env.deleteTable(self.id, self.condition, self.line, self.column)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        pass
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()
