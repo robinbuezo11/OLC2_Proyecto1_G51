@@ -161,8 +161,8 @@ const HomePage = () => {
         });
     }
 
-    const generateTokens = () => {
-        axios.get('http://localhost:4000/api/getTokens')
+    const generateToken = () => {
+        axios.get('http://localhost:4000/api/getToken')
         .then(function (response) {
             if(response.data.success) {
                 const dotCode = response.data.result;
@@ -270,7 +270,7 @@ const HomePage = () => {
         'ast': generateAst,
         'symbols': generateSymbols,
         'errors': generateError,
-        'tokens': generateTokens
+        'tokens': generateToken
     }
 
     return (

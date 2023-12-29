@@ -194,7 +194,7 @@ def getError():
             'error': str(e)
         })
 
-@app.route('/api/getTokens', methods=['GET'])
+@app.route('/api/getToken', methods=['GET'])
 def getToken():
     try:
         res = getTokens()
