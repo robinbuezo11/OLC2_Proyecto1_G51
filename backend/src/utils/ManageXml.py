@@ -731,7 +731,7 @@ class ManageXml:
 #------------------------------------- BD TO XML && XML TO BD -------------------------------------#
 #----------------------------------- IN PROGRESS TO BE FINISHED -----------------------------------#
     
-    def bdToXml(self, database: Env, name: str):
+    #def bdToXml(self, database: Env, name: str):
         try:
             # Verificar si la base de datos existe
             db_to_save = next((db for db in self.__root if db.get("name") == name), None)
