@@ -68,7 +68,12 @@ const HomePage = () => {
         })
         .then(function (response) {
             if (response.data.success) {
-                setData(response.data.result);
+                if (response.data.result.length > 0) {
+                    setData(response.data.result);
+                } else {
+                    console.log(response.data.result)
+                    setData([['Consola']]);
+                }
             } else {
                 showMessage('error', `${response.data.message}\n${response.data.error}`);
             }
