@@ -9,7 +9,7 @@ from utils.Outs import getStringOuts, getPrintConsole, resetOuts
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.Global import *
-from statements.Env.SymbolTable import SymbolTable as SymTab
+from statements.Env.SymbolTable import symTable
 from utils.Outs import getErrors
 from utils.Outs import getTokens
 
@@ -142,86 +142,25 @@ def getAst():
     })
 
 @app.route('/api/TablaDeSimbolos', methods=['POST'])
-def getDotSymbolTable():
+def get_symbols_table():
     try:
-        res = SymTab.getDot()
-        print(res)
-        if res:
-            return jsonify({
-                'success': True,
-                'message': 'Tabla de simbolos obtenida correctamente',
-                'result': res,
-                'error': ''
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Error al obtener la tabla de simbolos',
-                'result': '',
-                'error': 'No existen bases de datos'
-            })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': 'Error al procesar la petición',
-            'result': '',
-            'error': str(e)
-        })
+        return jsonify({"table": symTable.symbols})
+    except Exception as error:
+        return jsonify({"table": str(error)})
     
-@app.route('/api/Errores', methods=['POST'])
-def getErrores():
+@app.route('/getErrors', methods=['POST'])
+def get_errors():
     try:
-        res = getErrors()
-        print(res)
-        if res:
-            return jsonify({
-                'success': True,
-                'message': 'Errores obtenidos correctamente',
-                'result': res,
-                'error': ''
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Error al obtener los errores',
-                'result': '',
-                'error': 'No existen errores'
-            })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': 'Error al procesar la petición',
-            'result': '',
-            'error': str(e)
-        })
+        return jsonify({"errors": getErrors()})
+    except Exception as error:
+        return jsonify({"errors": str(error)})
 
-@app.route('/api/Tokens', methods=['POST'])
-def getToken():
+@app.route('/getTokens', methods=['POST'])
+def get_tokens():
     try:
-        res = getTokens()
-        print(res)
-        if res:
-            return jsonify({
-                'success': True,
-                'message': 'Errores obtenidos correctamente',
-                'result': res,
-                'error': ''
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Error al obtener los errores',
-                'result': '',
-                'error': 'No existen errores'
-            })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': 'Error al procesar la petición',
-            'result': '',
-            'error': str(e)
-        })
-
+        return jsonify({"tokens": getTokens()})
+    except Exception as error:
+        return jsonify({"tokens": str(error)})
 
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
