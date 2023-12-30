@@ -140,28 +140,87 @@ def getAst():
         'error': ''
     })
 
-
-@app.route('/api/TablaDeSimbolos', methods=['POST'])
-def get_symbols_table():
+@app.route('/api/getSymbols', methods=['GET'])
+def getSymbols():
     try:
-        return jsonify({"table": symTable.symbols})
-    except Exception as error:
-        return jsonify({"table": str(error)})
+        res = SymTab.getDot()
+        print(res)
+        if res:
+            return jsonify({
+                'success': True,
+                'message': 'Tabla de simbolos obtenida correctamente',
+                'result': res,
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener la tabla de simbolos',
+                'result': '',
+                'error': 'No existen bases de datos'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
     
-
-@app.route('/api/getErrors', methods=['POST'])
+@app.route('/api/getError', methods=['GET'])
 def getError():
     try:
-        return jsonify({"errors": getErrors()})
-    except Exception as error:
-        return jsonify({"errors": str(error)})
-    
-@app.route('/api/getTokens', methods=['POST'])
-def get_tokens():
+        res = getErrors()
+        print(res)
+        if res:
+            return jsonify({
+                'success': True,
+                'message': 'Errores obtenidos correctamente',
+                'result': res,
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener los errores',
+                'result': '',
+                'error': 'No existen errores'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+
+@app.route('/api/getToken', methods=['GET'])
+def getToken():
     try:
-        return jsonify({"tokens": getTokens()})
-    except Exception as error:
-        return jsonify({"tokens": str(error)})
-    
+        res = getTokens()
+        print(res)
+        if res:
+            return jsonify({
+                'success': True,
+                'message': 'Tokens obtenidos correctamente',
+                'result': res,
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener los tokens',
+                'result': '',
+                'error': 'No existen tokens'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
