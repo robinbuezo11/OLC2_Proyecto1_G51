@@ -137,7 +137,6 @@ def getAst():
 def getSymbols():
     try:
         res = symTable.getDot()
-        print(res)
         if res:
             return jsonify({
                 'success': True,
