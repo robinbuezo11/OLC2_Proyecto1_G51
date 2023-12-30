@@ -110,6 +110,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
+                    console.log(dotCode);
                     generateGraph(dotCode);
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
@@ -182,6 +183,7 @@ const HomePage = () => {
 
     function generateGraph(dotCode) {
         const newWindow = window.open('','_blank');
+        console.log(newWindow);
         newWindow.document.write('<html><head><title>AST</title></head><body><div id="graph"></div></body></html>');
         newWindow.document.close();
 

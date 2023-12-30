@@ -39,6 +39,7 @@ def getTokens():
     dot += '</table>>];}'
     return dot
 
+
 def resetOuts():
     global printConsole
     global errors

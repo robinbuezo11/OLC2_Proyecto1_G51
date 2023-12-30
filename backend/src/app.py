@@ -89,6 +89,9 @@ def exec():
 
     result = getPrintConsole()
 
+    print(result)
+    
+
     # result.insert(0, 'Resultado')
     # data = []
     # for res in result:
@@ -133,12 +136,14 @@ def createDB():
     
 @app.route('/api/getAst', methods=['GET'])
 def getAst():
+    print(dotAst)
     return jsonify({
         'success': True,
         'message': 'AST generado correctamente',
         'result': dotAst,
         'error': ''
     })
+
 
 @app.route('/api/getSymbols', methods=['GET'])
 def getSymbols():
@@ -220,7 +225,6 @@ def getToken():
             'result': '',
             'error': str(e)
         })
-
-
+    
 if __name__ == '__main__':
     app.run(debug=True, port=4000)

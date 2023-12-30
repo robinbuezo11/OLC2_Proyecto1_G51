@@ -5,7 +5,8 @@ from utils.TypeError import TypeError
 from statements.Env.Symbol import Symbol
 from statements.Abstracts.Expression import Expression
 from utils.Global import *
-
+from statements.Env.SymbolTable import symTable
+from statements.Env.SymTab import SymTab
 
 class Env:
     def __init__(self, previous: 'Env' or None, name: str):
@@ -20,6 +21,8 @@ class Env:
         env: Env = self
         if id.lower() not in env.ids:
             env.ids[id.lower()] = Symbol(value, id.lower(), type)
+            #-------------- NUEVO ----------------
+            symTable.push(SymTab(line, column + 1, True, True, id.lower(), env.name, type))
         else:
             self.setError('Redeclaración de variable existente', line, column)
 
@@ -53,6 +56,8 @@ class Env:
         env: Env = self
         if not id.lower() in env.functions:
             env.functions[id.lower()] = func
+            #------------ NUEVO ----------------
+            symTable.push(SymTab(func.line, func.column + 1 , False, False, id.lower(), env.name, Type.NULL))
         else:
             self.setError('Redefinición de función existente', func.line, func.column)
 
@@ -70,6 +75,8 @@ class Env:
         if not id.lower() in env.tables:
             env.tables[id.lower()] = table
             self.setPrint(f'Tabla \'{id.lower()}\' creada. {line}:{column + 1}')
+            #------------ NUEVO ----------------
+            symTable.push(SymTab(line, column + 1, False, False, id.lower(), env.name, Type.TABLE))
         else:
             self.setError('Redefinición de tabla existente', line, column)
 
@@ -86,6 +93,7 @@ class Env:
                         newRow[fields[i].lower()] = [result.type, result.value]
                         dataXml.append({"value": result.value, "column": fields[i].lower()})
                     if env.tables.get(id.lower()).insert(env, newRow, line, column):
+                        #------------- NUEVO ----------------
                         res = xml.insert(getUsedDatabase(), id.lower(), dataXml)
                         if not res[0]:
                             self.setPrint(res[1])
