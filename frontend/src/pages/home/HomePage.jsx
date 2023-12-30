@@ -71,7 +71,6 @@ const HomePage = () => {
                 if (response.data.result.length > 0) {
                     setData(response.data.result);
                 } else {
-                    console.log(response.data.result)
                     setData([['Consola']]);
                 }
             } else {
@@ -110,8 +109,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    console.log(dotCode);
-                    generateGraph(dotCode);
+                    generateGraph(dotCode, 'AST');
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -130,7 +128,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    generateGraph(dotCode);
+                    generateGraph(dotCode, 'Tabla de Símbolos');
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -149,7 +147,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    generateGraph(dotCode);
+                    generateGraph(dotCode, 'Errores');
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -168,7 +166,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    generateGraph(dotCode);
+                    generateGraph(dotCode, 'Tokens');
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -181,10 +179,9 @@ const HomePage = () => {
         });
     }
 
-    function generateGraph(dotCode) {
+    function generateGraph(dotCode, title) {
         const newWindow = window.open('','_blank');
-        console.log(newWindow);
-        newWindow.document.write('<html><head><title>AST</title></head><body><div id="graph"></div></body></html>');
+        newWindow.document.write(`<html><head><title>${title}</title></head><body><div id="graph"></div></body></html>`);
         newWindow.document.close();
 
         d3.select(newWindow.document.getElementById('graph')).graphviz().scale(1).width(newWindow.document.getElementById('graph').clientWidth).renderDot(dotCode);

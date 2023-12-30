@@ -7,8 +7,6 @@ tokens: list[Token] = []
 
 def getStringOuts() -> str:
     out = ''
-    global printConsole
-    global errors
     out += '\n'.join(printConsole)
     if len(errors) > 0:
         if out != '':
@@ -19,16 +17,12 @@ def getStringOuts() -> str:
     return out
 
 def getErrors():
-    global errors
-    print(errors)
     dot = 'digraph Errores {graph[fontname="Arial" labelloc="t" bgcolor="#252526" fontcolor="white"];node[shape=none fontname="Arial"];label="Errores";table[label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="3"><tr><td bgcolor="#009900" width="100"><font color="#FFFFFF">No.</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Linea</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Columna</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Tipo De Error</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Descripcion</font></td></tr>'
     for i in range(len(errors)):
-        errors[i].num = i + 1
-        dot += errors[i]
-        print('Entraaaaa')
+        errors[i]
+        dot += errors[i].getDot(i + 1)
     
     dot += '</table>>];}'
-    print(len(errors))
     return dot
 
 def getTokens():
@@ -41,13 +35,9 @@ def getTokens():
 
 
 def resetOuts():
-    global printConsole
-    global errors
-    global tokens
     printConsole.clear()
     errors.clear()
     tokens.clear()
 
 def getPrintConsole():
-    global printConsole
     return printConsole

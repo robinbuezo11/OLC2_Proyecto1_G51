@@ -191,8 +191,8 @@ def p_PROPS(t: Prod):
     if len(t) == 3 or len(t) == 4 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': False, 'primaryKey': True }
     if len(t) == 2                                                    : t[0] = {'notNull': False, 'primaryKey': False}
     
-    # if len(t) == 6 or len(t) == 4 or len(t) == 2                      : t[0].update(t[len(t) - 1])
-    # else                                                              : t[0].update({'foreignKey': False})
+    if len(t) == 6 or len(t) == 4 or len(t) == 2                      : t[0].update(t[len(t) - 1])
+    else                                                              : t[0].update({'foreignKey': False})
 
 def p_FKEY(t: Prod):
     '''FKEY : RW_ref TK_field TK_lpar TK_field TK_rpar'''

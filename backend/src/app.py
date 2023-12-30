@@ -5,13 +5,11 @@ from statements.Abstracts.Expression import Expression
 from statements.Abstracts.Instruction import Instruction
 from statements.Env.Env import Env
 from statements.Env.AST import AST
-from utils.Outs import getStringOuts, getPrintConsole, resetOuts
+from utils.Outs import getStringOuts, getPrintConsole, resetOuts, getErrors, getTokens
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.Global import *
 from statements.Env.SymbolTable import symTable
-from utils.Outs import getErrors
-from utils.Outs import getTokens
 
 
 dotAst = ''
@@ -55,9 +53,9 @@ def getStruct():
 def exec():
     data = request.get_json()
     Scanner.lineno = 1
+    resetOuts()
     instructions = parser.parse(data['input'])
     globalEnv = Env(None, 'Global')
-    resetOuts()
 
     global dotAst
     dotAst = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
@@ -88,15 +86,6 @@ def exec():
     dotAst += '\n}'
 
     result = getPrintConsole()
-
-    print(result)
-    
-
-    # result.insert(0, 'Resultado')
-    # data = []
-    # for res in result:
-    #     data.append([res])
-
 
     return jsonify({
         'success': True,
@@ -136,7 +125,6 @@ def createDB():
     
 @app.route('/api/getAst', methods=['GET'])
 def getAst():
-    print(dotAst)
     return jsonify({
         'success': True,
         'message': 'AST generado correctamente',
@@ -149,7 +137,6 @@ def getAst():
 def getSymbols():
     try:
         res = symTable.getDot()
-        print(res)
         if res:
             return jsonify({
                 'success': True,
