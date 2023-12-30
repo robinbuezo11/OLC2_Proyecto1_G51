@@ -163,7 +163,6 @@ def getSymbols():
 def getError():
     try:
         res = getErrors()
-        print(res)
         if res:
             return jsonify({
                 'success': True,
