@@ -10,7 +10,8 @@ from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.Global import *
 from statements.Env.SymbolTable import symTable
-from utils.Outs import getErrors, getTokens
+from utils.Outs import getErrors
+from utils.Outs import getTokens
 
 
 dotAst = ''
@@ -144,109 +145,27 @@ def getAst():
     })
 
 
-# @app.route('/api/getSymbols', methods=['GET'])
-# def getSymbols():
-#     try:
-#         return jsonify({"table": symTable.getDot()})
-#     except Exception as error:
-#         return jsonify({"table": str(error)})
+@app.route('/api/TablaDeSimbolos', methods=['POST'])
+def get_symbols_table():
+    try:
+        return jsonify({"table": symTable.symbols})
+    except Exception as error:
+        return jsonify({"table": str(error)})
     
 
-# @app.route('/api/getError', methods=['GET'])
-# def getError():
-#     try:
-#         return jsonify({"errors": getErrors()})
-#     except Exception as error:
-#         return jsonify({"errors": str(error)})
+@app.route('/api/getErrors', methods=['POST'])
+def getError():
+    try:
+        return jsonify({"errors": getErrors()})
+    except Exception as error:
+        return jsonify({"errors": str(error)})
     
-# @app.route('/api/getToken', methods=['GET'])
-# def getToken():
-#     try:
-#         return jsonify({"tokens": getTokens()})
-#     except Exception as error:
-#         return jsonify({"tokens": str(error)})
-
-@app.route('/api/getSymbols', methods=['GET'])
-def getDotSymbolTable():
+@app.route('/api/getTokens', methods=['POST'])
+def get_tokens():
     try:
-        res = symTable.getDot()
-        print(res)
-        if res:
-            return jsonify({
-                'success': True,
-                'message': 'Tabla de simbolos obtenida correctamente',
-                'result': res,
-                'error': ''
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Error al obtener la tabla de simbolos',
-                'result': '',
-                'error': 'No existen bases de datos'
-            })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': 'Error al procesar la petición',
-            'result': '',
-            'error': str(e)
-        })
-    
-@app.route('/api/getError', methods=['GET'])
-def getErrores():
-    try:
-        res = getErrors()
-        print(res)
-        if res:
-            return jsonify({
-                'success': True,
-                'message': 'Errores obtenidos correctamente',
-                'result': res,
-                'error': ''
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Error al obtener los errores',
-                'result': '',
-                'error': 'No existen errores'
-            })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': 'Error al procesar la petición',
-            'result': '',
-            'error': str(e)
-        })
-
-@app.route('/api/getToken', methods=['GET'])
-def getToken():
-    try:
-        res = getTokens()
-        print(res)
-        
-        if res:
-            return jsonify({
-                'success': True,
-                'message': 'Errores obtenidos correctamente',
-                'result': res,
-                'error': ''
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Error al obtener los errores',
-                'result': '',
-                'error': 'No existen errores'
-            })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': 'Error al procesar la petición',
-            'result': '',
-            'error': str(e)
-        })
+        return jsonify({"tokens": getTokens()})
+    except Exception as error:
+        return jsonify({"tokens": str(error)})
     
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
