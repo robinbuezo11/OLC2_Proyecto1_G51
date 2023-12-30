@@ -10,7 +10,6 @@ from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.Global import *
 from statements.Env.SymbolTable import symTable
-from statements.Env.SymTab import SymTab
 from utils.Outs import getErrors
 from utils.Outs import getTokens
 
@@ -144,7 +143,7 @@ def getAst():
 @app.route('/api/getSymbols', methods=['GET'])
 def getSymbols():
     try:
-        res = SymTab.getDot()
+        res = symTable.getDot()
         print(res)
         if res:
             return jsonify({

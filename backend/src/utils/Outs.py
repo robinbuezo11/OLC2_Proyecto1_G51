@@ -20,11 +20,24 @@ def getStringOuts() -> str:
 
 def getErrors():
     global errors
-    return errors
+    print(errors)
+    dot = 'digraph Errores {graph[fontname="Arial" labelloc="t" bgcolor="#252526" fontcolor="white"];node[shape=none fontname="Arial"];label="Errores";table[label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="3"><tr><td bgcolor="#009900" width="100"><font color="#FFFFFF">No.</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Linea</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Columna</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Tipo De Error</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Descripcion</font></td></tr>'
+    for i in range(len(errors)):
+        errors[i].num = i + 1
+        dot += errors[i]
+        print('Entraaaaa')
+    
+    dot += '</table>>];}'
+    print(len(errors))
+    return dot
 
 def getTokens():
-    global tokens
-    return tokens
+    dot = 'digraph Tokens {graph[fontname="Arial" labelloc="t" bgcolor="#252526" fontcolor="white"];node[shape=none fontname="Arial"];label="Tokens";table[label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="3"><tr><td bgcolor="#009900" width="100"><font color="#FFFFFF">No.</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Linea</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Columna</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Lexema</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Token</font></td></tr>'
+    for i in range(len(tokens)):
+        tokens[i].num = i + 1
+        dot += tokens[i]
+    dot += '</table>>];}'
+    return dot
 
 def resetOuts():
     global printConsole
