@@ -31,7 +31,7 @@ class CallFunction(Expression):
                     if value.type == param.type or param.type == Type.DECIMAL and value.type == Type.INT:
                         if not param.id.lower() in envFunc.ids:
                             envFunc.ids[param.id.lower()] = Symbol(value.value, param.id.lower(), param.type)
-                            # symTable.push(new SymTab(param.line, param.column + 1, true, true, param.id.toLowerCase(), envFunc.name, param.type))
+                            #symTable.push(new SymTab(param.line, param.column + 1, true, true, param.id.toLowerCase(), envFunc.name, param.type))
                             continue
                         env.setError('No puede haber parámetros distintos con el mismo nombre', param.line, param.column)
                         return

@@ -42,7 +42,7 @@ precedence = (
     ('left', 'TK_or'),
     ('left', 'TK_and'),
     ('right', 'TK_not'),
-    ('left', 'TK_equalequal', 'TK_notequal'),
+    ('left', 'TK_equalequal', 'TK_equal', 'TK_notequal'),
     ('left', 'TK_less', 'TK_lessequal', 'TK_great', 'TK_greatequal'),
     ('left', 'TK_plus', 'TK_minus'),
     ('left', 'TK_mult', 'TK_div', 'TK_mod'),
@@ -191,8 +191,8 @@ def p_PROPS(t: Prod):
     if len(t) == 3 or len(t) == 4 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': False, 'primaryKey': True }
     if len(t) == 2                                                    : t[0] = {'notNull': False, 'primaryKey': False}
     
-    if len(t) == 6 or len(t) == 4 or len(t) == 2                      : t[0].update(t[len(t) - 1])
-    else                                                              : t[0].update({'foreignKey': False})
+    # if len(t) == 6 or len(t) == 4 or len(t) == 2                      : t[0].update(t[len(t) - 1])
+    # else                                                              : t[0].update({'foreignKey': False})
 
 def p_FKEY(t: Prod):
     '''FKEY : RW_ref TK_field TK_lpar TK_field TK_rpar'''

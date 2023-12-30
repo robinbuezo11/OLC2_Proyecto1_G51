@@ -49,7 +49,7 @@ class InitID(Instruction):
                 dot += f'\nnode_{id}_type_{i} -> node_{id}_id_{i};'
         return ReturnAST(dot, id)
 
-    def getType(type: Type) -> str:
+    def getType(self, type: Type) -> str:
         match type:
             case Type.INT:
                 return "INT"

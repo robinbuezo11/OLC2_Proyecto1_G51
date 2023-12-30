@@ -4,6 +4,7 @@ from statements.Env.Env import Env
 from utils.Type import Type, ReturnType
 from utils.Attribute import Attribute
 from utils.ForeignKey import ForeignKey
+#-------- DESCOMENTANDO AQUI ---------
 # from Expressions.Field import Field as F
 
 class Data:
@@ -142,7 +143,7 @@ class Table:
                         return
                     env.setError(f'No existe el campo {fields[j].lower()} en Tabla {self.name}', values[j].line, values[j].column)
                     return
-
+    # ------------- DESCOMENTANDO AQUI ----------------
     # def getAllFieldsTitle(self) -> list[list[any]]:
     #     fieldsTitle: list[list[any]] = []
     #     for field in self.fields:
