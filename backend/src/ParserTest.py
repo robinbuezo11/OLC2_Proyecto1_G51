@@ -9,44 +9,45 @@ from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 
 
-# def interpreter():
-#     input = open('../../Inputs/Pruebas.sql', encoding='utf-8').read()
-#     Scanner.lineno = 1
-#     instructions: list[Instruction] = parser.parse(input)
-#     ast: AST = AST()
-#     globalEnv: Env = Env(None, 'Global')
-#     dot = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
-#     dot += '\nnode_r[label="INSTRUCTIONS"];'
-#     for instruction in instructions:
-#         try:
-#             if isinstance(instruction, Instruction) and instruction.typeInst == TypeInst.INIT_FUNCTION:
-#                 instruction.execute(globalEnv)
-#                 resultAST = instruction.ast(ast)
-#                 dot += '\n' + resultAST.dot
-#                 dot += f'\nnode_r -> node_{resultAST.id};'
-#         except ValueError as e: pass
+def interpreter():
+    input = open('C:\\Users\\kewin\\OneDrive\\Escritorio\\Frontend\\OLC2_PROYECTO\\OLC2_Proyecto1_G51\\Inputs\Input1.sql', encoding='utf-8').read()
+    Scanner.lineno = 1
+    instructions: list[Instruction] = parser.parse(input)
+    ast: AST = AST()
+    globalEnv: Env = Env(None, 'Global')
+    dot = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
+    dot += '\nnode_r[label="INSTRUCTIONS"];'
+    for instruction in instructions:
+        try:
+            if isinstance(instruction, Instruction) and instruction.typeInst == TypeInst.INIT_FUNCTION:
+                instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dot += '\n' + resultAST.dot
+                dot += f'\nnode_r -> node_{resultAST.id};'
+        except ValueError as e: pass
 
-#     for instruction in instructions:
-#         try:
-#             if isinstance(instruction, Instruction) and instruction.typeInst != TypeInst.INIT_FUNCTION:
-#                 instruction.execute(globalEnv)
-#                 resultAST = instruction.ast(ast)
-#                 dot += '\n' + resultAST.dot
-#                 dot += f'\nnode_r -> node_{resultAST.id}'
-#             elif isinstance(instruction, Expression) and instruction.typeExp == TypeExp.CALL_FUNC:
-#                 instruction.execute(globalEnv)
-#                 resultAST = instruction.ast(ast)
-#                 dot += '\n' + resultAST.dot
-#                 dot += f'\nnode_r -> node_{resultAST.id}'
-#         except ValueError as e: print(e)
-#     dot += '\n}'
+    for instruction in instructions:
+        try:
+            if isinstance(instruction, Instruction) and instruction.typeInst != TypeInst.INIT_FUNCTION:
+                instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dot += '\n' + resultAST.dot
+                dot += f'\nnode_r -> node_{resultAST.id}'
+            elif isinstance(instruction, Expression) and instruction.typeExp == TypeExp.CALL_FUNC:
+                instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dot += '\n' + resultAST.dot
+                dot += f'\nnode_r -> node_{resultAST.id}'
+        except ValueError as e: print(e)
+    dot += '\n}'
 
-#     print(getStringOuts())
-#     print('=====================================')
-#     print(dot)
+    print('================ERROREEESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS=====================')
+    print(getStringOuts())
+    print('=====================================')
+    print(dot)
 
 def compiller():
-    input = open('../../Inputs/Pruebas.sql', encoding='utf-8').read()
+    input = open('C:\\Users\\kewin\\OneDrive\\Escritorio\\Frontend\\OLC2_PROYECTO\\OLC2_Proyecto1_G51\\Inputs\Input1.sql', encoding='utf-8').read()
     Scanner.lineno = 1
     instructions: list[Instruction] = parser.parse(input)
 
@@ -61,5 +62,5 @@ def compiller():
     c3dgen.generateFinalCode()
     with open('Out.cpp', 'w', encoding='utf-8') as file:
         file.write(c3dgen.getFinalCode())
-
-compiller()
+interpreter()
+#compiller()

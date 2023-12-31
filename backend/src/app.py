@@ -55,9 +55,10 @@ def getStruct():
 def exec():
     data = request.get_json()
     Scanner.lineno = 1
+    resetOuts()
     instructions = parser.parse(data['input'])
     globalEnv = Env(None, 'Global')
-    resetOuts()
+   
 
     global dotAst
     dotAst = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
@@ -88,7 +89,7 @@ def exec():
     dotAst += '\n}'
 
     result = getPrintConsole()
-
+    
     print(result)
     
 
@@ -97,7 +98,8 @@ def exec():
     # for res in result:
     #     data.append([res])
 
-
+    print(getStringOuts())
+    
     return jsonify({
         'success': True,
         'message': 'Ejecutado correctamente',
