@@ -114,6 +114,10 @@ class Env:
         while env:
             if id.lower() in env.tables:
                 env.tables.get(id.lower()).truncate()
+                res = xml.truncateTable(getUsedDatabase(), id.lower())
+                if not res[0]:
+                    self.setPrint(res[1])
+                    return False
                 self.setPrint(f'Registros eliminados de Tabla \'{id.lower()}\'. {line}:{column + 1}')
                 return True
             env = env.previous
@@ -125,6 +129,10 @@ class Env:
         while env:
             if id.lower() in env.tables:
                 del env.tables[id.lower()]
+                res = xml.dropTable(getUsedDatabase(), id.lower())
+                if not res[0]:
+                    self.setPrint(res[1])
+                    return False
                 self.setPrint(f'Tabla \'{id.lower()}\' eliminada. {line}:{column + 1}')
                 return True
             env = env.previous
@@ -171,6 +179,10 @@ class Env:
             if id.lower() in env.tables:
                 if not newColumn.lower() in env.tables.get(id.lower()).fields:
                     env.tables.get(id.lower()).addColumn(newColumn, type)
+                    res = xml.createColumn(getUsedDatabase(), id.lower(), newColumn.lower(), env.getTypeOf(type).lower(), None, None)
+                    if not res[0]:
+                        self.setPrint(res[1])
+                        return False
                     self.setPrint(f'Columna {newColumn.lower()} insertada exitosamente en Tabla \'{id.lower()}\'. {line}:{column + 1}')
                     return True
                 self.setError(f'Ya hay una columna {newColumn.lower()} en Tabla \'{id.lower()}\'', line, column)
@@ -185,6 +197,10 @@ class Env:
             if id.lower() in env.tables:
                 if dropColumn.lower() in env.tables.get(id.lower()).fields:
                     env.tables.get(id.lower()).dropColumn(dropColumn)
+                    res = xml.dropColumn(getUsedDatabase(), id.lower(), dropColumn.lower())
+                    if not res[0]:
+                        self.setPrint(res[1])
+                        return False
                     self.setPrint(f'Columna {dropColumn.lower()} eliminada exitosamente de la Tabla \'{id.lower()}\'. {line}:{column + 1}')
                     return True
                 self.setError(f'La columna {dropColumn.lower()} no existe en Tabla \'{id.lower()}\'', line, column)

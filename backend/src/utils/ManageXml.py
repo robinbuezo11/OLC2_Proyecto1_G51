@@ -175,7 +175,17 @@ class ManageXml:
                 new_column.set("primary_key", "true")
             if props['foreignKey']:
                 new_column.set("foreign_key", "true")
+                
+                # Verificar que la tabla referenciada exista
+                referenced_table = next((tb for tb in db_to_modify if tb.get("name") == props['table']), None)
+                if referenced_table is None:
+                    return False, f"La tabla referenciada '{props['table']}' no existe en la base de datos '{database}'."
                 new_column.set("table", props['table'])
+
+                #Verificar que la columna referenciada exista
+                referenced_column = next((col for col in referenced_table.findall("column") if col.get("name") == props['field']), None)
+                if referenced_column is None:
+                    return False, f"La columna referenciada '{props['field']}' no existe en la tabla '{props['table']}' de la base de datos '{database}'."
                 new_column.set("field", props['field'])
 
         self.writeXml()
@@ -193,6 +203,12 @@ class ManageXml:
         if table_to_modify is None:
             return False, f"La tabla '{table}' no existe en la base de datos '{database}'."
         
+        # Verificar si las columnas existen en la tabla
+        table_columns = [col.get("name") for col in table_to_modify.findall("column")]
+        for d in data:
+            if d["column"] not in table_columns:
+                return False, f"La columna '{d['column']}' no existe en la tabla '{table}' de la base de datos '{database}'."
+        
         # Verificar si ya existe una fila con los mismos valores en las columnas primarias
         pk_columns = [col.get("name") for col in table_to_modify.findall("column") if col.get("primary_key") == "true"]
         if pk_columns:
@@ -200,6 +216,23 @@ class ManageXml:
             pk_data = {d["column"]: str(d["value"]) for d in data if d["column"] in pk_columns}
             if pk_data in pk_values:
                 return False, f"Ya existe una fila con los mismos valores en las columnas primarias, en la tabla {table} de la base de datos {database}."
+
+        # Verificar que se proporcionen valores para las columnas obligatorias
+        not_null_columns = [col.get("name") for col in table_to_modify.findall("column") if (col.get("not_null") == "true" or col.get("primary_key") == "true")]
+        if not_null_columns:
+            provided_columns = [d["column"] for d in data]
+            missing_columns = [col for col in not_null_columns if col not in provided_columns]
+            if missing_columns:
+                return False, f"Las columnas " + ", ".join(missing_columns) + f" no pueden ser nulas en la tabla {table} de la base de datos {database}."
+         
+        # Verificar que los valores proporcionados para las columnas foráneas existan en la tabla referenciada
+        fk_columns = [{'col': col.get("name"), 'table': col.get("table"), 'field': col.get("field")} for col in table_to_modify.findall("column") if col.get("foreign_key") == "true"]
+        for fk in fk_columns:
+            referenced_table = next((tb for tb in db_to_modify if tb.get("name") == fk['table']), None)
+            referenced_values = [{value.get("column"): str(value.text) for value in row.findall("value") if value.get("column") == fk['field']} for row in referenced_table.findall("row")]
+            fk_data = {d["column"]: str(d["value"]) for d in data if d["column"] == fk['col']}
+            if fk_data not in referenced_values:
+                return False, f"El valor '{fk_data}' no existe en la tabla '{fk['table']}' de la base de datos '{database}'. No se puede insertar en la tabla '{table}'."
 
         # Insertar datos en la tabla
         row = ET.SubElement(table_to_modify, "row")
@@ -210,6 +243,70 @@ class ManageXml:
         
         self.writeXml()
         return True, f"Datos insertados en la tabla '{table}' de la base de datos '{database}' exitosamente."
+    
+    def dropColumn(self, database, table, column):
+        self.loadXml()
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            return False, f"La base de datos '{database}' no existe."
+
+        # Verificar si la tabla existe en la base de datos
+        table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
+        if table_to_modify is None:
+            return False, f"La tabla '{table}' no existe en la base de datos '{database}'."
+
+        # Eliminar columnas de la tabla
+        for row in table_to_modify.findall("row"):
+            values = row.findall("value")
+            for value in values:
+                column_name = value.get("column")
+                if column_name == column:
+                    row.remove(value)
+
+        # Eliminar las definiciones de columna de la tabla
+        for col in table_to_modify.findall("column"):
+            if col.get("name") == column:
+                table_to_modify.remove(col)
+
+        self.writeXml()
+        return True, f"Columnas eliminadas en la tabla '{table}' de la base de datos '{database}' exitosamente."
+    
+    def dropTable(self, database, table):
+        self.loadXml()
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            return False, f"La base de datos '{database}' no existe."
+
+        # Verificar si la tabla existe en la base de datos
+        table_to_remove = next((tb for tb in db_to_modify if tb.get("name") == table), None)
+        if table_to_remove is None:
+            return False, f"La tabla '{table}' no existe en la base de datos '{database}'."
+
+        # Eliminar la tabla
+        db_to_modify.remove(table_to_remove)
+        self.writeXml()
+        return True, f"La tabla '{table}' ha sido eliminada de la base de datos '{database}' exitosamente."
+    
+    def truncateTable (self, database, table):
+        self.loadXml()
+        # Verificar si la base de datos existe
+        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_modify is None:
+            return False, f"La base de datos '{database}' no existe."
+
+        # Verificar si la tabla existe en la base de datos
+        table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
+        if table_to_modify is None:
+            return False, f"La tabla '{table}' no existe en la base de datos '{database}'."
+
+        # Eliminar todas las filas de la tabla
+        for row in table_to_modify.findall("row"):
+            table_to_modify.remove(row)
+
+        self.writeXml()
+        return True, f"Todas las filas de la tabla '{table}' en la base de datos '{database}' han sido eliminadas exitosamente."
 
     '''def select(self, database, table):
         #Verificar si la base de datos existe
@@ -430,25 +527,6 @@ class ManageXml:
         return True
 
     
-    def dropTable(self, database, table):
-        # Verificar si la base de datos existe
-        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
-        if db_to_modify is None:
-            print(f"La base de datos '{database}' no existe.")
-            return False
-
-        # Verificar si la tabla existe en la base de datos
-        table_to_remove = next((tb for tb in db_to_modify if tb.get("name") == table), None)
-        if table_to_remove is None:
-            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
-            return False
-
-        # Eliminar la tabla
-        db_to_modify.remove(table_to_remove)
-        self.writeXml()
-        print(f"La tabla '{table}' ha sido eliminada de la base de datos '{database}' exitosamente.")
-        return True
-    
     def alterTable(self, database, tableOld, tableNew):
     # Verificar si la base de datos existe
         db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
@@ -466,27 +544,6 @@ class ManageXml:
         table_to_modify.set("name", tableNew)
         self.writeXml()
         print(f"El nombre de la tabla '{tableOld}' ha sido cambiado a '{tableNew}' en la base de datos '{database}' exitosamente.")
-        return True
-    
-    def truncate (self, database, table):
-        # Verificar si la base de datos existe
-        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
-        if db_to_modify is None:
-            print(f"La base de datos '{database}' no existe.")
-            return False
-
-        # Verificar si la tabla existe en la base de datos
-        table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
-        if table_to_modify is None:
-            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
-            return False
-
-        # Eliminar todas las filas de la tabla
-        for row in table_to_modify.findall("row"):
-            table_to_modify.remove(row)
-
-        self.writeXml()
-        print(f"Todas las filas de la tabla '{table}' en la base de datos '{database}' han sido eliminadas exitosamente.")
         return True
     
     def updateRow(self, database, table, new_data):
@@ -515,36 +572,6 @@ class ManageXml:
 
         self.writeXml()
         print(f"Datos actualizados en la tabla '{table}' de la base de datos '{database}' exitosamente.")
-        return True
-    
-    def deleteColumn(self, database, table, columns):
-        # Verificar si la base de datos existe
-        db_to_modify = next((db for db in self.__root if db.get("name") == database), None)
-        if db_to_modify is None:
-            print(f"La base de datos '{database}' no existe.")
-            return False
-
-        # Verificar si la tabla existe en la base de datos
-        table_to_modify = next((tb for tb in db_to_modify if tb.get("name") == table), None)
-        if table_to_modify is None:
-            print(f"La tabla '{table}' no existe en la base de datos '{database}'.")
-            return False
-
-        # Eliminar columnas de la tabla
-        for row in table_to_modify.findall("row"):
-            values = row.findall("value")
-            for value in values:
-                column_name = value.get("column")
-                if column_name in columns:
-                    row.remove(value)
-
-        # Eliminar las definiciones de columna de la tabla
-        for col in table_to_modify.findall("column"):
-            if col.get("name") in columns:
-                table_to_modify.remove(col)
-
-        self.writeXml()
-        print(f"Columnas eliminadas en la tabla '{table}' de la base de datos '{database}' exitosamente.")
         return True
 
     def deleteRow(self, database, table, conditions):

@@ -19,7 +19,7 @@ class Data:
         return ReturnType(self.value, self.type)
 
 class Field:
-    def __init__(self, type: Type, values: list[Data], length: int, notNull: bool, isPrimary: bool):
+    def __init__(self, type: Type, values: list[Data], length: int = None, notNull: bool = False, isPrimary: bool = False):
         self.type = type
         self.values = values
         self.length = length

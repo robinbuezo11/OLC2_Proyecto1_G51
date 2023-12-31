@@ -68,10 +68,6 @@ const TopbarItems = [
         ]
     },
     {
-        label: "Ejecutar",
-        id: "execute",
-    },
-    {
         label: "Reportes",
         items: [
             {
@@ -89,12 +85,16 @@ const TopbarItems = [
             {
                 label: "Tokens",
                 id: "tokens",
-            },
-            {
-                label: "C3D",
-                id: "c3d"
             }
         ]
+    },
+    {
+        label: "Generar C3D",
+        id: "c3d"
+    },
+    {
+        label: "Ejecutar",
+        id: "execute",
     }
 ];
 
