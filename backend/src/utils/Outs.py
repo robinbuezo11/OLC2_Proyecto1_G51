@@ -7,8 +7,6 @@ tokens: list[Token] = []
 
 def getStringOuts() -> str:
     out = ''
-    global printConsole
-    global errors
     out += '\n'.join(printConsole)
     if len(errors) > 0:
         if out != '':
@@ -39,13 +37,9 @@ def getTokens():
 
 
 def resetOuts():
-    global printConsole
-    global errors
-    global tokens
     printConsole.clear()
     errors.clear()
     tokens.clear()
 
 def getPrintConsole():
-    global printConsole
     return printConsole

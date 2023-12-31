@@ -130,9 +130,9 @@ def p_SELECT(t: Prod):
     '''SELECT   : RW_select FIELDS RW_from TK_field RW_where EXP
                 | RW_select FIELDS RW_from TK_field
                 | RW_select LIST_IDS'''
-    if len(t) == 7   : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], t[6])
-    elif len(t) == 5 : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], None)
-    else             : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
+    # if len(t) == 7   : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], t[6])
+    # elif len(t) == 5 : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], None)
+    if len(t) == 3   : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
 
 def p_FIELDS(t: Prod):
     '''FIELDS   : LIST_IDS
@@ -167,13 +167,12 @@ def p_ATTRIBUTE(t: Prod):
     '''ATTRIBUTE    : TK_field TYPE TK_lpar TK_int TK_rpar PROPS
                     | TK_field TYPE PROPS
                     | TK_field TYPE TK_lpar TK_int TK_rpar
-                    | TK_field TYPE
-                    | RW_foreing RW_key TK_lpar TK_field TK_rpar RW_ref TK_field TK_lpar TK_field TK_rpar'''
+                    | TK_field TYPE'''
+                    # | RW_foreing RW_key TK_lpar TK_field TK_rpar RW_ref TK_field TK_lpar TK_field TK_rpar'''
     if len(t) == 7   : t[0] = Attribute(t.lineno(1), t.lexpos(1), t[1], t[2], t[4], t[6])
     elif len(t) == 4 : t[0] = Attribute(t.lineno(1), t.lexpos(1), t[1], t[2], None, t[3])
     elif len(t) == 6 : t[0] = Attribute(t.lineno(1), t.lexpos(1), t[1], t[2], t[4])
     elif len(t) == 3 : t[0] = Attribute(t.lineno(1), t.lexpos(1), t[1], t[2], None)
-    else             : t[0] = ForeignKey(t.lineno(1), t.lexpos(1), t[4], t[7], t[9])
 
 def p_PROPS(t: Prod):
     '''PROPS    : RW_not RW_null RW_primary RW_key FKEY
@@ -185,14 +184,18 @@ def p_PROPS(t: Prod):
                 | RW_primary RW_key FKEY
                 | RW_primary RW_key
                 | FKEY'''
-    if len(t) == 5 or len(t) == 6 and t.slice[1].type == 'RW_not'     : t[0] = {'notNull': True,  'primaryKey': True }
-    if len(t) == 5 or len(t) == 6 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': True,  'primaryKey': True }
-    if len(t) == 3 or len(t) == 4 and t.slice[1].type == 'RW_not'     : t[0] = {'notNull': True,  'primaryKey': False}
-    if len(t) == 3 or len(t) == 4 and t.slice[1].type == 'RW_primary' : t[0] = {'notNull': False, 'primaryKey': True }
-    if len(t) == 2                                                    : t[0] = {'notNull': False, 'primaryKey': False}
+    if len(t) == 5 or len(t) == 6                                           : t[0] = {'notNull': True,  'primaryKey': True }
+    elif (len(t) == 3 or len(t) == 4) and t.slice[1].type == 'RW_not'       : t[0] = {'notNull': True,  'primaryKey': False}
+    elif (len(t) == 3 or len(t) == 4) and t.slice[1].type == 'RW_primary'   : t[0] = {'notNull': False, 'primaryKey': True }
+    elif len(t) == 2                                                        : t[0] = {'notNull': False, 'primaryKey': False}
     
+<<<<<<< HEAD
     if len(t) == 6 or len(t) == 4 or len(t) == 2                      : t[0].update(t[len(t) - 1])
     else                                                              : t[0].update({'foreignKey': False})
+=======
+    if len(t) == 6 or len(t) == 4 or len(t) == 2                        : t[0].update(t[len(t) - 1])
+    else                                                                : t[0].update({'foreignKey': False})
+>>>>>>> 1eb9a7df374cd2e53e7ed7988949c537ee5f7c99
 
 def p_FKEY(t: Prod):
     '''FKEY : RW_ref TK_field TK_lpar TK_field TK_rpar'''
@@ -372,7 +375,9 @@ def p_EXP(t: Prod):
             | CALLFUNC
             | TERNARY
             | TK_id
+            | TK_id TK_point TK_id
             | TK_field
+            | TK_field TK_point TK_field
             | TK_nvarchar
             | TK_int
             | TK_decimal

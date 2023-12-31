@@ -38,7 +38,7 @@ class C3DGen:
         self.thereIsCharToString = False
         self.thereAreDeclarations = False
         self.keys: list[bool] = [False, False, False, False]
-        self.tmpKeys: list[bool] = []
+        self.tmpKeys: list[bool] = [k for k in self.keys]
 
     def thereAreDeclarations(self) -> bool:
         return self.thereAreDeclarations
@@ -79,14 +79,14 @@ class C3DGen:
             self.keys[i] = self.tmpKeys[i]
 
     def newTmp(self):
-        tmp: str = 't' + self.temporalCount
+        tmp: str = f't{self.temporalCount}'
         self.temporalCount += 1
         self.temporals.append(tmp)
         self.temporalsSaved[tmp] = tmp
         return tmp
 
     def newLbl(self):
-        lbl: str = 'L' + self.labelCount
+        lbl: str = f'L{self.labelCount}'
         self.labelCount += 1
         return lbl
 

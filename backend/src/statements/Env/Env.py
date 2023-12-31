@@ -15,6 +15,8 @@ class Env:
         self.tables: dict[str, any] = {}
         self.previous = previous
         self.name = name
+        self.size: int = 0
+        self.returnLbl: str = ''
 
     # === VARIABLES ===
     def saveID(self, id: str, value: any, type: Type, line: int, column: int):

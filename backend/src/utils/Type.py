@@ -21,9 +21,8 @@ class ReturnType:
         return f'{self.type}: {self.value}'
 
 class ReturnC3D:
-    def __init__(self, isTmp: bool = None, tmp: str = None, strValue: str = None, type: Type = None, trueLbl: str = None, falseLbl: str = None, isTrue: bool = None):
+    def __init__(self, isTmp: bool = None, strValue: str = None, type: Type = None, trueLbl: str = None, falseLbl: str = None, isTrue: bool = None):
         self.isTmp = isTmp
-        self.tmp = tmp
         self.strValue = strValue
         self.type = type
         self.trueLbl = trueLbl

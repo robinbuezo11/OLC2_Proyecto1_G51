@@ -5,13 +5,12 @@ from statements.Abstracts.Expression import Expression
 from statements.Abstracts.Instruction import Instruction
 from statements.Env.Env import Env
 from statements.Env.AST import AST
-from utils.Outs import getStringOuts, getPrintConsole, resetOuts
+from utils.Outs import getStringOuts, getPrintConsole, resetOuts, getErrors, getTokens
 from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.Global import *
 from statements.Env.SymbolTable import symTable
-from utils.Outs import getErrors
-from utils.Outs import getTokens
+from statements.C3D.C3DGen import C3DGen
 
 
 dotAst = ''
@@ -55,10 +54,9 @@ def getStruct():
 def exec():
     data = request.get_json()
     Scanner.lineno = 1
-    resetOuts()
     instructions = parser.parse(data['input'])
     globalEnv = Env(None, 'Global')
-   
+    resetOuts()
 
     global dotAst
     dotAst = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
@@ -72,7 +70,6 @@ def exec():
                 dotAst += '\n' + resultAST.dot
                 dotAst += f'\nnode_r -> node_{resultAST.id};'
         except ValueError as e: pass
-
     for instruction in instructions:
         try:
             if isinstance(instruction, Instruction) and instruction.typeInst != TypeInst.INIT_FUNCTION:
@@ -89,7 +86,7 @@ def exec():
     dotAst += '\n}'
 
     result = getPrintConsole()
-    
+
     print(result)
     
 
@@ -98,8 +95,7 @@ def exec():
     # for res in result:
     #     data.append([res])
 
-    print(getStringOuts())
-    
+
     return jsonify({
         'success': True,
         'message': 'Ejecutado correctamente',
@@ -138,7 +134,6 @@ def createDB():
     
 @app.route('/api/getAst', methods=['GET'])
 def getAst():
-    print(dotAst)
     return jsonify({
         'success': True,
         'message': 'AST generado correctamente',
@@ -151,7 +146,6 @@ def getAst():
 def getSymbols():
     try:
         res = symTable.getDot()
-        print(res)
         if res:
             return jsonify({
                 'success': True,
@@ -178,7 +172,6 @@ def getSymbols():
 def getError():
     try:
         res = getErrors()
-        print(res)
         if res:
             return jsonify({
                 'success': True,
@@ -205,7 +198,6 @@ def getError():
 def getToken():
     try:
         res = getTokens()
-        print(res)
         if res:
             return jsonify({
                 'success': True,
@@ -220,6 +212,40 @@ def getToken():
                 'result': '',
                 'error': 'No existen tokens'
             })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+    
+@app.route('/api/getC3d', methods=['POST'])
+def getC3d():
+    try:
+        input = request.get_json()
+        resetOuts()
+        instructions: list[Instruction] = parser.parse(input['input'])
+
+        globalEnv: Env = Env(None, 'Global')
+        c3dgen: C3DGen = C3DGen()
+        c3dgen.enableMain()
+
+        for instruction in instructions:
+            try:
+                instruction.compile(globalEnv, c3dgen)
+            except ValueError as e: print(e)
+        c3dgen.generateFinalCode()
+        # with open('Out.cpp', 'w', encoding='utf-8') as file:
+        #     file.write(c3dgen.getFinalCode())
+        c3d = c3dgen.getFinalCode()
+        print(c3d)
+        return jsonify({
+            'success': True,
+            'message': 'C3D generado correctamente',
+            'result': c3d,
+            'error': ''
+        })
     except Exception as e:
         return jsonify({
             'success': False,

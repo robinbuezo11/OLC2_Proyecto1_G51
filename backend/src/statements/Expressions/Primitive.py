@@ -52,7 +52,7 @@ class Primitive(Expression):
                     c3dgen.nextHeap()
                 c3dgen.addSetHeap('H', '-1')
                 c3dgen.nextHeap()
-                return ReturnC3D()
+                return ReturnC3D(isTmp = True, strValue = tmp, type = self.type)
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

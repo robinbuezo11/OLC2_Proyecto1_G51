@@ -8,3 +8,6 @@ class Attribute:
         self.type = type
         self.length = length
         self.props = props
+
+    def toString(self) -> str:
+        return f'{self.id} {self.type}({self.length}) {self.props}'

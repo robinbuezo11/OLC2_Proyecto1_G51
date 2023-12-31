@@ -71,7 +71,6 @@ const HomePage = () => {
                 if (response.data.result.length > 0) {
                     setData(response.data.result);
                 } else {
-                    console.log(response.data.result)
                     setData([['Consola']]);
                 }
             } else {
@@ -110,8 +109,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    console.log(dotCode);
-                    generateGraph(dotCode);
+                    generateGraph(dotCode, 'AST');
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -130,7 +128,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    generateGraph(dotCode);
+                    generateGraph(dotCode, 'Tabla de Símbolos');
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -149,7 +147,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    generateGraph(dotCode);
+                    generateGraph(dotCode, 'Errores');
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -168,7 +166,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const dotCode = response.data.result;
                 if(dotCode) {
-                    generateGraph(dotCode);
+                    generateGraph(dotCode, 'Tokens');
                 } else {
                     showMessage('error', 'No se ha recibido el código dot');
                 }
@@ -181,10 +179,33 @@ const HomePage = () => {
         });
     }
 
-    function generateGraph(dotCode) {
+    const generateC3d = () => {
+        axios.post('http://localhost:4000/api/getC3d', {
+            input: activeTab.code
+        })
+        .then(function (response) {
+            if(response.data.success) {
+                const c3d = response.data.result;
+                if(c3d) {
+                    console.log(c3d);
+                    const newWindow = window.open('','_blank');
+                    newWindow.document.write(`<html><head><title>C3D</title></head><body><pre>${c3d}</body></html>`);
+                    newWindow.document.close();
+                } else {
+                    showMessage('error', 'No se ha recibido el código c3d');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
+        });
+    }
+
+    function generateGraph(dotCode, title) {
         const newWindow = window.open('','_blank');
-        console.log(newWindow);
-        newWindow.document.write('<html><head><title>AST</title></head><body><div id="graph"></div></body></html>');
+        newWindow.document.write(`<html><head><title>${title}</title></head><body><div id="graph"></div></body></html>`);
         newWindow.document.close();
 
         d3.select(newWindow.document.getElementById('graph')).graphviz().scale(1).width(newWindow.document.getElementById('graph').clientWidth).renderDot(dotCode);
@@ -272,7 +293,8 @@ const HomePage = () => {
         'ast': generateAst,
         'symbols': generateSymbols,
         'errors': generateError,
-        'tokens': generateToken
+        'tokens': generateToken,
+        'c3d': generateC3d
     }
 
     return (

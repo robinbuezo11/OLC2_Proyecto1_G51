@@ -18,23 +18,16 @@ class CreateTable(Instruction):
     def execute(self, env: Env) -> any:
         table = Table(self.name.lower(), self.attribs)
         env.saveTable(self.name, table, self.line, self.column)
-        
-        #-----------------XML------------------
-        xml.createTable(getUsedDatabase(), self.name.lower())
+
+        res = xml.createTable(getUsedDatabase(), self.name.lower())
+        if not res[0]:
+            env.setPrint(res[1])
+            return
         for attrib in self.attribs:
             if type(attrib) == Attribute:
-                xml.createColumn(getUsedDatabase(), self.name.lower(), attrib.id, self.getTypeOf(attrib.type).lower(), attrib.length, attrib.props['notNull'], attrib.props['primaryKey'])
-
-        #--------------- CAMBIO ---------------
-        # res = xml.createTable(getUsedDatabase(), self.name.lower())
-        # if not res[0]:
-        #     env.setPrint(res[1])
-        #     return
-        # for attrib in self.attribs:
-        #     if type(attrib) == Attribute:
-        #         res = xml.createColumn(getUsedDatabase(), self.name.lower(), attrib.id.lower(), self.getTypeOf(attrib.type).lower(), attrib.length, attrib.props)
-        #         if not res[0]:
-        #             env.setPrint(res[1])
+                res = xml.createColumn(getUsedDatabase(), self.name.lower(), attrib.id.lower(), self.getTypeOf(attrib.type).lower(), attrib.length, attrib.props)
+                if not res[0]:
+                    env.setPrint(res[1])
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
         pass

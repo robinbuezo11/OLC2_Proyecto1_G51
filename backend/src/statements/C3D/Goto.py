@@ -4,7 +4,7 @@ from statements.C3D.Type import Type
 class Goto(Instruction):
     def __init__(self, lbl: str):
         super().__init__(Type.GOTO)
-        self.lbl = lbl
+        self.lbl = str(lbl)
 
     def __str__(self) -> str:
         return '\tgoto ' + self.lbl + ';'
