@@ -74,6 +74,7 @@ tokens = tuple(reserveds.values()) + (
     'TK_semicolon',
     'TK_comma',
     'TK_dot',
+    'TK_point',
     'TK_plus',
     'TK_minus',
     'TK_mult',
@@ -103,6 +104,7 @@ t_TK_rpar       = r'\)'
 t_TK_semicolon  = r'\;'
 t_TK_comma      = r'\,'
 t_TK_dot        = r'\.\.'
+t_TK_point      = r'\.'
 # OPERACIONES ARITMETICAS
 t_TK_plus       = r'\+'
 t_TK_minus      = r'\-'

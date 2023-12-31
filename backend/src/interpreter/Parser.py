@@ -130,9 +130,9 @@ def p_SELECT(t: Prod):
     '''SELECT   : RW_select FIELDS RW_from TK_field RW_where EXP
                 | RW_select FIELDS RW_from TK_field
                 | RW_select LIST_IDS'''
-    if len(t) == 7   : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], t[6])
-    elif len(t) == 5 : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], None)
-    else             : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
+    # if len(t) == 7   : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], t[6])
+    # elif len(t) == 5 : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], None)
+    if len(t) == 3   : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
 
 def p_FIELDS(t: Prod):
     '''FIELDS   : LIST_IDS
@@ -370,7 +370,9 @@ def p_EXP(t: Prod):
             | CALLFUNC
             | TERNARY
             | TK_id
+            | TK_id TK_point TK_id
             | TK_field
+            | TK_field TK_point TK_field
             | TK_nvarchar
             | TK_int
             | TK_decimal

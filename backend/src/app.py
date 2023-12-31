@@ -10,6 +10,7 @@ from utils.TypeExp import TypeExp
 from utils.TypeInst import TypeInst
 from utils.Global import *
 from statements.Env.SymbolTable import symTable
+from statements.C3D.C3DGen import C3DGen
 
 
 dotAst = ''
@@ -210,6 +211,40 @@ def getToken():
                 'result': '',
                 'error': 'No existen tokens'
             })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+    
+@app.route('/api/getC3d', methods=['POST'])
+def getC3d():
+    try:
+        input = request.get_json()
+        resetOuts()
+        instructions: list[Instruction] = parser.parse(input['input'])
+
+        globalEnv: Env = Env(None, 'Global')
+        c3dgen: C3DGen = C3DGen()
+        c3dgen.enableMain()
+
+        for instruction in instructions:
+            try:
+                instruction.compile(globalEnv, c3dgen)
+            except ValueError as e: print(e)
+        c3dgen.generateFinalCode()
+        # with open('Out.cpp', 'w', encoding='utf-8') as file:
+        #     file.write(c3dgen.getFinalCode())
+        c3d = c3dgen.getFinalCode()
+        print(c3d)
+        return jsonify({
+            'success': True,
+            'message': 'C3D generado correctamente',
+            'result': c3d,
+            'error': ''
+        })
     except Exception as e:
         return jsonify({
             'success': False,

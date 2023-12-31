@@ -89,6 +89,10 @@ const TopbarItems = [
             {
                 label: "Tokens",
                 id: "tokens",
+            },
+            {
+                label: "C3D",
+                id: "c3d"
             }
         ]
     }
