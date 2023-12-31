@@ -25,10 +25,23 @@ class Select_prt(Instruction):
         if len(self.expression) > 0:
             for exp in self.expression:
                 value: ReturnC3D = exp[0].compile(env, c3dgen)
-                if value.type == Type.INT:
+                if value.type in [Type.INT, Type.BIT]:
                     c3dgen.addPrintf('d', '(int) ' + value.strValue)
                 elif value.type == Type.DECIMAL:
                     c3dgen.addPrintf('f', '(float) ' + value.strValue)
+                elif value.type == Type.NULL:
+                    c3dgen.addPrint('NULL')
+                else:
+                    tmp1: str = c3dgen.newTmp()
+                    tmp2: str = c3dgen.newTmp()
+                    c3dgen.addExpression(tmp1, 'P', '+', str(env.size))
+                    c3dgen.addExpression(tmp2, tmp1, '+', '1')
+                    c3dgen.addSetStack(tmp1, value.strValue)
+                    c3dgen.newEnv(env.size)
+                    c3dgen.generatePrintString()
+                    c3dgen.addCall('_printString')
+                    c3dgen.addGetStack(tmp2, 'P')
+                    c3dgen.prevEnv(env.size)
             c3dgen.addPrint("\n")
         c3dgen.addComment("-------- Fin Print --------")
 
