@@ -63,5 +63,5 @@ def compiller():
     with open('Out.cpp', 'w', encoding='utf-8') as file:
         file.write(c3dgen.getFinalCode())
 
-# interpreter()
+interpreter()
 compiller()

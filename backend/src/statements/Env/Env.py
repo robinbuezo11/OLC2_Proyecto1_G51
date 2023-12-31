@@ -37,12 +37,13 @@ class Env:
         else:
             self.setError('Redeclaración de variable existente', line, column)
 
-    def getValue(self, id: str) -> Symbol:
+    def getValue(self, id: str, line: int, column: int) -> Symbol:
         env: Env = self
         while env:
             if id.lower() in env.ids:
                 return env.ids.get(id.lower())
             env = env.previous
+        self.setError(f'Acceso a variable inexistente. \'id\'', line, column)
         return None
 
     def reasignID(self, id: str, value: ReturnType, line: int, column: int) -> bool:
