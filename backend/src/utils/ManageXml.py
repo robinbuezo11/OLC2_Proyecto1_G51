@@ -194,14 +194,12 @@ class ManageXml:
             return False, f"La tabla '{table}' no existe en la base de datos '{database}'."
         
         # Verificar si ya existe una fila con los mismos valores en las columnas primarias
-        primary_key_columns = [col.get("name") for col in table_to_modify.findall("column") if col.get("primary_key") == "true"]
-        if primary_key_columns:
-            data_values = [d["value"] for d in data if d["column"] in primary_key_columns]
-            for row in table_to_modify.findall("row"):
-                row_values = [value.text for value in row.findall("value") if value.get("column") in primary_key_columns]
-                for d in data_values:
-                    if str(d) in row_values:
-                        return False, f"Ya existe una fila con el valor '{d}' en la columna primaria, en la tabla '{table}' de la base de datos '{database}'."
+        pk_columns = [col.get("name") for col in table_to_modify.findall("column") if col.get("primary_key") == "true"]
+        if pk_columns:
+            pk_values = [{value.get("column"): value.text for value in row.findall("value") if value.get("column") in pk_columns} for row in table_to_modify.findall("row")]
+            pk_data = {d["column"]: str(d["value"]) for d in data if d["column"] in pk_columns}
+            if pk_data in pk_values:
+                return False, f"Ya existe una fila con los mismos valores en las columnas primarias, en la tabla {table} de la base de datos {database}."
 
         # Insertar datos en la tabla
         row = ET.SubElement(table_to_modify, "row")

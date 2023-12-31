@@ -125,6 +125,10 @@ def t_newline(t):
     r'\n | \r'
     t.lexer.lineno += 1
 
+def t_eof(t):
+    r'\0+'
+    t.lexer.lineno = 1
+
 t_ignore = ' \t'
 
 def t_comments(t):
@@ -147,17 +151,17 @@ def t_TK_field(t):
     return t
 
 def t_TK_date(t):
-    r'\"\d\d\d\d\-\d\d\-\d\d\"'
+    r"\'\d\d\d\d\-\d\d\-\d\d\'"
     t.value = t.value[1 : len(t.value) - 1]
     return t
 
 def t_TK_datetime(t):
-    r'\"\d\d\-\d\d\-\d\d\d\d\ \d\d\:\d\d"'
+    r"\'\d\d\-\d\d\-\d\d\d\d\ \d\d\:\d\d\'"
     t.value = t.value[1 : len(t.value) - 1]
     return t
 
 def t_TK_nvarchar(t):
-    r'\"(([^\n\"\\]|\\.)*)\"'
+    r"\'(([^\n\'\\]|\\.)*)\'"
     t.value = t.value[1 : len(t.value) - 1]
     return t
 
