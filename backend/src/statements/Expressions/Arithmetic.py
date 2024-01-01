@@ -122,7 +122,7 @@ class Arithmetic(Expression):
             case '/':
                 return self.div_c3d(env, c3dgen)
             case _:
-                return ReturnType('NULL', Type.NULL)
+                return c3dgen('NULL', Type.NULL)
 
     def plus_c3d(self, env: Env, c3dgen:C3DGen) -> ReturnC3D:
         value1: ReturnC3D = self.exp1.compile(env, c3dgen)

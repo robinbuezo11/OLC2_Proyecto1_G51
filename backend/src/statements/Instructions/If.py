@@ -5,6 +5,7 @@ from statements.Env.Env import Env
 from statements.C3D.C3DGen import C3DGen
 from utils.Type import ReturnType, ReturnC3D, Type
 from utils.TypeInst import TypeInst
+from utils.TypeExp import TypeExp
 
 class If(Instruction):
     def __init__(self, line: int, column: int, condition: Expression, block: Instruction, except_: Instruction):
@@ -28,7 +29,28 @@ class If(Instruction):
         return
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        pass
+        c3dgen.addComment('----------- If ------------')
+        condition: ReturnC3D = self.condition.compile(env, c3dgen)
+        if condition.type == Type.BOOLEAN:
+            if self.condition.typeExp == TypeExp.CALL_FUNC:
+                condition.trueLbl = c3dgen.validLabel(condition.trueLbl)
+                condition.falseLbl = c3dgen.validLabel(condition.falseLbl)
+                c3dgen.addIf(condition.strValue, '==', '1', condition.trueLbl)
+                c3dgen.addGoto(condition.falseLbl)
+            c3dgen.addLabel(condition.trueLbl)
+            self.block.compile(env, c3dgen)
+            lbl: str = None
+            if self.except_ != None:
+                lbl = c3dgen.newLbl()
+                c3dgen.addGoto(lbl)
+            c3dgen.addLabel(condition.falseLbl)
+            if self.except_ != None:
+                self.except_.compile(env, c3dgen)
+                c3dgen.addLabel(lbl)
+            c3dgen.addComment('--------- Fin If ----------')
+            return None
+        c3dgen.addComment('--------- Fin If ----------')
+        return None
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

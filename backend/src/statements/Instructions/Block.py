@@ -1,4 +1,5 @@
 from statements.Abstracts.Instruction import Instruction
+from statements.Abstracts.Expression import Expression
 from statements.Env.AST import AST, ReturnAST
 from statements.Env.Env import Env
 from utils.TypeInst import TypeInst
@@ -20,7 +21,15 @@ class Block(Instruction):
             except: {}
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        pass
+        exp: Expression
+        inst: Instruction
+        ret: ReturnC3D
+        for instruction in self.instructions:
+            try:
+                ret = instruction.compile(env, c3dgen)
+                if ret:
+                    return ret
+            except: {}
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

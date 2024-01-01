@@ -91,7 +91,7 @@ class C3DGen:
         return lbl
 
     def validLabel(self, lbl: str):
-        if lbl == None:
+        if not lbl:
             return self.newLbl()
         return lbl
 

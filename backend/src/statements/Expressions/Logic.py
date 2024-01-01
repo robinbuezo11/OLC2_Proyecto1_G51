@@ -29,9 +29,6 @@ class Logic(Expression):
             case _:
                 return ReturnType('NULL', Type.NULL)
 
-    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        pass
-
     def and_(self, env: Env) -> ReturnType:
         value1: ReturnType = self.exp1.execute(env)
         value2: ReturnType = self.exp2.execute(env)
@@ -48,6 +45,61 @@ class Logic(Expression):
         value: ReturnType = self.exp2.execute(env)
         self.type = Type.BOOLEAN
         return ReturnType(not value.value, self.type)
+
+    def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        match self.sign.upper():
+            case '&&':
+                return self.and_c3d(env, c3dgen)
+            case '||':
+                return self.or_c3d(env, c3dgen)
+            case '!':
+                return self.not_c3d(env, c3dgen)
+            case _:
+                return ReturnC3D(isTmp = False, type = Type.NULL)
+
+    def and_c3d(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        andLbl: str
+        self.checkLbls(c3dgen)
+        andLbl = self.exp1.trueLbl = c3dgen.newLbl()
+        self.exp2.trueLbl = self.trueLbl
+        self.exp1.falseLbl = self.exp2.falseLbl = self.falseLbl
+        value1: ReturnC3D = self.exp1.compile(env, c3dgen)
+        self.type = Type.BOOLEAN
+        if value1.type != Type.BOOLEAN:
+            return ReturnC3D(isTmp = False, type = Type.NULL)
+        c3dgen.addLabel(andLbl)
+        value2: ReturnC3D = self.exp2.compile(env, c3dgen)
+        if value2.type == Type.BOOLEAN:
+            return ReturnC3D(isTmp = True, type = Type.BOOLEAN, trueLbl = self.trueLbl, falseLbl = self.falseLbl)
+        return ReturnC3D(isTmp = False, type = Type.NULL)
+
+    def or_c3d(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        orLbl: str
+        self.checkLbls(c3dgen)
+        orLbl = self.exp1.falseLbl = c3dgen.newLbl()
+        self.exp2.falseLbl = self.falseLbl
+        self.exp1.trueLbl = self.exp2.trueLbl = self.trueLbl
+        value1: ReturnC3D = self.exp1.compile(env, c3dgen)
+        if value1.type != Type.BOOLEAN:
+            return ReturnC3D(isTmp = False, type = Type.NULL)
+        c3dgen.addLabel(orLbl)
+        value2: ReturnC3D = self.exp2.compile(env, c3dgen)
+        if value2.type == Type.BOOLEAN:
+            return ReturnC3D(isTmp = True, type = Type.BOOLEAN, trueLbl = self.trueLbl, falseLbl = self.falseLbl)
+        return ReturnC3D(isTmp = False, type = Type.NULL)
+
+    def not_c3d(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        self.checkLbls(c3dgen)
+        self.exp2.falseLbl = self.trueLbl
+        self.exp2.trueLbl = self.falseLbl
+        value2: ReturnC3D = self.exp2.compile(env, c3dgen)
+        if value2.type == Type.BOOLEAN:
+            return ReturnC3D(isTmp = True, type = Type.BOOLEAN, trueLbl = self.trueLbl, falseLbl = self.falseLbl)
+        return ReturnC3D(isTmp = False, type = Type.NULL)
+
+    def checkLbls(self, c3dgen: C3DGen):
+        self.trueLbl = c3dgen.validLabel(self.trueLbl)
+        self.falseLbl = c3dgen.validLabel(self.falseLbl)
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()
