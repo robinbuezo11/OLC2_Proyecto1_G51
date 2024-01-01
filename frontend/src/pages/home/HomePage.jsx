@@ -211,6 +211,28 @@ const HomePage = () => {
         });
     }
 
+    const getTechDoc = () => {
+        axios.get('http://localhost:4000/api/getTechDoc')
+        .then (function (response) {
+            if(response.data.success) {
+                const doc = response.data.result;
+                if(doc) {
+                    openPdf(doc);
+                } else {
+                    showMessage('error', 'No se ha recibido el documento');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+    }
+
+    const openPdf = (pdfBase64) => {
+        const newWindow = window.open('','_blank');
+        newWindow.document.write(`<html><head><title>Documentación Técnica</title></head><body><embed width="100%" height="100%" src="data:application/pdf;base64,${pdfBase64}" type="application/pdf"></body></html>`);
+        newWindow.document.close();
+    }
+
     function generateGraph(dotCode, title) {
         const newWindow = window.open('','_blank');
         newWindow.document.write(`<html><head><title>${title}</title></head><body><div id="graph"></div></body></html>`);
@@ -302,7 +324,8 @@ const HomePage = () => {
         'symbols': generateSymbols,
         'errors': generateError,
         'tokens': generateToken,
-        'c3d': generateC3d
+        'c3d': generateC3d,
+        'tech': getTechDoc
     }
 
     return (

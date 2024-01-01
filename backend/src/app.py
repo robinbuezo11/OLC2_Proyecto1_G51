@@ -11,6 +11,7 @@ from utils.TypeInst import TypeInst
 from utils.Global import *
 from statements.Env.SymbolTable import symTable
 from statements.C3D.C3DGen import C3DGen
+import base64
 
 
 dotAst = ''
@@ -250,6 +251,25 @@ def getC3d():
         return jsonify({
             'success': False,
             'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+    
+@app.route('/api/getTechDoc', methods=['GET'])
+def getTechDoc():
+    try:
+        with open('..\\docs\\ManualTecnico.pdf', 'rb') as file:
+            data = base64.b64encode(file.read()).decode('utf-8')
+            return jsonify({
+                'success': True,
+                'message': 'Documento obtenido correctamente',
+                'result': data,
+                'error': ''
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al obtener el documento',
             'result': '',
             'error': str(e)
         })
