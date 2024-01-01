@@ -39,6 +39,8 @@ class Primitive(Expression):
                 return ReturnC3D(isTmp = False, strValue = str(self.value), type = self.type)
             case Type.DECIMAL:
                 return ReturnC3D(isTmp = False, strValue = str(self.value), type = self.type)
+            case Type.NULL:
+                return ReturnC3D(isTmp = False, type = self.type)
             case _:
                 self.value = self.value.replace('\\n', '\n')
                 self.value = self.value.replace('\\t', '\t')

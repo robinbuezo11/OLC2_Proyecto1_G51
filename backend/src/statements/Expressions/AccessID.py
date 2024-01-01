@@ -35,7 +35,9 @@ class AccessID(Expression):
                 tmp1 = c3dgen.newTmp()
             c3dgen.addGetStack(tmp1, tmp2)
             c3dgen.addComment('------- Fin Acceso --------')
-            return ReturnC3D(isTmp = True, strValue = tmp1, type = value.currentType)
+            if value.isglobal:
+                return ReturnC3D(isTmp = False, strValue = tmp1, type = value.currentType)
+            return ReturnC3D(isTmp = True, strValue = tmp1, type = value.type)
         c3dgen.addComment('------- Fin Acceso --------')
 
     def ast(self, ast: AST) -> ReturnAST:
