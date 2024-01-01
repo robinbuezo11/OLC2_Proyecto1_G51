@@ -7,7 +7,7 @@ tokens: list[Token] = []
 
 def getStringOuts() -> str:
     out = ''
-    out += '\n'.join(printConsole)
+    out += '\n'.join(str(prt) for prt in printConsole)
     if len(errors) > 0:
         if out != '':
             out += '\n\n↳ ERRORES\n'
@@ -26,10 +26,12 @@ def getErrors():
     return dot
 
 def getTokens():
+    global tokens
+    #return tokens
     dot = 'digraph Tokens {graph[fontname="Arial" labelloc="t" bgcolor="#252526" fontcolor="white"];node[shape=none fontname="Arial"];label="Tokens";table[label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="3"><tr><td bgcolor="#009900" width="100"><font color="#FFFFFF">No.</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Linea</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Columna</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Lexema</font></td><td bgcolor="#009900" width="100"><font color="#FFFFFF">Token</font></td></tr>'
     for i in range(len(tokens)):
         tokens[i].num = i + 1
-        dot += tokens[i]
+        dot += tokens[i].getDot()
     dot += '</table>>];}'
     return dot
 

@@ -225,7 +225,7 @@ class C3DGen:
             self.saveSetting()
             self.enableNatives()
             # =========
-            self.addFunction('_concatstring')
+            self.addFunction('_concatString')
             self.addAsign(tmp1, 'H')
             self.addExpression(tmp2, 'P', '+', '1')
             self.addGetStack(tmp3, tmp2)

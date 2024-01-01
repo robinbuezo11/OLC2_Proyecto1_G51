@@ -52,55 +52,56 @@ def getStruct():
 
 @app.route('/api/exec', methods=['POST'])
 def exec():
-    try:
-        data = request.get_json()
-        resetOuts()
-        instructions = parser.parse(data['input'])
-        globalEnv = Env(None, 'Global')
+    data = request.get_json()
+    Scanner.lineno = 1
+    instructions = parser.parse(data['input'])
+    globalEnv = Env(None, 'Global')
+    resetOuts()
 
-        global dotAst
-        dotAst = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
-        dotAst += '\nnode_r[label="INSTRUCTIONS"];'
-        ast = AST()    
-        for instruction in instructions:
-            try:
-                if isinstance(instruction, Instruction) and instruction.typeInst == TypeInst.INIT_FUNCTION:
-                    instruction.execute(globalEnv)
-                    resultAST = instruction.ast(ast)
-                    dotAst += '\n' + resultAST.dot
-                    dotAst += f'\nnode_r -> node_{resultAST.id};'
-            except ValueError as e: pass
+    global dotAst
+    dotAst = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
+    dotAst += '\nnode_r[label="INSTRUCTIONS"];'
+    ast = AST()    
+    for instruction in instructions:
+        try:
+            if isinstance(instruction, Instruction) and instruction.typeInst == TypeInst.INIT_FUNCTION:
+                instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dotAst += '\n' + resultAST.dot
+                dotAst += f'\nnode_r -> node_{resultAST.id};'
+        except ValueError as e: pass
+    for instruction in instructions:
+        try:
+            if isinstance(instruction, Instruction) and instruction.typeInst != TypeInst.INIT_FUNCTION:
+                instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dotAst += '\n' + resultAST.dot
+                dotAst += f'\nnode_r -> node_{resultAST.id}'
+            elif isinstance(instruction, Expression) and instruction.typeExp == TypeExp.CALL_FUNC:
+                instruction.execute(globalEnv)
+                resultAST = instruction.ast(ast)
+                dotAst += '\n' + resultAST.dot
+                dotAst += f'\nnode_r -> node_{resultAST.id}'
+        except ValueError as e: print(e)
+    dotAst += '\n}'
 
-        for instruction in instructions:
-            try:
-                if isinstance(instruction, Instruction) and instruction.typeInst != TypeInst.INIT_FUNCTION:
-                    instruction.execute(globalEnv)
-                    resultAST = instruction.ast(ast)
-                    dotAst += '\n' + resultAST.dot
-                    dotAst += f'\nnode_r -> node_{resultAST.id}'
-                elif isinstance(instruction, Expression) and instruction.typeExp == TypeExp.CALL_FUNC:
-                    instruction.execute(globalEnv)
-                    resultAST = instruction.ast(ast)
-                    dotAst += '\n' + resultAST.dot
-                    dotAst += f'\nnode_r -> node_{resultAST.id}'
-            except ValueError as e: print(e)
-        dotAst += '\n}'
+    result = getPrintConsole()
 
-        result = getPrintConsole()
+    print(result)
+    
 
-        return jsonify({
-            'success': True,
-            'message': 'Ejecutado correctamente',
-            'result': result,
-            'error': ''
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': 'Error al ejecutar',
-            'result': [],
-            'error': str(e)
-        })
+    # result.insert(0, 'Resultado')
+    # data = []
+    # for res in result:
+    #     data.append([res])
+
+
+    return jsonify({
+        'success': True,
+        'message': 'Ejecutado correctamente',
+        'result': result,
+        'error': ''
+    })
 
 @app.route('/api/createDB', methods=['POST'])
 def createDB():

@@ -20,20 +20,30 @@ class Env:
 
     # === VARIABLES ===
     def saveID(self, id: str, value: any, type: Type, line: int, column: int):
-        env: Env = self
-        if id.lower() not in env.ids:
-            env.ids[id.lower()] = Symbol(value, id.lower(), type)
+        if id.lower() not in self.ids:
+            self.ids[id.lower()] = Symbol(value, id.lower(), type)
             #-------------- NUEVO ----------------
-            symTable.push(SymTab(line, column + 1, True, True, id.lower(), env.name, type))
+            symTable.push(SymTab(line, column + 1, True, True, id.lower(), self.name, type))
         else:
             self.setError('Redeclaración de variable existente', line, column)
 
-    def getValue(self, id: str) -> Symbol:
+    def saveID_c3d(self, id: str, type: Type, isTrue: bool, line: int, column: int, currentType: Type):
+        if id.lower() not in self.ids:
+            self.ids[id.lower()] = Symbol(None, id.lower(), type, self.size, self.name == 'Global', isTrue, currentType)
+            #-------------- NUEVO ----------------
+            symTable.push(SymTab(line, column + 1, True, True, id.lower(), self.name, type))
+            self.size += 1
+            return self.ids[id.lower()]
+        else:
+            self.setError('Redeclaración de variable existente', line, column)
+
+    def getValue(self, id: str, line: int, column: int) -> Symbol:
         env: Env = self
         while env:
             if id.lower() in env.ids:
                 return env.ids.get(id.lower())
             env = env.previous
+        self.setError(f'Acceso a variable inexistente. \'id\'', line, column)
         return None
 
     def reasignID(self, id: str, value: ReturnType, line: int, column: int) -> bool:
