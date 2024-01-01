@@ -1,6 +1,7 @@
 from statements.Abstracts.Instruction import Instruction
 from statements.Abstracts.Expression import Expression
 from utils.TypeInst import TypeInst
+from utils.TypeExp import TypeExp
 from statements.C3D.C3DGen import C3DGen
 from utils.Type import ReturnType, ReturnC3D
 from statements.Env.AST import AST, ReturnAST
@@ -28,7 +29,20 @@ class While(Instruction):
             condition = self.condition.execute(whileEnv)
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        pass
+        c3dgen.addComment('--------- While -----------')
+        envWhile: Env = Env(env, f'{env.name} while')
+        envWhile.returnLbl = env.returnLbl
+        envWhile.size = env.size
+        condition: ReturnC3D = self.condition.compile(env, c3dgen)
+        if self.condition.typeExp == TypeExp.CALL_FUNC:
+            condition.trueLbl = c3dgen.validLabel(condition.trueLbl)
+            condition.falseLbl = c3dgen.validLabel(condition.falseLbl)
+            c3dgen.addIf(condition.strValue, '==', '1', condition.trueLbl)
+            c3dgen.addGoto(condition.falseLbl)
+        c3dgen.addLabel(condition.trueLbl)
+        self.block.compile(env, c3dgen)
+        c3dgen.addLabel(condition.falseLbl)
+        c3dgen.addComment('------- Fin While ---------')
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()
