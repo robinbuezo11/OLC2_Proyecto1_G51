@@ -1,45 +1,31 @@
--- lo del bit son puntos extras
-
--- CREATE FUNCTION fn_regresatasa (@idproducto int)
--- RETURN decimal
--- AS
--- BEGIN
--- 	DECLARE @TASA as decimal; 
--- 	set @TASA = (select tasa from tbproducto where idproducto = @idproducto and idestado = 1);
-
--- 	RETURN @TASA;	
--- END;
-
-CREATE FUNCTION fn_retornanombre(@primerNombre as nvarchar, @segundoNombre nvarchar, @apellido_ nvarchar)
+CREATE FUNCTION fn_retornaalturamora (@diasmora int)
 RETURNS nvarchar
 AS
 BEGIN
-    DECLARE @nombres nvarchar(100);
-	DECLARE @apellidos nvarchar(100);
-	DECLARE @nombrecompleto nvarchar(100);
-
-    SET @nombres = CONCATENAR(@primerNombre, @segundoNombre);
-    SET @apellidos = @apellido_;
-    RETURN CONCATENAR(@nombres, @apellidos);
-END;
-
-SELECT fn_retornanombre('Brandon', 'Andy', 'Tejaxun');
-
--- select fn_retornanombre(identificacion,primernombre,segundonombre)
--- from tbidentificacion 
--- where idestado = 1;
-
-CREATE PROCEDURE sp_actualizatasa(@aumento int, @fecha date)
-AS
-BEGIN
-		IF (@aumento > 0)
+	DECLARE @alturamora nvarchar(100);
+		if (@diasmora > 0 && @diasmora < 30) 
 		BEGIN
-            SELECT 'Aumento';
-		END 
-		ELSE 
-		BEGIN
-            select 'Disminucion';
-		END; 
-END;
+			SET @alturamora = 'Al dia';
+		END;
+	
+		IF (@diasmora >= 30 && @diasmora < 60) 
+		BEGIN 
+			SET @alturamora = 'Altura Mora 2';	
+		END;
+	
+		IF (@diasmora >= 30 && @diasmora < 60) 
+		BEGIN 
+			SET @alturamora = 'Altura Mora 3';				
+		END;
 
-sp_actualizatasa (0, '2021-01-01');
+		IF (@diasmora >= 60 && @diasmora < 90) 
+		BEGIN 
+			SET @alturamora = 'Altura Mora 4';		
+		END;
+	
+		IF (@diasmora >= 90 && @diasmora < 120) 
+		BEGIN 
+			SET @alturamora = 'Altura Mora 5';				
+		END;
+	RETURN @alturamora;
+END;
