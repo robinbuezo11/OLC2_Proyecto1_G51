@@ -111,6 +111,7 @@ class ManageXml:
     def writeXml(self):
         self.__tree.write(self.__path, encoding="utf-8", xml_declaration=True)
 
+
     def createDataBase(self, name):
         self.loadXml()
         # Verificar si la base de datos ya existe
@@ -124,6 +125,7 @@ class ManageXml:
 
         self.writeXml()
         return True, f"Nueva base de datos '{name}' creada exitosamente."
+
 
     def createTable(self, database, name):
         self.loadXml()
@@ -191,6 +193,7 @@ class ManageXml:
         self.writeXml()
         return True, f"Nueva columna '{name}' creada en la tabla '{table}' de la base de datos '{database}' exitosamente."
     
+
     def insert(self, database, table, data):
         self.loadXml()
         # Verificar si la base de datos existe
@@ -244,6 +247,7 @@ class ManageXml:
         self.writeXml()
         return True, f"Datos insertados en la tabla '{table}' de la base de datos '{database}' exitosamente."
     
+
     def dropColumn(self, database, table, column):
         self.loadXml()
         # Verificar si la base de datos existe
@@ -272,6 +276,7 @@ class ManageXml:
         self.writeXml()
         return True, f"Columnas eliminadas en la tabla '{table}' de la base de datos '{database}' exitosamente."
     
+
     def dropTable(self, database, table):
         self.loadXml()
         # Verificar si la base de datos existe
@@ -289,6 +294,7 @@ class ManageXml:
         self.writeXml()
         return True, f"La tabla '{table}' ha sido eliminada de la base de datos '{database}' exitosamente."
     
+
     def truncateTable (self, database, table):
         self.loadXml()
         # Verificar si la base de datos existe
@@ -307,6 +313,105 @@ class ManageXml:
 
         self.writeXml()
         return True, f"Todas las filas de la tabla '{table}' en la base de datos '{database}' han sido eliminadas exitosamente."
+    
+
+    def getDump(self, database):
+        self.loadXml()
+        # Verificar si la base de datos existe
+        db_to_dump = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_dump is None:
+            return False, f"La base de datos '{database}' no existe."
+        
+        # Obtener el query para crear la base de datos
+        dump = f"CREATE DATA BASE {database};\n"
+        dump += f"USE {database};\n\n"
+
+        # Obtener los queries para crear las tablas
+        for table in db_to_dump:
+            if table.tag == "table":
+                dump += self.getCreateTableQuery(database, table)
+                dump += "\n\n"
+
+        return True, dump
+
+    def getCreateTableQuery(self, database, table):
+        # Obtener el query para crear la tabla
+        query = f"CREATE TABLE {table.get('name')} (\n"
+
+        # Obtener los queries para crear las columnas
+        for column in table:
+            if column.tag == "column":
+                query += self.getCreateColumnQuery(column)
+                query += ",\n"
+        query = query[:-2] + "\n);"
+
+        return query
+    
+    def getCreateColumnQuery(self, column):
+        # Obtener el query para crear la columna
+        query = f"\t{column.get('name')} {column.get('type')}"
+        if column.get("length") is not None:
+            query += f"({column.get('length')})"
+        if column.get("not_null") == "true":
+            query += " NOT NULL"
+        if column.get("primary_key") == "true":
+            query += " PRIMARY KEY"
+        if column.get("foreign_key") == "true":
+            query += f" REFERENCE {column.get('table')}({column.get('field')})"
+        return query
+    
+    def dropDatabase(self, database):   
+        self.loadXml()
+        # Verificar si la base de datos existe
+        db_to_remove = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_remove is None:
+            return False, f"La base de datos '{database}' no existe."
+
+        # Eliminar la base de datos
+        self.__root.remove(db_to_remove)
+        self.writeXml()
+        return True, f"La base de datos '{database}' ha sido eliminada exitosamente."
+    
+    def getExport(self, database):
+        self.loadXml()
+        # Verificar si la base de datos existe
+        db_to_export = next((db for db in self.__root if db.get("name") == database), None)
+        if db_to_export is None:
+            return False, f"La base de datos '{database}' no existe."
+        
+        # Obtener el query para los inserts
+        export = ""
+        try:
+            for table in db_to_export:
+                if table.tag == "table":
+                    export += self.getInsertQuery(table)
+                    export += "\n\n"
+            return True, export
+        except Exception as e:
+            return False, str(e)
+    
+    def getInsertQuery(self, table):
+        # Obtener el query para insertar datos en la tabla
+        types = {column.get("name"): column.get("type") for column in table if column.tag == "column"}
+        
+        query = ''
+        for row in table:
+            if row.tag == "row":
+                insert = f"INSERT INTO {table.get('name')} ("
+                columns = ""
+                values = ""
+                for value in row:
+                    columns += f"{value.get('column')}, "
+                    if types[value.get('column')] in ["int", "decimal", "bit", "boolean", "null"]:
+                        values += f"{value.text}, "
+                    else:
+                        values += f"'{value.text}', "
+                insert += columns[:-2] + ") VALUES (" + values[:-2] + ");\n"
+                query += insert
+        return query
+
+
+
 
     '''def select(self, database, table):
         #Verificar si la base de datos existe
@@ -512,20 +617,6 @@ class ManageXml:
         self.writeXml()
         print(f"El nombre de la base de datos '{databaseOld}' ha sido cambiado a '{databaseNew}' exitosamente.")
         return True
-
-    def dropDatabase(self, database):   
-        # Verificar si la base de datos existe
-        db_to_remove = next((db for db in self.__root if db.get("name") == database), None)
-        if db_to_remove is None:
-            print(f"La base de datos '{database}' no existe.")
-            return False
-
-        # Eliminar la base de datos
-        self.__root.remove(db_to_remove)
-        self.writeXml()
-        print(f"La base de datos '{database}' ha sido eliminada exitosamente.")
-        return True
-
     
     def alterTable(self, database, tableOld, tableNew):
     # Verificar si la base de datos existe

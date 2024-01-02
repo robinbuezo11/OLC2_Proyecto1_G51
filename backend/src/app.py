@@ -15,6 +15,7 @@ import base64
 
 
 dotAst = ''
+setUsedDatabase(None)
 
 
 app = Flask(__name__)
@@ -53,11 +54,11 @@ def getStruct():
 
 @app.route('/api/exec', methods=['POST'])
 def exec():
+    resetOuts()
     data = request.get_json()
     Scanner.lineno = 1
     instructions = parser.parse(data['input'])
     globalEnv = Env(None, 'Global')
-    resetOuts()
 
     global dotAst
     dotAst = 'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
@@ -88,15 +89,6 @@ def exec():
 
     result = getPrintConsole()
 
-    print(result)
-    
-
-    # result.insert(0, 'Resultado')
-    # data = []
-    # for res in result:
-    #     data.append([res])
-
-
     return jsonify({
         'success': True,
         'message': 'Ejecutado correctamente',
@@ -108,10 +100,9 @@ def exec():
 def createDB():
     try:
         data = request.get_json()
-        print(data['dbName'])
         create = True if data['action'] == 'create' else False
         res = xml.createDataBase(data['dbName']) if create else xml.dropDatabase(data['dbName'])
-        if res:
+        if res[0]:
             return jsonify({
                 'success': True,
                 'message': 'Base de datos creada correctamente' if create else 'Base de datos eliminada correctamente',
@@ -270,6 +261,76 @@ def getTechDoc():
         return jsonify({
             'success': False,
             'message': 'Error al obtener el documento',
+            'result': '',
+            'error': str(e)
+        })
+    
+@app.route('/api/getDump', methods=['GET'])
+def getDump():
+    try:
+        database = getUsedDatabase()
+        if database == None:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener el dump',
+                'result': '',
+                'error': 'No se ha seleccionado una base de datos'
+            })
+        
+        res = xml.getDump(database)
+        if res[0]:
+            return jsonify({
+                'success': True,
+                'message': 'Dump obtenido correctamente',
+                'result': res[1],
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener el dump',
+                'result': '',
+                'error': res[1]
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
+            'result': '',
+            'error': str(e)
+        })
+    
+@app.route('/api/getExport', methods=['GET'])
+def getExport():
+    try:
+        database = getUsedDatabase()
+        if database == None:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener el export',
+                'result': '',
+                'error': 'No se ha seleccionado una base de datos'
+            })
+        
+        res = xml.getExport(database)
+        if res[0]:
+            return jsonify({
+                'success': True,
+                'message': 'Export obtenido correctamente',
+                'result': res[1],
+                'error': ''
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Error al obtener el export',
+                'result': '',
+                'error': res[1]
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al procesar la petición',
             'result': '',
             'error': str(e)
         })

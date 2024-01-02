@@ -28,6 +28,8 @@ const Sidebar = () => {
       if (response.data.success) {
         const updatedStructDB = setStructDBData(response.data.result);
         setStructDB(updatedStructDB);
+      }else{
+        setStructDB([]);
       }
     } catch (error) {
       console.log(error);

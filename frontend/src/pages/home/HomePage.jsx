@@ -16,6 +16,7 @@ const HomePage = () => {
     const inputFileRef = useRef(null);
     const [idEditor, setIdEditor] = useState(1);
     const [opDB, setOpDB] = useState(null);
+    const [opOpen, setOpOpen] = useState(null);
 
     const [tabs, setTabs] = useState([
         { id: 1, label: "Query 1 ", code: "" },
@@ -67,8 +68,11 @@ const HomePage = () => {
             showMessage('error', 'No se puede ejecutar código C3D');
             return;
         }
+        exec(activeTab.code);
+    }
+    const exec = (code) => {
         axios.post('http://localhost:4000/api/exec', {
-            input: activeTab.code
+            input: code
         })
         .then(function (response) {
             if (response.data.success) {
@@ -88,23 +92,29 @@ const HomePage = () => {
 
     const manageDatabase = (e) => {
         e.preventDefault();
-        const dbName = document.getElementById('dbName').value;
-        axios.post('http://localhost:4000/api/createDB', {
-            dbName: dbName,
-            action: opDB
-        })
-        .then(function (response) {
+        if(opDB === 'create' || opDB === 'delete') {
+            const dbName = document.getElementById('dbName').value;
+            axios.post('http://localhost:4000/api/createDB', {
+                dbName: dbName,
+                action: opDB
+            })
+            .then(function (response) {
+                closeModalDB();
+                if (response.data.success) {
+                    showMessage('success', response.data.message);
+                } else {
+                    showMessage('error', `${response.data.message}\n${response.data.error}`);
+                }
+            })
+            .catch(function (error) {
+                closeModalDB();
+                showMessage('error', `${error}`);
+            });
+        } else if (opDB === 'select') {
+            exec(`USE ${document.getElementById('dbName').value};`);
             closeModalDB();
-            if (response.data.success) {
-                showMessage('success', response.data.message);
-            } else {
-                showMessage('error', `${response.data.message}\n${response.data.error}`);
-            }
-        })
-        .catch(function (error) {
-            closeModalDB();
-            showMessage('error', `${error}`);
-        });
+        }
+        setOpDB(null);
     }
 
     const generateAst = () => {
@@ -211,6 +221,49 @@ const HomePage = () => {
         });
     }
 
+    const getDump = () => {
+        axios.get('http://localhost:4000/api/getDump')
+        .then (function (response) {
+            if(response.data.success) {
+                const dump = response.data.result;
+                if(dump) {
+                    dowloadFile('dump.sql', dump);
+                } else {
+                    showMessage('error', 'No se ha recibido el dump');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {   
+            showMessage('error', `${error}`);
+        });
+    }
+
+    const getExport = () => {
+        axios.get('http://localhost:4000/api/getExport')
+        .then (function (response) {
+            if(response.data.success) {
+                const exportData = response.data.result;
+                if(exportData) {
+                    dowloadFile('export.sql', exportData);
+                } else {
+                    showMessage('error', 'No se ha recibido el export');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
+        });
+    }       
+    
+    const importFile = () => {
+        setOpOpen('import');
+        inputFileRef.current.click();
+    };
+
     const getTechDoc = () => {
         axios.get('http://localhost:4000/api/getTechDoc')
         .then (function (response) {
@@ -249,19 +302,29 @@ const HomePage = () => {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.onload = (e) => {
-            handleEditorChange(e.target.result);
+            if (opOpen === 'open') {
+                handleEditorChange(e.target.result);
+                setOpOpen(null);   
+            } else {
+                exec(e.target.result);
+            }
         };
         reader.readAsText(file);
     };
     const openFile = () => {
+        setOpOpen('open');
         inputFileRef.current.click();
     };
 
     const saveFile = () => {
+        dowloadFile('query.sql', activeTab.code);
+    };
+
+    const dowloadFile = (filename, text) => {
         const element = document.createElement("a");
-        const file = new Blob([activeTab.code], {type: 'text/plain'});
+        const file = new Blob([text], {type: 'text/plain'});
         element.href = URL.createObjectURL(file);
-        element.download = "code.sql";
+        element.download = filename;
         document.body.appendChild(element); // Required for this to work in FireFox
         element.click();
         document.body.removeChild(element);
@@ -281,6 +344,11 @@ const HomePage = () => {
     const openModalDBDel = () => {
         openModalDB();
         setOpDB('delete');
+    }
+
+    const openModalDBSel = () => {
+        openModalDB();
+        setOpDB('select');
     }
 
     const closeModalDB = () => {
@@ -325,7 +393,11 @@ const HomePage = () => {
         'errors': generateError,
         'tokens': generateToken,
         'c3d': generateC3d,
-        'tech': getTechDoc
+        'tech': getTechDoc,
+        'createDump': getDump,
+        'export': getExport,
+        'import': importFile,
+        'selectDB': openModalDBSel,
     }
 
     return (
