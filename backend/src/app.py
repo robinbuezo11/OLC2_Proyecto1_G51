@@ -249,7 +249,7 @@ def getC3d():
 @app.route('/api/getTechDoc', methods=['GET'])
 def getTechDoc():
     try:
-        with open('..\\docs\\ManualTecnico.pdf', 'rb') as file:
+        with open('Docs\ManualTecnico.pdf', 'rb') as file:
             data = base64.b64encode(file.read()).decode('utf-8')
             return jsonify({
                 'success': True,
@@ -268,7 +268,7 @@ def getTechDoc():
 @app.route('/api/getUserDoc', methods=['GET'])
 def getUserDoc():
     try:
-        with open('..\\docs\\ManualUsuario.pdf', 'rb') as file:
+        with open('Docs\ManualUsuario.pdf', 'rb') as file:
             data = base64.b64encode(file.read()).decode('utf-8')
             return jsonify({
                 'success': True,
@@ -287,7 +287,7 @@ def getUserDoc():
 @app.route('/api/getGrammar', methods=['GET'])
 def getGrammar():
     try:
-        with open('..\\docs\\Gramatica.pdf', 'rb') as file:
+        with open('Docs\Gramatica.pdf', 'rb') as file:
             data = base64.b64encode(file.read()).decode('utf-8')
             return jsonify({
                 'success': True,

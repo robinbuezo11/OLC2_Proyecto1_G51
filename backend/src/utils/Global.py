@@ -1,6 +1,6 @@
 from utils.ManageXml import ManageXml
 
-xml = ManageXml("..\\backend\\files\\data.xml")
+xml = ManageXml("backend\\files\data.xml")
 global usedDatabase
 usedDatabase = None
 

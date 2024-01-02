@@ -5,7 +5,7 @@ from utils.Type import Type, ReturnType
 from utils.Attribute import Attribute
 from utils.ForeignKey import ForeignKey
 #-------- DESCOMENTANDO AQUI ---------
-# from Expressions.Field import Field as F
+from statements.Expressions.Field import Field as F
 
 class Data:
     def __init__(self, type: Type, value: any):
@@ -143,12 +143,12 @@ class Table:
                         return
                     env.setError(f'No existe el campo {fields[j].lower()} en Tabla {self.name}', values[j].line, values[j].column)
                     return
-    # ------------- DESCOMENTANDO AQUI ----------------
-    # def getAllFieldsTitle(self) -> list[list[any]]:
-    #     fieldsTitle: list[list[any]] = []
-    #     for field in self.fields:
-    #         fieldsTitle.append([F(0, 0, field), field])
-    #     return fieldsTitle
+
+    def getAllFieldsTitle(self) -> list[list[any]]:
+        fieldsTitle: list[list[any]] = []
+        for field in self.fields:
+            fieldsTitle.append([F(0, 0, field), field])
+        return fieldsTitle
 
     def getTitles(self, fieldsTitle: list[list[any]] or str) -> list[list[str]]:
         newFieldsTitle: list[list[str]] = []
@@ -162,8 +162,6 @@ class Table:
     def createSelectFields(self, titles: list[list[str]]) -> dict[str, Field]:
         newFields: dict[str, Field] = {}
         type: Type
-        # for name, field in self.fields.items():
-        #     newFields[name] = Field(field.type, [], len(name), field.notNull, field.isPrimary)
         for field in titles:
             type = self.fields.get(field[0]).type
             newFields[field[1]] = Field(type if type else Type.NULL, [], len(field[1]), False, False)
