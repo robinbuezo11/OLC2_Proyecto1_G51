@@ -32,4 +32,4 @@ class Concatenar(Expression):
         dot += '\n' + value2.dot
         dot += f'\nnode_{id} -> node_{value1.id};'
         dot += f'\nnode_{id} -> node_{value2.id};'
-        return {dot: dot, id: id}
+        return ReturnAST(dot, id)

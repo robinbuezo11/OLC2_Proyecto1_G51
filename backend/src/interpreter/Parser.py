@@ -117,8 +117,12 @@ def p_DECLIDS(t: Prod):
     else:           t[0] = [[t[1][0]], [t[1][1]]]
 
 def p_DECLID(t: Prod):
-    '''DECLID : TK_id TYPE'''
-    t[0] = [t[1], t[2]]
+    '''DECLID   : TK_id TYPE
+                | TK_id RW_as TYPE
+                | TK_id TYPE TK_lpar TK_int TK_rpar'''
+    if len(t) == 3   : t[0] = [t[1], t[2]]
+    elif len(t) == 4 : t[0] = [t[1], t[3]]
+    elif len(t) == 6 : t[0] = [t[1], t[2]]
 
 # Asignación de Variables
 def p_ASIGNID(t: Prod):
@@ -130,9 +134,9 @@ def p_SELECT(t: Prod):
     '''SELECT   : RW_select FIELDS RW_from TK_field RW_where EXP
                 | RW_select FIELDS RW_from TK_field
                 | RW_select LIST_IDS'''
-    # if len(t) == 7   : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], t[6])
-    # elif len(t) == 5 : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], None)
-    if len(t) == 3   : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
+    if len(t) == 7   : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], t[6])
+    elif len(t) == 5 : t[0] = Select(t.lineno(1), t.lexpos(1), t[4], t[2], None)
+    elif len(t) == 3   : t[0] = Select_prt(t.lineno(1), t.lexpos(1), t[2])
 
 def p_FIELDS(t: Prod):
     '''FIELDS   : LIST_IDS
@@ -271,10 +275,12 @@ def p_DELETETAB(t: Prod):
 
 # Estructura IF
 def p_IFSTRUCT(t: Prod):
-    '''IFSTRUCT : RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end RW_if
+    '''IFSTRUCT : RW_if EXP RW_begin INSTRUCTIONS RW_end RW_else RW_begin INSTRUCTIONS RW_end
+                | RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end RW_if
                 | RW_if EXP RW_then INSTRUCTIONS RW_end RW_if
                 | RW_if EXP RW_begin INSTRUCTIONS RW_end'''
-    if len(t) == 9   : t[0] = If(t.lineno(1), t.lexpos(1), t[2], Block(t.lineno(1), t.lexpos(1), t[4]), Block(t.lineno(1), t.lexpos(1), t[6]))
+    if len(t) == 10  : t[0] = If(t.lineno(1), t.lexpos(1), t[2], Block(t.lineno(1), t.lexpos(1), t[4]), Block(t.lineno(1), t.lexpos(1), t[8]))
+    elif len(t) == 9 : t[0] = If(t.lineno(1), t.lexpos(1), t[2], Block(t.lineno(1), t.lexpos(1), t[4]), Block(t.lineno(1), t.lexpos(1), t[6]))
     elif len(t) == 7 : t[0] = If(t.lineno(1), t.lexpos(1), t[2], Block(t.lineno(1), t.lexpos(1), t[4]), None)
     elif len(t) == 6 : t[0] = If(t.lineno(1), t.lexpos(1), t[2], Block(t.lineno(1), t.lexpos(1), t[4]), None)
 
@@ -328,18 +334,18 @@ def p_FORSTRUCT(t: Prod):
 
 # Funciones y métodos
 def p_FUNCDEC(t: Prod):
-    '''FUNCDEC  : RW_create RW_function TK_field TK_lpar PARAMS TK_rpar RW_returns TYPE ENCAP
-                | RW_create RW_function TK_field TK_lpar TK_rpar RW_returns TYPE ENCAP
+    '''FUNCDEC  : RW_create RW_function TK_field TK_lpar PARAMS TK_rpar RW_returns TYPE RW_as ENCAP
+                | RW_create RW_function TK_field TK_lpar TK_rpar RW_returns TYPE RW_as ENCAP
                 | RW_create RW_procedure TK_field PARAMS RW_as ENCAP
                 | RW_create RW_procedure TK_field RW_as ENCAP
-                | RW_create RW_procedure TK_field TK_lpar PARAMS TK_rpar ENCAP
+                | RW_create RW_procedure TK_field TK_lpar PARAMS TK_rpar RW_as ENCAP
                 | RW_create RW_procedure TK_field ENCAP'''
-    if len(t) == 10  : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[5], t[9], t[8])
-    elif len(t) == 9 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[8], t[7])
-    elif len(t) == 7 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[4], t[6], Type.NULL)
-    elif len(t) == 6 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[5], Type.NULL)
-    elif len(t) == 8 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[5], t[7], Type.NULL)
-    else             : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[4], Type.NULL)
+    if len(t) == 11   : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[5], t[10], t[8])
+    elif len(t) == 10 : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[9], t[7])
+    elif len(t) == 7  : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[4], t[6], Type.NULL)
+    elif len(t) == 6  : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[5], Type.NULL)
+    elif len(t) == 9  : t[0] = Function(t.lineno(1), t.lexpos(1), t[3], t[5], t[8], Type.NULL)
+    else              : t[0] = Function(t.lineno(1), t.lexpos(1), t[3],   [], t[4], Type.NULL)
 
 def p_PARAMS(t: Prod):
     '''PARAMS   : PARAMS TK_comma PARAM
@@ -348,8 +354,10 @@ def p_PARAMS(t: Prod):
     else           : t[0] = [t[1]]
 
 def p_PARAM(t: Prod):
-    '''PARAM    : TK_id RW_as TYPE'''
-    t[0] = Parameter(t.lineno(1), t.lexpos(1), t[1], t[3])
+    '''PARAM    : TK_id TYPE
+                | TK_id RW_as TYPE'''
+    if len(t) == 3   : t[0] = Parameter(t.lineno(1), t.lexpos(1), t[1], t[2])
+    elif len(t) == 4 : t[0] = Parameter(t.lineno(1), t.lexpos(1), t[1], t[3])
 
 # Encapsulamiento de Sentencias
 def p_ENCAP(t: Prod):
@@ -361,9 +369,11 @@ def p_ENCAP(t: Prod):
 # Llamada a funciones y métodos
 def p_CALLFUNC(t: Prod):
     '''CALLFUNC : TK_field TK_lpar ARGS TK_rpar
-                | TK_field TK_lpar TK_rpar'''
-    if len(t) == 5 : t[0] = CallFunction(t.lineno(1), t.lexpos(1), t[1], t[3])
-    else           : t[0] = CallFunction(t.lineno(1), t.lexpos(1), t[1],  [] )
+                | TK_field TK_lpar TK_rpar
+                | RW_exec TK_field ARGS'''
+    if len(t) == 5                                    : t[0] = CallFunction(t.lineno(1), t.lexpos(1), t[1], t[3])
+    elif len(t) == 4                                  : t[0] = CallFunction(t.lineno(1), t.lexpos(1), t[1],  [] )
+    elif len(t) == 4 and t.slice[1].type == 'RW_exec' : t[0] = CallFunction(t.lineno(1), t.lexpos(1), t[2], t[3])
 
 def p_ARGS(t: Prod):
     '''ARGS : ARGS TK_comma EXP

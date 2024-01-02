@@ -10,7 +10,7 @@ from utils.TypeInst import TypeInst
 
 
 def interpreter():
-    input = open('../../Inputs/Pruebas.sql', encoding='utf-8').read()
+    input = open('../../Inputs/Input1.sql', encoding='utf-8').read()
     Scanner.lineno = 1
     instructions: list[Instruction] = parser.parse(input)
     ast: AST = AST()
@@ -64,4 +64,4 @@ def compiller():
         file.write(c3dgen.getFinalCode())
 
 interpreter()
-compiller()
+# compiller()

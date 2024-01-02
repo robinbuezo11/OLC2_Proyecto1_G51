@@ -31,7 +31,24 @@ class When(Instruction):
                 return self.result.execute(env)
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        pass
+        c3dgen.addComment('----------- When ----------')
+        envWhen: Env = Env(env, f'{env.name} when')
+        when_: ReturnC3D = self.when_.compile(env, c3dgen)
+        if self.when_.typeExp == Type.BOOLEAN:
+            if when_.strValue == '1':
+                self.whenEvaluate = ReturnType(when_.value, when_.type)
+                result: ReturnC3D = self.result.compile(envWhen, c3dgen)
+                if result.type == Type.BOOLEAN:
+                    if result.strValue == '1':
+                        c3dgen.addComment('--------- Fin When ---------')
+                        lbl = c3dgen.newLbl()
+                        c3dgen.addGoto(lbl)
+                    if result.strValue == '0':
+                        c3dgen.addComment('--------- Fin When ---------')
+                        lbl = c3dgen.newLbl()
+                        c3dgen.addGoto(lbl)
+                c3dgen.addComment('--------- Fin When ---------')
+                return None
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()
