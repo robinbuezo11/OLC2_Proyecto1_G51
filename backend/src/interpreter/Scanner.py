@@ -17,7 +17,7 @@ reserveds = {
     'USE'        : 'RW_use',
     'TABLE'      : 'RW_table',
     'PRIMARY'    : 'RW_primary',
-    'FOREING'    : 'RW_foreing',
+    # 'FOREING'    : 'RW_foreing',
     'KEY'        : 'RW_key',
     'REFERENCE'  : 'RW_ref',
     'ALTER'      : 'RW_alter',
@@ -55,7 +55,7 @@ reserveds = {
     'CONCATENAR' : 'RW_concatenar',
     'SUBSTRAER'  : 'RW_substraer',
     'HOY'        : 'RW_hoy',
-    'CONTAR'     : 'RW_contar',
+    'EXEC'       : 'RW_exec',
     'CAST'       : 'RW_cast',
     # TIPOS DE DATOS
     'INT'        : 'RW_int',
