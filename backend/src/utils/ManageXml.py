@@ -380,7 +380,11 @@ class ManageXml:
             return False, f"La base de datos '{database}' no existe."
         
         # Obtener el query para los inserts
-        export = ""
+        dump = self.getDump(database)
+        if not dump[0]:
+            return False, dump[1]
+        export = dump[1] + "\n\n"
+        
         try:
             for table in db_to_export:
                 if table.tag == "table":

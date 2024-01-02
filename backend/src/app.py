@@ -265,6 +265,44 @@ def getTechDoc():
             'error': str(e)
         })
     
+@app.route('/api/getUserDoc', methods=['GET'])
+def getUserDoc():
+    try:
+        with open('..\\docs\\ManualUsuario.pdf', 'rb') as file:
+            data = base64.b64encode(file.read()).decode('utf-8')
+            return jsonify({
+                'success': True,
+                'message': 'Documento obtenido correctamente',
+                'result': data,
+                'error': ''
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al obtener el documento',
+            'result': '',
+            'error': str(e)
+        })
+    
+@app.route('/api/getGrammar', methods=['GET'])
+def getGrammar():
+    try:
+        with open('..\\docs\\Gramatica.pdf', 'rb') as file:
+            data = base64.b64encode(file.read()).decode('utf-8')
+            return jsonify({
+                'success': True,
+                'message': 'Documento obtenido correctamente',
+                'result': data,
+                'error': ''
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'Error al obtener el documento',
+            'result': '',
+            'error': str(e)
+        })
+    
 @app.route('/api/getDump', methods=['GET'])
 def getDump():
     try:

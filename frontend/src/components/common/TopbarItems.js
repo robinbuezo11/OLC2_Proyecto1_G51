@@ -89,6 +89,14 @@ const TopbarItems = [
             {
                 label: "Manual Técnico",
                 id: "tech"
+            },
+            {
+                label: "Manual de Usuario",
+                id: "user"
+            },
+            {
+                label: "Reporte de Gramática",
+                id: "grammar"
             }
         ]
     },

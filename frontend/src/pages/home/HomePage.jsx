@@ -270,7 +270,7 @@ const HomePage = () => {
             if(response.data.success) {
                 const doc = response.data.result;
                 if(doc) {
-                    openPdf(doc);
+                    openPdf(doc, 'Manual Técnico');
                 } else {
                     showMessage('error', 'No se ha recibido el documento');
                 }
@@ -278,11 +278,55 @@ const HomePage = () => {
                 showMessage('error', `${response.data.message}\n${response.data.error}`);
             }
         })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
+        }
+        );
     }
 
-    const openPdf = (pdfBase64) => {
+    const getUserDoc = () => {
+        axios.get('http://localhost:4000/api/getUserDoc')
+        .then (function (response) {
+            if(response.data.success) {
+                const doc = response.data.result;
+                if(doc) {
+                    openPdf(doc, 'Manual de Usuario');
+                } else {
+                    showMessage('error', 'No se ha recibido el documento');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
+        }
+        );
+    }
+
+    const getGrammar = () => {
+        axios.get('http://localhost:4000/api/getGrammar')
+        .then (function (response) {
+            if(response.data.success) {
+                const doc = response.data.result;
+                if(doc) {
+                    openPdf(doc, 'Gramática');
+                } else {
+                    showMessage('error', 'No se ha recibido el documento');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+        .catch(function (error) {
+            showMessage('error', `${error}`);
+        }
+        );
+    }
+
+    const openPdf = (pdfBase64, title) => {
         const newWindow = window.open('','_blank');
-        newWindow.document.write(`<html><head><title>Documentación Técnica</title></head><body><embed width="100%" height="100%" src="data:application/pdf;base64,${pdfBase64}" type="application/pdf"></body></html>`);
+        newWindow.document.write(`<html><head><title>${title}</title></head><body><embed width="100%" height="100%" src="data:application/pdf;base64,${pdfBase64}" type="application/pdf"></body></html>`);
         newWindow.document.close();
     }
 
@@ -398,6 +442,8 @@ const HomePage = () => {
         'export': getExport,
         'import': importFile,
         'selectDB': openModalDBSel,
+        'user': getUserDoc,
+        'grammar': getGrammar,
     }
 
     return (
