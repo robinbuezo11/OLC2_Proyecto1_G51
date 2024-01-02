@@ -38,7 +38,7 @@ class C3DGen:
         self.thereIsCharToString = False
         self.thereAreDeclarations = False
         self.keys: list[bool] = [False, False, False, False]
-        self.tmpKeys: list[bool] = [k for k in self.keys]
+        self.tmpKeys: list[bool] = [False, False, False, False]
 
     def thereAreDeclarations(self) -> bool:
         return self.thereAreDeclarations
@@ -71,12 +71,10 @@ class C3DGen:
         return self.keys[3]
 
     def saveSetting(self):
-        for i in range(len(self.keys)):
-            self.tmpKeys[i] = self.keys[i]
+        self.tmpKeys = [k for k in self.keys]
 
     def restoreSetting(self):
-        for i in range(len(self.tmpKeys)):
-            self.keys[i] = self.tmpKeys[i]
+        self.keys = [k for k in self.tmpKeys]
 
     def newTmp(self):
         tmp: str = f't{self.temporalCount}'
@@ -113,7 +111,7 @@ class C3DGen:
             if self.C3DNatives[len(self.C3DNatives) - 1].type == Type.GOTO and str(self.C3DNatives[len(self.C3DNatives) - 1]) == str(instruction):
                 return True
         elif self.keys[2]:
-            if self.C3DNatives[len(self.C3DFunctions) - 1].type == Type.GOTO and str(self.C3DFunctions[len(self.C3DFunctions) - 1]) == str(instruction):
+            if self.C3DFunctions[len(self.C3DFunctions) - 1].type == Type.GOTO and str(self.C3DFunctions[len(self.C3DFunctions) - 1]) == str(instruction):
                 return True
         elif self.keys[3]:
             if self.C3DGlobals[len(self.C3DGlobals) - 1].type == Type.GOTO and str(self.C3DGlobals[len(self.C3DGlobals) - 1]) == str(instruction):
@@ -470,6 +468,11 @@ class C3DGen:
         if len(self.C3DNatives) > 0:
             self.C3DCode.append(Generic("/* ------ NATIVES ------ */"))
             for s in self.C3DNatives:
+                self.C3DCode.append(s)
+        # Functions
+        if len(self.C3DFunctions) > 0:
+            self.C3DCode.append(Generic("/* ----- FUNCTIONS ----- */"))
+            for s in self.C3DFunctions:
                 self.C3DCode.append(s)
         # Main
         self.C3DCode.append(Generic("/* ------ MAIN ------ */"))

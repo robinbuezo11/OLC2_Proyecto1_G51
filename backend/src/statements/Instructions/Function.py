@@ -18,7 +18,21 @@ class Function(Instruction):
         env.saveFunction(self.id, self)
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        pass
+        env.saveFunction(self.id, self)
+        c3dgen.enableFunction()
+        c3dgen.addFunction(self.id)
+        envFunc: Env = Env(env, 'Function' + self.id)
+        self.generateC3D(envFunc, c3dgen)
+        c3dgen.addEnd()
+        c3dgen.enableMain()
+
+    def generateC3D(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
+        env.returnLbl = c3dgen.newLbl()
+        env.size = 1
+        for i in range(len(self.parameters)):
+            env.saveID_c3d(self.parameters[i].id, self.parameters[i].type, False, self.parameters[i].line, self.parameters[i].column, Type.NULL)
+        self.block.compile(env, c3dgen)
+        c3dgen.addLabel(env.returnLbl)
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

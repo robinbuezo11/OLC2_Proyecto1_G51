@@ -48,7 +48,47 @@ class CallFunction(Expression):
         env.setError(f'La Función "{self.id}" no existe, línea {self.line} columna {self.column}', self.line, self.column)
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        pass
+        func: Function = env.getFunction(self.id)
+        if func:
+            if len(func.parameters) == len(self.args):
+                c3dgen.addComment('----- Llamada Funcion -----')
+                tmp: str = c3dgen.newTmp()
+                if len(func.parameters) > 0:
+                    c3dgen.addComment('------- Parametros --------')
+                    c3dgen.addExpression(tmp, 'P', '+', str(env.size + 1))
+                    for i in range(len(func.parameters)):
+                        value: ReturnC3D = self.args[i].compile(env, c3dgen)
+                        param: Parameter = func.parameters[i]
+                        if value.type == param.type or param.type == Type.DECIMAL and value.type == Type.INT:
+                            if value.type != Type.BOOLEAN:
+                                c3dgen.addSetStack(tmp, value.strValue)
+                            else:
+                                c3dgen.addLabel(value.trueLbl)
+                                c3dgen.addSetStack(tmp, '1')
+                                lbl: str = c3dgen.newLbl()
+                                c3dgen.addGoto(lbl)
+                                c3dgen.addLabel(value.falseLbl)
+                                c3dgen.addSetStack(tmp, '0')
+                                c3dgen.addLabel(lbl)
+                            if i < len(func.parameters) - 1:
+                                c3dgen.addExpression(tmp, tmp, '+', '1')
+                            continue
+                        c3dgen.addComment('----- Fin Parametros ------')
+                        c3dgen.addComment('--- Fin Llamada Funcion ---')
+                        return None
+                    c3dgen.addComment('----- Fin Parametros ------')
+                c3dgen.newEnv(env.size)
+                c3dgen.addCall(self.id)
+                c3dgen.addGetStack(tmp, 'P')
+                c3dgen.prevEnv(env.size)
+                if func.type != Type.NULL:
+                    c3dgen.addComment('--- Fin Llamada Funcion ---')
+                    return ReturnC3D(isTmp = True, strValue = tmp, type = func.type)
+                c3dgen.addComment('--- Fin Llamada Funcion ---')
+                return None
+            c3dgen.addComment('--- Fin Llamada Funcion ---')
+            return None
+        return None
 
     def getType(type: Type) -> str:
         match type:

@@ -21,15 +21,11 @@ class Block(Instruction):
             except: {}
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        exp: Expression
-        inst: Instruction
         ret: ReturnC3D
         for instruction in self.instructions:
-            try:
                 ret = instruction.compile(env, c3dgen)
                 if ret:
                     return ret
-            except: {}
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()
