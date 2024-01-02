@@ -4,6 +4,7 @@ from statements.Env.Env import Env
 from utils.TypeInst import TypeInst
 from statements.C3D.C3DGen import C3DGen
 from utils.Type import ReturnType, ReturnC3D, Type
+from statements.Expressions.Arithmetic import Arithmetic
 
 class Concatenar(Expression):
     def __init__(self, line: int, column: int, exp1: Expression, exp2: Expression):
@@ -20,7 +21,7 @@ class Concatenar(Expression):
         return ReturnType(exp1.value + exp2.value, Type.NVARCHAR)
 
     def compile(self, env: Env, c3dgen: C3DGen) -> ReturnC3D:
-        pass
+        return Arithmetic(self.line, self.column, self.exp1, '+', self.exp2).compile(env, c3dgen)
 
     def ast(self, ast: AST) -> ReturnAST:
         id = ast.getNewID()

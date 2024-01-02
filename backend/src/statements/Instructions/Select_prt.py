@@ -35,7 +35,7 @@ class Select_prt(Instruction):
                     tmp1: str = c3dgen.newTmp()
                     tmp2: str = c3dgen.newTmp()
                     c3dgen.addExpression(tmp1, 'P', '+', str(env.size))
-                    c3dgen.addExpression(tmp2, tmp1, '+', '1')
+                    c3dgen.addExpression(tmp1, tmp1, '+', '1')
                     c3dgen.addSetStack(tmp1, value.strValue)
                     c3dgen.newEnv(env.size)
                     c3dgen.generatePrintString()

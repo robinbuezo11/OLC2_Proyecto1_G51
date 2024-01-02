@@ -91,7 +91,7 @@ class C3DGen:
         return lbl
 
     def validLabel(self, lbl: str):
-        if lbl == None:
+        if not lbl:
             return self.newLbl()
         return lbl
 
@@ -225,7 +225,7 @@ class C3DGen:
             self.saveSetting()
             self.enableNatives()
             # =========
-            self.addFunction('_concatstring')
+            self.addFunction('_concatString')
             self.addAsign(tmp1, 'H')
             self.addExpression(tmp2, 'P', '+', '1')
             self.addGetStack(tmp3, tmp2)

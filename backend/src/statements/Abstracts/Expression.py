@@ -6,8 +6,8 @@ class Expression(ABC):
         self.line = line
         self.column = column
         self.typeExp = typeExp
-        self.trueLabel = ''
-        self.falseLabel = ''
+        self.trueLbl = None
+        self.falseLbl = None
 
     @abstractmethod
     def setField(self, field):

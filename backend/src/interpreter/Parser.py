@@ -190,12 +190,17 @@ def p_PROPS(t: Prod):
     elif len(t) == 2                                                        : t[0] = {'notNull': False, 'primaryKey': False}
     
 #<<<<<<< HEAD
+#<<<<<<< HEAD
     if len(t) == 6 or len(t) == 4 or len(t) == 2                      : t[0].update(t[len(t) - 1])
     else                                                              : t[0].update({'foreignKey': False})
 #=======
     if len(t) == 6 or len(t) == 4 or len(t) == 2                        : t[0].update(t[len(t) - 1])
     else                                                                : t[0].update({'foreignKey': False})
 #>>>>>>> 1eb9a7df374cd2e53e7ed7988949c537ee5f7c99
+#=======
+    if len(t) == 6 or len(t) == 4 or len(t) == 2                        : t[0].update(t[len(t) - 1])
+    else                                                                : t[0].update({'foreignKey': False})
+#>>>>>>> 05feb2b93edbb59fa9b2ab10bf36b884a7791376
 
 def p_FKEY(t: Prod):
     '''FKEY : RW_ref TK_field TK_lpar TK_field TK_rpar'''
@@ -207,11 +212,11 @@ def p_ALTERTAB(t: Prod):
     t[0] = AlterTable(t.lineno(1), t.lexpos(1), t[3], t[4][0], t[4][1], t[4][2], t[4][3])
 
 def p_ACTION(t: Prod):
-    '''ACTION   : RW_add TK_field TYPE
+    '''ACTION   : RW_add RW_column TK_field TYPE
                 | RW_drop TK_field
                 | RW_rename RW_to TK_field
                 | RW_rename RW_column TK_field RW_to TK_field'''
-    if   t.slice[1].type == 'RW_add'    : t[0] = [t[1],        t[2], None, t[3]]
+    if   t.slice[1].type == 'RW_add'    : t[0] = [t[1],        t[3], None, t[4]]
     elif t.slice[1].type == 'RW_drop'   : t[0] = [t[1],        t[2], None, None]
     elif t.slice[2].type == 'RW_to'     : t[0] = [t[1] + t[2], t[3], None, None]
     elif t.slice[2].type == 'RW_column' : t[0] = [t[1] + t[2], t[3], t[5], None]

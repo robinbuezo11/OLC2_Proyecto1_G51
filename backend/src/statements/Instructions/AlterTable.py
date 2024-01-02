@@ -64,16 +64,18 @@ class AlterTable(Instruction):
         dot += f'\nnode_{id} -> node_{id}_action;'
         return ReturnAST(dot, id)
 
-    def getType(type: Type) -> str:
+    def getType(self, type: Type) -> str:
         match type:
             case Type.INT:
                 return "INT"
-            case Type.DOUBLE:
-                return "DOUBLE"
-            case Type.VARCHAR:
-                return "VARCHAR"
-            case Type.BOOLEAN:
-                return "BOOLEAN"
+            case Type.DECIMAL:
+                return "DECIMAL"
+            case Type.NCHAR:
+                return "NCHAR"
+            case Type.NVARCHAR:
+                return "NVARCHAR"
+            case Type.BIT:
+                return "BIT"
             case Type.DATE:
                 return "DATE"
             case Type.TABLE:

@@ -7,7 +7,7 @@ tokens: list[Token] = []
 
 def getStringOuts() -> str:
     out = ''
-    out += '\n'.join(printConsole)
+    out += '\n'.join(str(prt) for prt in printConsole)
     if len(errors) > 0:
         if out != '':
             out += '\n\n↳ ERRORES\n'

@@ -63,6 +63,10 @@ const HomePage = () => {
       
 
     const execute = () => {
+        if (activeTab.label.includes('C3D')) {
+            showMessage('error', 'No se puede ejecutar código C3D');
+            return;
+        }
         axios.post('http://localhost:4000/api/exec', {
             input: activeTab.code
         })
@@ -180,6 +184,10 @@ const HomePage = () => {
     }
 
     const generateC3d = () => {
+        if (activeTab.label.includes('C3D')) {
+            showMessage('error', 'No se puede generar código C3D de código C3D');
+            return;
+        }
         axios.post('http://localhost:4000/api/getC3d', {
             input: activeTab.code
         })
@@ -187,10 +195,10 @@ const HomePage = () => {
             if(response.data.success) {
                 const c3d = response.data.result;
                 if(c3d) {
-                    console.log(c3d);
-                    const newWindow = window.open('','_blank');
-                    newWindow.document.write(`<html><head><title>C3D</title></head><body><pre>${c3d}</body></html>`);
-                    newWindow.document.close();
+                    const newTab = { id: idEditor + 1, label: `C3D ${idEditor + 1} `, code: c3d };
+                    setTabs((prevTabs) => [...prevTabs, newTab]);
+                    setActiveTab(newTab);
+                    setIdEditor(idEditor + 1);
                 } else {
                     showMessage('error', 'No se ha recibido el código c3d');
                 }
@@ -201,6 +209,28 @@ const HomePage = () => {
         .catch(function (error) {
             showMessage('error', `${error}`);
         });
+    }
+
+    const getTechDoc = () => {
+        axios.get('http://localhost:4000/api/getTechDoc')
+        .then (function (response) {
+            if(response.data.success) {
+                const doc = response.data.result;
+                if(doc) {
+                    openPdf(doc);
+                } else {
+                    showMessage('error', 'No se ha recibido el documento');
+                }
+            } else {
+                showMessage('error', `${response.data.message}\n${response.data.error}`);
+            }
+        })
+    }
+
+    const openPdf = (pdfBase64) => {
+        const newWindow = window.open('','_blank');
+        newWindow.document.write(`<html><head><title>Documentación Técnica</title></head><body><embed width="100%" height="100%" src="data:application/pdf;base64,${pdfBase64}" type="application/pdf"></body></html>`);
+        newWindow.document.close();
     }
 
     function generateGraph(dotCode, title) {
@@ -294,7 +324,8 @@ const HomePage = () => {
         'symbols': generateSymbols,
         'errors': generateError,
         'tokens': generateToken,
-        'c3d': generateC3d
+        'c3d': generateC3d,
+        'tech': getTechDoc
     }
 
     return (
